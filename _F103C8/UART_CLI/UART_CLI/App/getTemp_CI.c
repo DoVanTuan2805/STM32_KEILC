@@ -16,7 +16,6 @@ void getTemp(char **argv, uint8_t argvNum)			// char **argv -> array matrix -> c
 		}
 		Response_print("Ok\n");
 		channel = atoi(argv[1]);			// CONVERT ARRAY STRING TO INT
-		Response_print("argument - 1: %s - 2: %d\n", argv[0], channel);
+		Response_print("command: %s\nchannel: %d\n", argv[0], channel);
 		temp = getTempChannel(channel);
-		Response_print("Channel : %d - Value : %f\n", channel, temp);
 }

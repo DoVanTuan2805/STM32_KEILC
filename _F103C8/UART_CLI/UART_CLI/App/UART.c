@@ -1,5 +1,7 @@
 #include "UART.h"
-
+#include "getTemp_CI.h"
+#include "setTemp_CI.h"
+#include "cli_command.h"
 #define MAX_DATA_UART 100
 
 static uint8_t UartBuff[MAX_DATA_UART];
@@ -23,21 +25,35 @@ void UartHandle(void)
 		if(UartFlag == 1)
 		{			
 				char *data;
-				uint8_t *argv[10];
+				char *argv[10];
 				uint8_t argvNum = 0;
 				data = strtok((char*)UartBuff, " ");
 				
 				while(data != NULL)
 				{
-						argv[argvNum] = (uint8_t*)data;
+						argv[argvNum] = data;
 						data = strtok(NULL, " ");
 						argvNum++;
 				}
+				const cli_command_infor_t *command_infor = find_command_infor(argv[0]);
 				
-				if(strcmp((char*)argv[0], "getTemperature") == 0)
+				if(command_infor != NULL)
 				{
-						getTemp((char**)argv, argvNum);
+						command_infor->function(argv, argvNum);
 				}
+//				if(strcmp((char*)argv[0], "getTemperature") == 0)
+//				{
+//						getTemp((char**)argv, argvNum);
+//				}
+//				else if(strcmp((char*)argv[0], "setTemperatureMax") == 0)
+//				{
+//						setTempMax((char**)argv, argvNum);
+//				}
+//				else if(strcmp((char*)argv[0], "setTemperatureMin") == 0)
+//				{
+//						setTempMin((char**)argv, argvNum);
+//				}
+				
 				memset(UartBuff, 0, strlen((char*)UartBuff));
 				UartLen = 0;
 				UartFlag = 0;

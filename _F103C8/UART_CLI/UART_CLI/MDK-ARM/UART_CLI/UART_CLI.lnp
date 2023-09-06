@@ -24,6 +24,7 @@
 "uart_cli\sensor.o"
 "uart_cli\cli_command_table.o"
 "uart_cli\settemp_ci.o"
+"uart_cli\cli_command.o"
 --strict --scatter "UART_CLI\UART_CLI.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
