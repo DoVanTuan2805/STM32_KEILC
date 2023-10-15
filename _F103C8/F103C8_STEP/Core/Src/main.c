@@ -123,7 +123,7 @@ int main(void)
 				HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_SET);
 				microDelay(100);
 				HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_RESET);
-				microDelay(100);
+				microDelay(100); THU
 		}
 		*/
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);

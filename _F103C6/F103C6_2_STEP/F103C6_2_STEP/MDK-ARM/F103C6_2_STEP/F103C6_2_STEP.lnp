@@ -1,0 +1,23 @@
+--cpu Cortex-M3
+"f103c6_2_step\startup_stm32f103x6.o"
+"f103c6_2_step\main.o"
+"f103c6_2_step\stm32f1xx_it.o"
+"f103c6_2_step\stm32f1xx_hal_msp.o"
+"f103c6_2_step\stm32f1xx_hal_gpio_ex.o"
+"f103c6_2_step\stm32f1xx_hal_tim.o"
+"f103c6_2_step\stm32f1xx_hal_tim_ex.o"
+"f103c6_2_step\stm32f1xx_hal.o"
+"f103c6_2_step\stm32f1xx_hal_rcc.o"
+"f103c6_2_step\stm32f1xx_hal_rcc_ex.o"
+"f103c6_2_step\stm32f1xx_hal_gpio.o"
+"f103c6_2_step\stm32f1xx_hal_dma.o"
+"f103c6_2_step\stm32f1xx_hal_cortex.o"
+"f103c6_2_step\stm32f1xx_hal_pwr.o"
+"f103c6_2_step\stm32f1xx_hal_flash.o"
+"f103c6_2_step\stm32f1xx_hal_flash_ex.o"
+"f103c6_2_step\stm32f1xx_hal_exti.o"
+"f103c6_2_step\system_stm32f1xx.o"
+--strict --scatter "F103C6_2_STEP\F103C6_2_STEP.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "F103C6_2_STEP.map" -o F103C6_2_STEP\F103C6_2_STEP.axf
