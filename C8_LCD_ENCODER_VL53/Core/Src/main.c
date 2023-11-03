@@ -68,7 +68,7 @@ static void MX_TIM3_Init(void);
 static uint64_t timeGetDistance;
 static uint16_t value, valueReal, distance;
 static uint8_t dataLcdLine3[20], dataLcdLine4[20];
-static volatile uint64_t pulse = 0;
+static volatile uint64_t pulse = 6400;
 static uint8_t checkDistance;
 static uint16_t pulseEncoder = 0;
 
@@ -120,12 +120,6 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
-	lcd_init();
-	KalmanInit(2,2,0.1);
-	vl53_user_init();
-	
-	
 	HAL_GPIO_WritePin(MS1_GPIO_Port, MS1_Pin, 1);
 	HAL_GPIO_WritePin(MS2_GPIO_Port, MS2_Pin, 1);
 	HAL_GPIO_WritePin(MS3_GPIO_Port, MS3_Pin, 1);
@@ -133,15 +127,26 @@ int main(void)
 	HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
 
 	
-	timeGetDistance = HAL_GetTick();
-	checkDistance = 0;
+	HAL_TIM_Base_Start_IT(&htim3);
+	//HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
+	//lcd_init();
+	//KalmanInit(2,2,0.1);
+	//vl53_user_init();
+	
+	
+	
+	
+	//timeGetDistance = HAL_GetTick();
+	//checkDistance = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		pulseEncoder = TIM2->CNT;
+		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		HAL_Delay(100);
+		//pulseEncoder = TIM2->CNT;
 		/*
 		if(pulseEncoder > 600)
 		{
@@ -153,6 +158,7 @@ int main(void)
 				TIM2->CNT = 600;
 		}
 		*/
+		/*
 		value = getVL53SingleMode();
 		value = updateEstimate(value);
 		value = updateEstimate(value);
@@ -198,7 +204,8 @@ int main(void)
 		
 		memset(dataLcdLine3, 0, sizeof(dataLcdLine3));
 		memset(dataLcdLine4, 0, sizeof(dataLcdLine4));
-		//pulse = 100;
+		
+		/*
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -416,14 +423,25 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, DIR_Pin|PUL_Pin|MS3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, MS2_Pin|MS1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DIR_Pin PUL_Pin MS3_Pin */
   GPIO_InitStruct.Pin = DIR_Pin|PUL_Pin|MS3_Pin;
