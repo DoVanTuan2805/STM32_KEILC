@@ -1,0 +1,24 @@
+--cpu Cortex-M3
+"c6_driver_arduino\startup_stm32f103x6.o"
+"c6_driver_arduino\main.o"
+"c6_driver_arduino\stm32f1xx_it.o"
+"c6_driver_arduino\stm32f1xx_hal_msp.o"
+"c6_driver_arduino\stm32f1xx_hal_gpio_ex.o"
+"c6_driver_arduino\stm32f1xx_hal_tim.o"
+"c6_driver_arduino\stm32f1xx_hal_tim_ex.o"
+"c6_driver_arduino\stm32f1xx_hal.o"
+"c6_driver_arduino\stm32f1xx_hal_rcc.o"
+"c6_driver_arduino\stm32f1xx_hal_rcc_ex.o"
+"c6_driver_arduino\stm32f1xx_hal_gpio.o"
+"c6_driver_arduino\stm32f1xx_hal_dma.o"
+"c6_driver_arduino\stm32f1xx_hal_cortex.o"
+"c6_driver_arduino\stm32f1xx_hal_pwr.o"
+"c6_driver_arduino\stm32f1xx_hal_flash.o"
+"c6_driver_arduino\stm32f1xx_hal_flash_ex.o"
+"c6_driver_arduino\stm32f1xx_hal_exti.o"
+"c6_driver_arduino\system_stm32f1xx.o"
+"c6_driver_arduino\pin.o"
+--strict --scatter "C6_DRIVER_ARDUINO\C6_DRIVER_ARDUINO.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "C6_DRIVER_ARDUINO.map" -o C6_DRIVER_ARDUINO\C6_DRIVER_ARDUINO.axf
