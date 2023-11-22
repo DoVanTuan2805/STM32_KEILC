@@ -49,7 +49,7 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
-
+CLCD_I2C_Name LCD1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,13 +65,17 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static uint64_t timeGetDistance;
+
+#define ERROR 13
+
+static uint64_t timeGetDistance , timeGetDistance1;
 static uint16_t value, valueReal, distance;
 static uint8_t dataLcdLine3[20], dataLcdLine4[20];
-static volatile uint64_t pulse = 6400;
-static uint8_t checkDistance;
-static uint16_t pulseEncoder = 0;
-
+static volatile uint64_t pulse, totalPulse;
+static uint8_t checkDistance = 0;
+volatile static uint16_t pulseEncoder = 0;
+static uint8_t complete, run, completeProgram;
+static float angleDegree;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 		if(htim->Instance == htim3.Instance)
@@ -123,46 +127,31 @@ int main(void)
 	HAL_GPIO_WritePin(MS1_GPIO_Port, MS1_Pin, 1);
 	HAL_GPIO_WritePin(MS2_GPIO_Port, MS2_Pin, 1);
 	HAL_GPIO_WritePin(MS3_GPIO_Port, MS3_Pin, 1);
-	
-	HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
 
 	
 	HAL_TIM_Base_Start_IT(&htim3);
-	//HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
-	//lcd_init();
-	//KalmanInit(2,2,0.1);
-	//vl53_user_init();
+	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
 	
 	
+	CLCD_I2C_Init(&LCD1,&hi2c2,0x4e,20,4);
+	CLCD_I2C_Clear(&LCD1);
+	KalmanInit(2,2,0.1);
+	vl53_user_init();
 	
-	
-	//timeGetDistance = HAL_GetTick();
-	//checkDistance = 0;
+	timeGetDistance = HAL_GetTick();
+	checkDistance = 0;
+	run = 0;
+	completeProgram = 0;
+	HAL_TIM_Base_Start_IT(&htim3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-		HAL_Delay(100);
-		//pulseEncoder = TIM2->CNT;
-		/*
-		if(pulseEncoder > 600)
-		{
-				pulseEncoder = 1;
-				TIM2->CNT = 1;
-		}else if(pulseEncoder < 1)
-		{
-				pulseEncoder = 600;
-				TIM2->CNT = 600;
-		}
-		*/
-		/*
 		value = getVL53SingleMode();
 		value = updateEstimate(value);
-		value = updateEstimate(value);
-		valueReal = updateEstimate(value);
+		valueReal = updateEstimate(value) *	10;
 		
 		if(checkDistance == 0)
 		{
@@ -174,38 +163,82 @@ int main(void)
 		}
 		if(checkDistance == 1)
 		{
-				if(valueReal - distance >= 3)
+				if(run == 0)
 				{
-						pulse = 0;
-						HAL_TIM_Base_Stop_IT(&htim3);
-				}else 
-				{
-						pulse = 100;
-						HAL_TIM_Base_Start_IT(&htim3);
+						if((valueReal - distance >= ERROR) || (valueReal <= distance - ERROR))
+						{
+								HAL_TIM_Base_Stop_IT(&htim3);
+								pulse = 0;
+								value = getVL53SingleMode();
+								value = updateEstimate(value);
+								valueReal = updateEstimate(value) *	10;
+								
+								if(complete == 0)
+								{	
+										complete = 1;
+										timeGetDistance1 = HAL_GetTick();
+								}
+								if(HAL_GetTick() - timeGetDistance1 > 5000){
+										run = 1;
+										distance = valueReal;
+										HAL_TIM_Base_Start_IT(&htim3);
+								}
+						}
+						else {
+								HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
+								pulse = 10;
+						}
+				}else if (run == 1) {
+						if((valueReal - distance >= ERROR) || (valueReal <= distance - ERROR))
+						{
+								HAL_TIM_Base_Stop_IT(&htim3);
+								pulse = 0;
+								checkDistance = 2;
+								angleDegree = (totalPulse * 360.0) / 6400;
+								completeProgram = 1;
+						}
+						else {
+								HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);
+								pulse = 10;
+								totalPulse += pulse;
+						}
+				}
+				
+		}
+		
+		CLCD_I2C_SetCursor(&LCD1, 2, 0);
+		CLCD_I2C_WriteString(&LCD1, "Do Do Ro Vo Lang");
+		/*
+		CLCD_I2C_SetCursor(&LCD1, 0,2);
+		CLCD_I2C_WriteString(&LCD1,"Khoang cach : ");
+		
+		sprintf((char*)dataLcdLine3, "%d", valueReal);
+		CLCD_I2C_SetCursor(&LCD1, 16,2);
+		CLCD_I2C_WriteString(&LCD1, (char*)dataLcdLine3);
+		*/
+		CLCD_I2C_SetCursor(&LCD1, 0,2);
+		CLCD_I2C_WriteString(&LCD1,"Do Ro Vo Lang:");
+		
+		sprintf((char*)dataLcdLine4, "%.1f", angleDegree);
+		
+		CLCD_I2C_SetCursor(&LCD1, 16,2);
+		CLCD_I2C_WriteString(&LCD1, (char*)dataLcdLine4);
+		
+		
+		CLCD_I2C_SetCursor(&LCD1, 0,3);
+		CLCD_I2C_WriteString(&LCD1,"Ket Qua : ");
+		if(completeProgram == 1){
+				if(angleDegree <= 23 ){
+						CLCD_I2C_SetCursor(&LCD1, 10,3);
+						CLCD_I2C_WriteString(&LCD1,"Dat");
+				}else {
+						CLCD_I2C_SetCursor(&LCD1, 10,3);
+						CLCD_I2C_WriteString(&LCD1,"Khong Dat");
 				}
 		}
-		lcd_goto_XY(1,2);
-		lcd_send_string("Do Do Ro Vo Lang");
-		
-		sprintf((char*)dataLcdLine3, "%ld", valueReal);
-		lcd_goto_XY(2,0);
-		lcd_send_string((char*)dataLcdLine3);
-		
-		
-		lcd_goto_XY(3,0);
-		lcd_send_string("Do Ro Vo Lang : ");
-		
-		sprintf((char*)dataLcdLine4, "%ld", pulseEncoder);
-		lcd_goto_XY(3,15);
-		lcd_send_string((char*)dataLcdLine4);
-		
-
-
-		
 		memset(dataLcdLine3, 0, sizeof(dataLcdLine3));
 		memset(dataLcdLine4, 0, sizeof(dataLcdLine4));
 		
-		/*
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -267,7 +300,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -340,14 +373,14 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 1200;
+  htim2.Init.Period = 65535;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
+  sConfig.IC1Filter = 10;
   sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
@@ -424,6 +457,7 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 

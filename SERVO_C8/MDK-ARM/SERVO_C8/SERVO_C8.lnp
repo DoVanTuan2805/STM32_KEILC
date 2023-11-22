@@ -1,0 +1,23 @@
+--cpu Cortex-M3
+"servo_c8\startup_stm32f103xb.o"
+"servo_c8\main.o"
+"servo_c8\stm32f1xx_it.o"
+"servo_c8\stm32f1xx_hal_msp.o"
+"servo_c8\stm32f1xx_hal_gpio_ex.o"
+"servo_c8\stm32f1xx_hal_tim.o"
+"servo_c8\stm32f1xx_hal_tim_ex.o"
+"servo_c8\stm32f1xx_hal.o"
+"servo_c8\stm32f1xx_hal_rcc.o"
+"servo_c8\stm32f1xx_hal_rcc_ex.o"
+"servo_c8\stm32f1xx_hal_gpio.o"
+"servo_c8\stm32f1xx_hal_dma.o"
+"servo_c8\stm32f1xx_hal_cortex.o"
+"servo_c8\stm32f1xx_hal_pwr.o"
+"servo_c8\stm32f1xx_hal_flash.o"
+"servo_c8\stm32f1xx_hal_flash_ex.o"
+"servo_c8\stm32f1xx_hal_exti.o"
+"servo_c8\system_stm32f1xx.o"
+--strict --scatter "SERVO_C8\SERVO_C8.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "SERVO_C8.map" -o SERVO_C8\SERVO_C8.axf
