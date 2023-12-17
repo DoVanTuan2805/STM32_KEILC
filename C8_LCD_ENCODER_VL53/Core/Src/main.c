@@ -45,7 +45,6 @@
  I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
@@ -57,7 +56,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
-static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -66,16 +64,17 @@ static void MX_TIM3_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-#define ERROR 13
-
+#define ERROR 40
+#define ERROR_MEASURE 15
 static uint64_t timeGetDistance , timeGetDistance1;
-static uint16_t value, valueReal, distance;
+static uint16_t value, valueReal, valueReal2,distance ;
 static uint8_t dataLcdLine3[20], dataLcdLine4[20];
 static volatile uint64_t pulse, totalPulse;
 static uint8_t checkDistance = 0;
 volatile static uint16_t pulseEncoder = 0;
 static uint8_t complete, run, completeProgram;
 static float angleDegree;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 		if(htim->Instance == htim3.Instance)
@@ -89,6 +88,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 		
 }
+void readDataVL53(void){
+		value = getVL53SingleMode()	;
+		valueReal = updateEstimate(value) ;
+		valueReal = updateEstimate(valueReal) * 10;
+}
 /* USER CODE END 0 */
 
 /**
@@ -96,7 +100,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   * @retval int
   */
 int main(void)
-{
+ {
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -121,17 +125,12 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_I2C2_Init();
-  MX_TIM2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 	HAL_GPIO_WritePin(MS1_GPIO_Port, MS1_Pin, 1);
 	HAL_GPIO_WritePin(MS2_GPIO_Port, MS2_Pin, 1);
 	HAL_GPIO_WritePin(MS3_GPIO_Port, MS3_Pin, 1);
 
-	
-	HAL_TIM_Base_Start_IT(&htim3);
-	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
-	
 	
 	CLCD_I2C_Init(&LCD1,&hi2c2,0x4e,20,4);
 	CLCD_I2C_Clear(&LCD1);
@@ -142,19 +141,17 @@ int main(void)
 	checkDistance = 0;
 	run = 0;
 	completeProgram = 0;
-	HAL_TIM_Base_Start_IT(&htim3);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		value = getVL53SingleMode();
-		value = updateEstimate(value);
-		valueReal = updateEstimate(value) *	10;
-		
+		readDataVL53();
 		if(checkDistance == 0)
 		{
+				readDataVL53();
 				if(HAL_GetTick() - timeGetDistance > 5000)
 				{
 						distance = valueReal;
@@ -165,13 +162,11 @@ int main(void)
 		{
 				if(run == 0)
 				{
-						if((valueReal - distance >= ERROR) || (valueReal <= distance - ERROR))
+						if((valueReal - distance >= ERROR_MEASURE) || (valueReal <= distance - ERROR_MEASURE))
 						{
 								HAL_TIM_Base_Stop_IT(&htim3);
 								pulse = 0;
-								value = getVL53SingleMode();
-								value = updateEstimate(value);
-								valueReal = updateEstimate(value) *	10;
+								readDataVL53();
 								
 								if(complete == 0)
 								{	
@@ -181,26 +176,34 @@ int main(void)
 								if(HAL_GetTick() - timeGetDistance1 > 5000){
 										run = 1;
 										distance = valueReal;
-										HAL_TIM_Base_Start_IT(&htim3);
+										
 								}
 						}
 						else {
+								readDataVL53();
+								HAL_TIM_Base_Start_IT(&htim3);
 								HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
 								pulse = 10;
 						}
 				}else if (run == 1) {
-						if((valueReal - distance >= ERROR) || (valueReal <= distance - ERROR))
+					
+						if((valueReal - distance >= ERROR_MEASURE) || (valueReal <= distance - ERROR_MEASURE))
 						{
 								HAL_TIM_Base_Stop_IT(&htim3);
 								pulse = 0;
 								checkDistance = 2;
-								angleDegree = (totalPulse * 360.0) / 6400;
+								angleDegree = ((totalPulse - ERROR)* 360.0) / 6400;
 								completeProgram = 1;
 						}
 						else {
+								readDataVL53();
+								HAL_TIM_Base_Start_IT(&htim3);
 								HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);
-								pulse = 10;
-								totalPulse += pulse;
+								if(pulse == 0)
+								{
+											pulse = 10;
+											totalPulse += pulse;
+								}
 						}
 				}
 				
@@ -353,55 +356,6 @@ static void MX_I2C2_Init(void)
 }
 
 /**
-  * @brief TIM2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_Encoder_InitTypeDef sConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 65535;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
-  sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
-  sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 10;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
-  sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
-  sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 0;
-  if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
-
-}
-
-/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -477,6 +431,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : ENA_Pin */
+  GPIO_InitStruct.Pin = ENA_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ENA_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ENB_Pin */
+  GPIO_InitStruct.Pin = ENB_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ENB_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : DIR_Pin PUL_Pin MS3_Pin */
   GPIO_InitStruct.Pin = DIR_Pin|PUL_Pin|MS3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -490,6 +456,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
 }
 
