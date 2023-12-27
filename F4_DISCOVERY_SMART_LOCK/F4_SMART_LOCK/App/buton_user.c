@@ -39,7 +39,6 @@ void bt_press_callback(Button_t *button) {
 			HAL_GPIO_TogglePin(LD5_GPIO_Port, LD5_Pin);
 			timeWaitLogin = HAL_GetTick();
 			stateLogin = true;
-			lcdCheckInOut();
 		}
 		else if (button == &bt2)
 		{

@@ -8,17 +8,17 @@ extern uint8_t stateCheckInOut;
 static bool stateLoginPrev;
 static uint8_t stateCheckInOutPrev;
 
-bool ArrayScreen( Screen_t screen)
-{
-	if(screen < NUM_OF_SCREEN)
-	{
-			return handleScreen[screen];
-	}
-	else 
-	{
-			return false;
-	}
-}
+//bool ArrayScreen( Screen_t screen)
+//{
+//	if(screen < NUM_OF_SCREEN)
+//	{
+//			return handleScreen[screen];
+//	}
+//	else 
+//	{
+//			return false;
+//	}
+//}
 
 void lcdHanle()
 {
@@ -32,26 +32,26 @@ void lcdHanle()
 				stateLoginPrev = stateLogin;
 				if(stateLogin == false)
 				{
-						ArrayScreen(SCREEN_NON_LOGIN);
-						//lcdNonLogin();
+						//ArrayScreen(SCREEN_NON_LOGIN);
+						lcdNonLogin();
 				}
 				else 
 				{
 					SHOW_CHECK_IN_OUT:
 						if(stateCheckInOut == 0)
 						{
-								ArrayScreen(SCREEN_CHECK_INOUT);
-							//lcdCheckInOut();
+								//ArrayScreen(SCREEN_CHECK_INOUT);
+							lcdCheckInOut();
 						}
 						else if (stateCheckInOut == 1)
 						{
-							ArrayScreen(SCREEN_WAIT_CHECKIN);
-							//waitCheckIn();
+							//ArrayScreen(SCREEN_WAIT_CHECKIN);
+							waitCheckIn();
 						}
 						else if (stateCheckInOut == 2)
 						{
-							ArrayScreen(SCREEN_WAIT_CHECKOUT);
-							//waitCheckOut();
+							//ArrayScreen(SCREEN_WAIT_CHECKOUT);
+							waitCheckOut();
 						}
 				}
 		}
@@ -62,9 +62,10 @@ void lcdInit(void)
 		CLCD_I2C_Init(&lcd, &hi2c3,  0X4E, 16, 2);
 		CLCD_I2C_Clear(&lcd);
 		CLCD_I2C_SetCursor(&lcd, 0, 0);
-		CLCD_I2C_WriteString(&lcd, "PLS CHOOSE CHECK ");
-		CLCD_I2C_SetCursor(&lcd, 0, 1);
-		CLCD_I2C_WriteString(&lcd, "     IN/OUT      ");
+//		CLCD_I2C_WriteString(&lcd, "PLS CHOOSE CHECK ");
+//		CLCD_I2C_SetCursor(&lcd, 0, 1);
+//		CLCD_I2C_WriteString(&lcd, "     IN/OUT      ");
+		stateCheckInOutPrev = stateCheckInOut;
 }
 
 void lcdNonLogin()

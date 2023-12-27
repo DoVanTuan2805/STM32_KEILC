@@ -1426,7 +1426,6 @@ Section Cross References
     buton_user.o(.text.bt_press_callback) refers to stm32f4xx_hal.o(.text.HAL_GetTick) for HAL_GetTick
     buton_user.o(.text.bt_press_callback) refers to main.o(.bss.timeWaitLogin) for timeWaitLogin
     buton_user.o(.text.bt_press_callback) refers to main.o(.bss.stateLogin) for stateLogin
-    buton_user.o(.text.bt_press_callback) refers to lcd_user.o(.text.lcdCheckInOut) for lcdCheckInOut
     buton_user.o(.text.bt_press_callback) refers to main.o(.bss.timeWaitCheckInOut) for timeWaitCheckInOut
     buton_user.o(.text.bt_press_callback) refers to main.o(.bss.stateCheckInOut) for stateCheckInOut
     buton_user.o(.text.bt_press_callback) refers to finger_user.o(.text.fingerHandle) for fingerHandle
@@ -1589,37 +1588,40 @@ Section Cross References
     keypad.o(.text.KEYPAD_Scan) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_ReadPin) for HAL_GPIO_ReadPin
     keypad.o(.text.KEYPAD_Scan) refers to keypad.o(.bss.gs_KEYPAD_info) for gs_KEYPAD_info
     keypad.o(.ARM.exidx.text.KEYPAD_Scan) refers to keypad.o(.text.KEYPAD_Scan) for [Anonymous Symbol]
-    lcd_user.o(.ARM.exidx.text.ArrayScreen) refers to lcd_user.o(.text.ArrayScreen) for [Anonymous Symbol]
     lcd_user.o(.text.lcdHanle) refers to lcd_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
     lcd_user.o(.text.lcdHanle) refers to main.o(.bss.stateCheckInOut) for stateCheckInOut
     lcd_user.o(.text.lcdHanle) refers to main.o(.bss.stateLogin) for stateLogin
+    lcd_user.o(.text.lcdHanle) refers to lcd_user.o(.rodata.str1.1) for .L.str.3
+    lcd_user.o(.text.lcdHanle) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
+    lcd_user.o(.text.lcdHanle) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
     lcd_user.o(.ARM.exidx.text.lcdHanle) refers to lcd_user.o(.text.lcdHanle) for [Anonymous Symbol]
-    lcd_user.o(.text.lcdInit) refers to lcd_user.o(.bss.lcd) for lcd
+    lcd_user.o(.text.lcdNonLogin) refers to lcd_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
+    lcd_user.o(.text.lcdNonLogin) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
+    lcd_user.o(.text.lcdNonLogin) refers to lcd_user.o(.rodata.str1.1) for .L.str
+    lcd_user.o(.text.lcdNonLogin) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
+    lcd_user.o(.ARM.exidx.text.lcdNonLogin) refers to lcd_user.o(.text.lcdNonLogin) for [Anonymous Symbol]
+    lcd_user.o(.text.lcdCheckInOut) refers to lcd_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
+    lcd_user.o(.text.lcdCheckInOut) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
+    lcd_user.o(.text.lcdCheckInOut) refers to lcd_user.o(.rodata.str1.1) for .L.str.2
+    lcd_user.o(.text.lcdCheckInOut) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
+    lcd_user.o(.ARM.exidx.text.lcdCheckInOut) refers to lcd_user.o(.text.lcdCheckInOut) for [Anonymous Symbol]
+    lcd_user.o(.text.waitCheckIn) refers to lcd_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
+    lcd_user.o(.text.waitCheckIn) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
+    lcd_user.o(.text.waitCheckIn) refers to lcd_user.o(.rodata.str1.1) for .L.str.4
+    lcd_user.o(.text.waitCheckIn) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
+    lcd_user.o(.ARM.exidx.text.waitCheckIn) refers to lcd_user.o(.text.waitCheckIn) for [Anonymous Symbol]
+    lcd_user.o(.text.waitCheckOut) refers to lcd_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
+    lcd_user.o(.text.waitCheckOut) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
+    lcd_user.o(.text.waitCheckOut) refers to lcd_user.o(.rodata.str1.1) for .L.str.5
+    lcd_user.o(.text.waitCheckOut) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
+    lcd_user.o(.ARM.exidx.text.waitCheckOut) refers to lcd_user.o(.text.waitCheckOut) for [Anonymous Symbol]
+    lcd_user.o(.text.lcdInit) refers to lcd_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
     lcd_user.o(.text.lcdInit) refers to i2c.o(.bss.hi2c3) for hi2c3
     lcd_user.o(.text.lcdInit) refers to i2c-lcd.o(.text.CLCD_I2C_Init) for CLCD_I2C_Init
     lcd_user.o(.text.lcdInit) refers to i2c-lcd.o(.text.CLCD_I2C_Clear) for CLCD_I2C_Clear
     lcd_user.o(.text.lcdInit) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
-    lcd_user.o(.text.lcdInit) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
+    lcd_user.o(.text.lcdInit) refers to main.o(.bss.stateCheckInOut) for stateCheckInOut
     lcd_user.o(.ARM.exidx.text.lcdInit) refers to lcd_user.o(.text.lcdInit) for [Anonymous Symbol]
-    lcd_user.o(.text.lcdNonLogin) refers to lcd_user.o(.bss.lcd) for lcd
-    lcd_user.o(.text.lcdNonLogin) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
-    lcd_user.o(.text.lcdNonLogin) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
-    lcd_user.o(.ARM.exidx.text.lcdNonLogin) refers to lcd_user.o(.text.lcdNonLogin) for [Anonymous Symbol]
-    lcd_user.o(.text.lcdCheckInOut) refers to lcd_user.o(.bss.lcd) for lcd
-    lcd_user.o(.text.lcdCheckInOut) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
-    lcd_user.o(.text.lcdCheckInOut) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
-    lcd_user.o(.text.lcdCheckInOut) refers to lcd_user.o(.rodata.str1.1) for .L.str.5
-    lcd_user.o(.ARM.exidx.text.lcdCheckInOut) refers to lcd_user.o(.text.lcdCheckInOut) for [Anonymous Symbol]
-    lcd_user.o(.text.waitCheckIn) refers to lcd_user.o(.bss.lcd) for lcd
-    lcd_user.o(.text.waitCheckIn) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
-    lcd_user.o(.text.waitCheckIn) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
-    lcd_user.o(.text.waitCheckIn) refers to lcd_user.o(.rodata.str1.1) for .L.str.5
-    lcd_user.o(.ARM.exidx.text.waitCheckIn) refers to lcd_user.o(.text.waitCheckIn) for [Anonymous Symbol]
-    lcd_user.o(.text.waitCheckOut) refers to lcd_user.o(.bss.lcd) for lcd
-    lcd_user.o(.text.waitCheckOut) refers to i2c-lcd.o(.text.CLCD_I2C_SetCursor) for CLCD_I2C_SetCursor
-    lcd_user.o(.text.waitCheckOut) refers to i2c-lcd.o(.text.CLCD_I2C_WriteString) for CLCD_I2C_WriteString
-    lcd_user.o(.text.waitCheckOut) refers to lcd_user.o(.rodata.str1.1) for .L.str.5
-    lcd_user.o(.ARM.exidx.text.waitCheckOut) refers to lcd_user.o(.text.waitCheckOut) for [Anonymous Symbol]
     keypad_user.o(.text.HAL_TIM_PeriodElapsedCallback) refers to tim.o(.bss.htim3) for htim3
     keypad_user.o(.text.HAL_TIM_PeriodElapsedCallback) refers to keypad.o(.text.KEYPAD_Scan) for KEYPAD_Scan
     keypad_user.o(.text.HAL_TIM_PeriodElapsedCallback) refers to keypad_user.o(.bss..L_MergedGlobals) for .L_MergedGlobals
@@ -3564,17 +3566,16 @@ Removing Unused input sections from the image.
     Removing keypad.o(.ARM.exidx.text.KEYPAD_Scan), (8 bytes).
     Removing keypad_cfg.o(.text), (0 bytes).
     Removing lcd_user.o(.text), (0 bytes).
-    Removing lcd_user.o(.text.ArrayScreen), (12 bytes).
-    Removing lcd_user.o(.ARM.exidx.text.ArrayScreen), (8 bytes).
     Removing lcd_user.o(.ARM.exidx.text.lcdHanle), (8 bytes).
-    Removing lcd_user.o(.ARM.exidx.text.lcdInit), (8 bytes).
-    Removing lcd_user.o(.text.lcdNonLogin), (92 bytes).
+    Removing lcd_user.o(.text.lcdNonLogin), (64 bytes).
     Removing lcd_user.o(.ARM.exidx.text.lcdNonLogin), (8 bytes).
+    Removing lcd_user.o(.text.lcdCheckInOut), (64 bytes).
     Removing lcd_user.o(.ARM.exidx.text.lcdCheckInOut), (8 bytes).
-    Removing lcd_user.o(.text.waitCheckIn), (76 bytes).
+    Removing lcd_user.o(.text.waitCheckIn), (64 bytes).
     Removing lcd_user.o(.ARM.exidx.text.waitCheckIn), (8 bytes).
-    Removing lcd_user.o(.text.waitCheckOut), (76 bytes).
+    Removing lcd_user.o(.text.waitCheckOut), (64 bytes).
     Removing lcd_user.o(.ARM.exidx.text.waitCheckOut), (8 bytes).
+    Removing lcd_user.o(.ARM.exidx.text.lcdInit), (8 bytes).
     Removing keypad_user.o(.text), (0 bytes).
     Removing keypad_user.o(.ARM.exidx.text.HAL_TIM_PeriodElapsedCallback), (8 bytes).
     Removing keypad_user.o(.ARM.exidx.text.initKeyPad), (8 bytes).
@@ -3765,7 +3766,7 @@ Removing Unused input sections from the image.
     Removing ccsbcs.o(.rodata.Tbl), (256 bytes).
     Removing ccsbcs.o(.rodata.str2.2), (686 bytes).
 
-1461 unused section(s) (total 117362 bytes) removed from the image.
+1460 unused section(s) (total 117354 bytes) removed from the image.
 
 ==============================================================================
 
@@ -4256,38 +4257,42 @@ Image Symbol Table
     [Anonymous Symbol]                       0x08009a10   Section        0  stm32f4xx_it.o(.text.UsageFault_Handler)
     [Anonymous Symbol]                       0x08009a14   Section        0  button.o(.text.bt_handle)
     [Anonymous Symbol]                       0x08009a90   Section        0  buton_user.o(.text.bt_press_callback)
-    [Anonymous Symbol]                       0x08009bac   Section        0  button.o(.text.bt_press_timout_callback)
-    [Anonymous Symbol]                       0x08009bb0   Section        0  button.o(.text.bt_release_callback)
-    [Anonymous Symbol]                       0x08009bb4   Section        0  fingerprint.o(.text.fingerFastSearch)
-    [Anonymous Symbol]                       0x08009c64   Section        0  finger_user.o(.text.fingerHandle)
-    [Anonymous Symbol]                       0x08009c90   Section        0  fingerprint.o(.text.getConfidence)
-    [Anonymous Symbol]                       0x08009c9c   Section        0  ds1307.o(.text.getDateTime)
-    [Anonymous Symbol]                       0x08009e94   Section        0  fingerprint.o(.text.getFingerID)
-    [Anonymous Symbol]                       0x08009ea0   Section        0  fingerprint.o(.text.getImage)
-    [Anonymous Symbol]                       0x08009f30   Section        0  fingerprint.o(.text.getImage2Tz)
-    [Anonymous Symbol]                       0x08009fc4   Section        0  keypad_user.o(.text.getPassword)
-    [Anonymous Symbol]                       0x0800a0a0   Section        0  buton_user.o(.text.handleButton)
-    [Anonymous Symbol]                       0x0800a124   Section        0  buton_user.o(.text.initButton)
-    [Anonymous Symbol]                       0x0800a16c   Section        0  finger_user.o(.text.initFinger)
-    [Anonymous Symbol]                       0x0800a18c   Section        0  keypad_user.o(.text.initKeyPad)
-    [Anonymous Symbol]                       0x0800a1b4   Section        0  fingerprint.o(.text.init_fingerprint)
-    [Anonymous Symbol]                       0x0800a234   Section        0  lcd_user.o(.text.lcdCheckInOut)
-    [Anonymous Symbol]                       0x0800a280   Section        0  lcd_user.o(.text.lcdHanle)
-    [Anonymous Symbol]                       0x0800a2b0   Section        0  lcd_user.o(.text.lcdInit)
-    [Anonymous Symbol]                       0x0800a330   Section        0  fingerprint.o(.text.led_mode)
-    [Anonymous Symbol]                       0x0800a3c0   Section        0  main.o(.text.main)
-    [Anonymous Symbol]                       0x0800a488   Section        0  ds1307.o(.text.rtcInit)
-    [Anonymous Symbol]                       0x0800a4a0   Section        0  fingerprint.o(.text.send)
-    locale$$code                             0x0800a5bc   Section       44  lc_ctype_c.o(locale$$code)
-    $v0                                      0x0800a5e8   Number         0  fpinit.o(x$fpl$fpinit)
-    x$fpl$fpinit                             0x0800a5e8   Section       26  fpinit.o(x$fpl$fpinit)
-    [Anonymous Symbol]                       0x0800a64c   Section        0  usbh_cdc.o(.rodata.str1.1)
-    .L.str.5                                 0x0800a650   Data          18  lcd_user.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x0800a650   Section        0  lcd_user.o(.rodata.str1.1)
-    locale$$data                             0x0800a684   Section      272  lc_ctype_c.o(locale$$data)
-    __lcctype_c_name                         0x0800a688   Data           2  lc_ctype_c.o(locale$$data)
-    __lcctype_c_start                        0x0800a690   Data           0  lc_ctype_c.o(locale$$data)
-    __lcctype_c_end                          0x0800a794   Data           0  lc_ctype_c.o(locale$$data)
+    [Anonymous Symbol]                       0x08009ba4   Section        0  button.o(.text.bt_press_timout_callback)
+    [Anonymous Symbol]                       0x08009ba8   Section        0  button.o(.text.bt_release_callback)
+    [Anonymous Symbol]                       0x08009bac   Section        0  fingerprint.o(.text.fingerFastSearch)
+    [Anonymous Symbol]                       0x08009c5c   Section        0  finger_user.o(.text.fingerHandle)
+    [Anonymous Symbol]                       0x08009c88   Section        0  fingerprint.o(.text.getConfidence)
+    [Anonymous Symbol]                       0x08009c94   Section        0  ds1307.o(.text.getDateTime)
+    [Anonymous Symbol]                       0x08009e8c   Section        0  fingerprint.o(.text.getFingerID)
+    [Anonymous Symbol]                       0x08009e98   Section        0  fingerprint.o(.text.getImage)
+    [Anonymous Symbol]                       0x08009f28   Section        0  fingerprint.o(.text.getImage2Tz)
+    [Anonymous Symbol]                       0x08009fbc   Section        0  keypad_user.o(.text.getPassword)
+    [Anonymous Symbol]                       0x0800a098   Section        0  buton_user.o(.text.handleButton)
+    [Anonymous Symbol]                       0x0800a11c   Section        0  buton_user.o(.text.initButton)
+    [Anonymous Symbol]                       0x0800a164   Section        0  finger_user.o(.text.initFinger)
+    [Anonymous Symbol]                       0x0800a184   Section        0  keypad_user.o(.text.initKeyPad)
+    [Anonymous Symbol]                       0x0800a1ac   Section        0  fingerprint.o(.text.init_fingerprint)
+    [Anonymous Symbol]                       0x0800a22c   Section        0  lcd_user.o(.text.lcdHanle)
+    [Anonymous Symbol]                       0x0800a2c0   Section        0  lcd_user.o(.text.lcdInit)
+    [Anonymous Symbol]                       0x0800a308   Section        0  fingerprint.o(.text.led_mode)
+    [Anonymous Symbol]                       0x0800a398   Section        0  main.o(.text.main)
+    [Anonymous Symbol]                       0x0800a460   Section        0  ds1307.o(.text.rtcInit)
+    [Anonymous Symbol]                       0x0800a478   Section        0  fingerprint.o(.text.send)
+    locale$$code                             0x0800a594   Section       44  lc_ctype_c.o(locale$$code)
+    $v0                                      0x0800a5c0   Number         0  fpinit.o(x$fpl$fpinit)
+    x$fpl$fpinit                             0x0800a5c0   Section       26  fpinit.o(x$fpl$fpinit)
+    [Anonymous Symbol]                       0x0800a624   Section        0  usbh_cdc.o(.rodata.str1.1)
+    .L.str.1                                 0x0800a628   Data          18  lcd_user.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x0800a628   Section        0  lcd_user.o(.rodata.str1.1)
+    .L.str.2                                 0x0800a64c   Data          18  lcd_user.o(.rodata.str1.1)
+    .L.str.3                                 0x0800a64c   Data          18  lcd_user.o(.rodata.str1.1)
+    .L.str                                   0x0800a670   Data          18  lcd_user.o(.rodata.str1.1)
+    .L.str.4                                 0x0800a670   Data          18  lcd_user.o(.rodata.str1.1)
+    .L.str.5                                 0x0800a682   Data          18  lcd_user.o(.rodata.str1.1)
+    locale$$data                             0x0800a6b4   Section      272  lc_ctype_c.o(locale$$data)
+    __lcctype_c_name                         0x0800a6b8   Data           2  lc_ctype_c.o(locale$$data)
+    __lcctype_c_start                        0x0800a6c0   Data           0  lc_ctype_c.o(locale$$data)
+    __lcctype_c_end                          0x0800a7c4   Data           0  lc_ctype_c.o(locale$$data)
     .L_MergedGlobals                         0x20000000   Data           8  stm32f4xx_hal.o(.data..L_MergedGlobals)
     [Anonymous Symbol]                       0x20000000   Section        0  stm32f4xx_hal.o(.data..L_MergedGlobals)
     Stat                                     0x20000028   Data           1  fatfs_sd.o(.data.Stat)
@@ -4303,30 +4308,30 @@ Image Symbol Table
     fingerInfor.0                            0x20000188   Data           2  fingerprint.o(.bss..L_MergedGlobals)
     [Anonymous Symbol]                       0x20000188   Section        0  fingerprint.o(.bss..L_MergedGlobals)
     fingerInfor.1                            0x2000018a   Data           2  fingerprint.o(.bss..L_MergedGlobals)
-    .L_MergedGlobals                         0x200001be   Data           2  lcd_user.o(.bss..L_MergedGlobals)
-    stateCheckInOutPrev                      0x200001be   Data           1  lcd_user.o(.bss..L_MergedGlobals)
-    [Anonymous Symbol]                       0x200001be   Section        0  lcd_user.o(.bss..L_MergedGlobals)
-    stateLoginPrev                           0x200001bf   Data           1  lcd_user.o(.bss..L_MergedGlobals)
-    .L_MergedGlobals                         0x200001c0   Data          32  keypad_user.o(.bss..L_MergedGlobals)
-    [Anonymous Symbol]                       0x200001c0   Section        0  keypad_user.o(.bss..L_MergedGlobals)
-    index                                    0x200001c1   Data           1  keypad_user.o(.bss..L_MergedGlobals)
-    getPassword.timeDebounce                 0x200001c8   Data           8  keypad_user.o(.bss..L_MergedGlobals)
-    u8_KeyStatesArr                          0x200001d0   Data          16  keypad_user.o(.bss..L_MergedGlobals)
-    .L_MergedGlobals                         0x200001e0   Data          24  ds1307.o(.bss..L_MergedGlobals)
-    [Anonymous Symbol]                       0x200001e0   Section        0  ds1307.o(.bss..L_MergedGlobals)
-    .L_MergedGlobals                         0x200001f8   Data           2  fatfs_sd.o(.bss..L_MergedGlobals)
-    CardType                                 0x200001f8   Data           1  fatfs_sd.o(.bss..L_MergedGlobals)
-    [Anonymous Symbol]                       0x200001f8   Section        0  fatfs_sd.o(.bss..L_MergedGlobals)
-    PowerFlag                                0x200001f9   Data           1  fatfs_sd.o(.bss..L_MergedGlobals)
-    .L_MergedGlobals                         0x200001fa   Data           5  fatfs.o(.bss..L_MergedGlobals)
-    [Anonymous Symbol]                       0x200001fa   Section        0  fatfs.o(.bss..L_MergedGlobals)
-    gs_KEYPAD_info                           0x2000020c   Data           4  keypad.o(.bss.gs_KEYPAD_info)
-    [Anonymous Symbol]                       0x2000020c   Section        0  keypad.o(.bss.gs_KEYPAD_info)
-    Heap_Mem                                 0x20000bd0   Data         512  startup_stm32f407xx.o(HEAP)
-    HEAP                                     0x20000bd0   Section      512  startup_stm32f407xx.o(HEAP)
-    Stack_Mem                                0x20000dd0   Data        1024  startup_stm32f407xx.o(STACK)
-    STACK                                    0x20000dd0   Section     1024  startup_stm32f407xx.o(STACK)
-    __initial_sp                             0x200011d0   Data           0  startup_stm32f407xx.o(STACK)
+    .L_MergedGlobals                         0x200001c0   Data          16  lcd_user.o(.bss..L_MergedGlobals)
+    stateCheckInOutPrev                      0x200001c0   Data           1  lcd_user.o(.bss..L_MergedGlobals)
+    [Anonymous Symbol]                       0x200001c0   Section        0  lcd_user.o(.bss..L_MergedGlobals)
+    stateLoginPrev                           0x200001c1   Data           1  lcd_user.o(.bss..L_MergedGlobals)
+    .L_MergedGlobals                         0x200001d0   Data          32  keypad_user.o(.bss..L_MergedGlobals)
+    [Anonymous Symbol]                       0x200001d0   Section        0  keypad_user.o(.bss..L_MergedGlobals)
+    index                                    0x200001d1   Data           1  keypad_user.o(.bss..L_MergedGlobals)
+    getPassword.timeDebounce                 0x200001d8   Data           8  keypad_user.o(.bss..L_MergedGlobals)
+    u8_KeyStatesArr                          0x200001e0   Data          16  keypad_user.o(.bss..L_MergedGlobals)
+    .L_MergedGlobals                         0x200001f0   Data          24  ds1307.o(.bss..L_MergedGlobals)
+    [Anonymous Symbol]                       0x200001f0   Section        0  ds1307.o(.bss..L_MergedGlobals)
+    .L_MergedGlobals                         0x20000208   Data           2  fatfs_sd.o(.bss..L_MergedGlobals)
+    CardType                                 0x20000208   Data           1  fatfs_sd.o(.bss..L_MergedGlobals)
+    [Anonymous Symbol]                       0x20000208   Section        0  fatfs_sd.o(.bss..L_MergedGlobals)
+    PowerFlag                                0x20000209   Data           1  fatfs_sd.o(.bss..L_MergedGlobals)
+    .L_MergedGlobals                         0x2000020a   Data           5  fatfs.o(.bss..L_MergedGlobals)
+    [Anonymous Symbol]                       0x2000020a   Section        0  fatfs.o(.bss..L_MergedGlobals)
+    gs_KEYPAD_info                           0x2000021c   Data           4  keypad.o(.bss.gs_KEYPAD_info)
+    [Anonymous Symbol]                       0x2000021c   Section        0  keypad.o(.bss.gs_KEYPAD_info)
+    Heap_Mem                                 0x20000bd8   Data         512  startup_stm32f407xx.o(HEAP)
+    HEAP                                     0x20000bd8   Section      512  startup_stm32f407xx.o(HEAP)
+    Stack_Mem                                0x20000dd8   Data        1024  startup_stm32f407xx.o(STACK)
+    STACK                                    0x20000dd8   Section     1024  startup_stm32f407xx.o(STACK)
+    __initial_sp                             0x200011d8   Data           0  startup_stm32f407xx.o(STACK)
 
     Global Symbols
 
@@ -4734,39 +4739,38 @@ Image Symbol Table
     USER_write                               0x08009a0d   Thumb Code     4  user_diskio_1.o(.text.USER_write)
     UsageFault_Handler                       0x08009a11   Thumb Code     2  stm32f4xx_it.o(.text.UsageFault_Handler)
     bt_handle                                0x08009a15   Thumb Code   122  button.o(.text.bt_handle)
-    bt_press_callback                        0x08009a91   Thumb Code   284  buton_user.o(.text.bt_press_callback)
-    bt_press_timout_callback                 0x08009bad   Thumb Code     2  button.o(.text.bt_press_timout_callback)
-    bt_release_callback                      0x08009bb1   Thumb Code     2  button.o(.text.bt_release_callback)
-    fingerFastSearch                         0x08009bb5   Thumb Code   176  fingerprint.o(.text.fingerFastSearch)
-    fingerHandle                             0x08009c65   Thumb Code    44  finger_user.o(.text.fingerHandle)
-    getConfidence                            0x08009c91   Thumb Code    12  fingerprint.o(.text.getConfidence)
-    getDateTime                              0x08009c9d   Thumb Code   504  ds1307.o(.text.getDateTime)
-    getFingerID                              0x08009e95   Thumb Code    12  fingerprint.o(.text.getFingerID)
-    getImage                                 0x08009ea1   Thumb Code   142  fingerprint.o(.text.getImage)
-    getImage2Tz                              0x08009f31   Thumb Code   148  fingerprint.o(.text.getImage2Tz)
-    getPassword                              0x08009fc5   Thumb Code   218  keypad_user.o(.text.getPassword)
-    handleButton                             0x0800a0a1   Thumb Code   132  buton_user.o(.text.handleButton)
-    initButton                               0x0800a125   Thumb Code    70  buton_user.o(.text.initButton)
-    initFinger                               0x0800a16d   Thumb Code    32  finger_user.o(.text.initFinger)
-    initKeyPad                               0x0800a18d   Thumb Code    40  keypad_user.o(.text.initKeyPad)
-    init_fingerprint                         0x0800a1b5   Thumb Code   126  fingerprint.o(.text.init_fingerprint)
-    lcdCheckInOut                            0x0800a235   Thumb Code    56  lcd_user.o(.text.lcdCheckInOut)
-    lcdHanle                                 0x0800a281   Thumb Code    48  lcd_user.o(.text.lcdHanle)
-    lcdInit                                  0x0800a2b1   Thumb Code    88  lcd_user.o(.text.lcdInit)
-    led_mode                                 0x0800a331   Thumb Code   142  fingerprint.o(.text.led_mode)
-    main                                     0x0800a3c1   Thumb Code   200  main.o(.text.main)
-    rtcInit                                  0x0800a489   Thumb Code    22  ds1307.o(.text.rtcInit)
-    send                                     0x0800a4a1   Thumb Code   284  fingerprint.o(.text.send)
-    _get_lc_ctype                            0x0800a5bd   Thumb Code    44  lc_ctype_c.o(locale$$code)
-    _fp_init                                 0x0800a5e9   Thumb Code    26  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x0800a601   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x0800a601   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    AHBPrescTable                            0x0800a602   Data          16  system_stm32f4xx.o(.rodata.AHBPrescTable)
-    APBPrescTable                            0x0800a612   Data           8  system_stm32f4xx.o(.rodata.APBPrescTable)
-    KEYPAD_CfgParam                          0x0800a61c   Data          48  keypad_cfg.o(.rodata.KEYPAD_CfgParam)
-    Region$$Table$$Base                      0x0800a664   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x0800a684   Number         0  anon$$obj.o(Region$$Table)
-    __ctype                                  0x0800a691   Data           0  lc_ctype_c.o(locale$$data)
+    bt_press_callback                        0x08009a91   Thumb Code   276  buton_user.o(.text.bt_press_callback)
+    bt_press_timout_callback                 0x08009ba5   Thumb Code     2  button.o(.text.bt_press_timout_callback)
+    bt_release_callback                      0x08009ba9   Thumb Code     2  button.o(.text.bt_release_callback)
+    fingerFastSearch                         0x08009bad   Thumb Code   176  fingerprint.o(.text.fingerFastSearch)
+    fingerHandle                             0x08009c5d   Thumb Code    44  finger_user.o(.text.fingerHandle)
+    getConfidence                            0x08009c89   Thumb Code    12  fingerprint.o(.text.getConfidence)
+    getDateTime                              0x08009c95   Thumb Code   504  ds1307.o(.text.getDateTime)
+    getFingerID                              0x08009e8d   Thumb Code    12  fingerprint.o(.text.getFingerID)
+    getImage                                 0x08009e99   Thumb Code   142  fingerprint.o(.text.getImage)
+    getImage2Tz                              0x08009f29   Thumb Code   148  fingerprint.o(.text.getImage2Tz)
+    getPassword                              0x08009fbd   Thumb Code   218  keypad_user.o(.text.getPassword)
+    handleButton                             0x0800a099   Thumb Code   132  buton_user.o(.text.handleButton)
+    initButton                               0x0800a11d   Thumb Code    70  buton_user.o(.text.initButton)
+    initFinger                               0x0800a165   Thumb Code    32  finger_user.o(.text.initFinger)
+    initKeyPad                               0x0800a185   Thumb Code    40  keypad_user.o(.text.initKeyPad)
+    init_fingerprint                         0x0800a1ad   Thumb Code   126  fingerprint.o(.text.init_fingerprint)
+    lcdHanle                                 0x0800a22d   Thumb Code   136  lcd_user.o(.text.lcdHanle)
+    lcdInit                                  0x0800a2c1   Thumb Code    72  lcd_user.o(.text.lcdInit)
+    led_mode                                 0x0800a309   Thumb Code   142  fingerprint.o(.text.led_mode)
+    main                                     0x0800a399   Thumb Code   200  main.o(.text.main)
+    rtcInit                                  0x0800a461   Thumb Code    22  ds1307.o(.text.rtcInit)
+    send                                     0x0800a479   Thumb Code   284  fingerprint.o(.text.send)
+    _get_lc_ctype                            0x0800a595   Thumb Code    44  lc_ctype_c.o(locale$$code)
+    _fp_init                                 0x0800a5c1   Thumb Code    26  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x0800a5d9   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x0800a5d9   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    AHBPrescTable                            0x0800a5da   Data          16  system_stm32f4xx.o(.rodata.AHBPrescTable)
+    APBPrescTable                            0x0800a5ea   Data           8  system_stm32f4xx.o(.rodata.APBPrescTable)
+    KEYPAD_CfgParam                          0x0800a5f4   Data          48  keypad_cfg.o(.rodata.KEYPAD_CfgParam)
+    Region$$Table$$Base                      0x0800a694   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0800a6b4   Number         0  anon$$obj.o(Region$$Table)
+    __ctype                                  0x0800a6c1   Data           0  lc_ctype_c.o(locale$$data)
     uwTickFreq                               0x20000000   Data           1  stm32f4xx_hal.o(.data..L_MergedGlobals)
     uwTickPrio                               0x20000004   Data           4  stm32f4xx_hal.o(.data..L_MergedGlobals)
     CDC_Class                                0x20000008   Data          32  usbh_cdc.o(.data.CDC_Class)
@@ -4787,31 +4791,31 @@ Image Symbol Table
     bt3                                      0x20000158   Data          24  buton_user.o(.bss..L_MergedGlobals)
     detectFinger                             0x20000170   Data          24  buton_user.o(.bss..L_MergedGlobals)
     dataRx                                   0x2000018c   Data          50  fingerprint.o(.bss..L_MergedGlobals)
-    indexPassword                            0x200001c0   Data           1  keypad_user.o(.bss..L_MergedGlobals)
-    press                                    0x200001c2   Data           1  keypad_user.o(.bss..L_MergedGlobals)
-    statePressPrev                           0x200001c3   Data           1  keypad_user.o(.bss..L_MergedGlobals)
-    buffPassword                             0x200001c4   Data           4  keypad_user.o(.bss..L_MergedGlobals)
-    bufferBcd                                0x200001e0   Data           2  ds1307.o(.bss..L_MergedGlobals)
-    i2cHandle                                0x200001e4   Data           4  ds1307.o(.bss..L_MergedGlobals)
-    rtc                                      0x200001e8   Data          16  ds1307.o(.bss..L_MergedGlobals)
-    retUSER                                  0x200001fa   Data           1  fatfs.o(.bss..L_MergedGlobals)
-    USERPath                                 0x200001fb   Data           4  fatfs.o(.bss..L_MergedGlobals)
-    Appli_state                              0x200001ff   Data           1  usb_host.o(.bss.Appli_state)
-    disk                                     0x20000200   Data          12  ff_gen_drv.o(.bss.disk)
-    hUsbHostFS                               0x20000210   Data         984  usb_host.o(.bss.hUsbHostFS)
-    hhcd_USB_OTG_FS                          0x200005e8   Data         992  usbh_conf.o(.bss.hhcd_USB_OTG_FS)
-    hi2c3                                    0x200009c8   Data          84  i2c.o(.bss.hi2c3)
-    hspi2                                    0x20000a1c   Data          88  spi.o(.bss.hspi2)
-    htim3                                    0x20000a74   Data          72  tim.o(.bss.htim3)
-    huart2                                   0x20000abc   Data          72  usart.o(.bss.huart2)
-    huart3                                   0x20000b04   Data          72  usart.o(.bss.huart3)
-    lcd                                      0x20000b4c   Data          12  lcd_user.o(.bss.lcd)
-    rpacket                                  0x20000b58   Data          88  fingerprint.o(.bss.rpacket)
-    stateCheckInOut                          0x20000bb0   Data           1  main.o(.bss.stateCheckInOut)
-    stateLogin                               0x20000bb1   Data           1  main.o(.bss.stateLogin)
-    timeWaitCheckInOut                       0x20000bb8   Data           8  main.o(.bss.timeWaitCheckInOut)
-    timeWaitLogin                            0x20000bc0   Data           8  main.o(.bss.timeWaitLogin)
-    uwTick                                   0x20000bc8   Data           4  stm32f4xx_hal.o(.bss.uwTick)
+    lcd                                      0x200001c4   Data          12  lcd_user.o(.bss..L_MergedGlobals)
+    indexPassword                            0x200001d0   Data           1  keypad_user.o(.bss..L_MergedGlobals)
+    press                                    0x200001d2   Data           1  keypad_user.o(.bss..L_MergedGlobals)
+    statePressPrev                           0x200001d3   Data           1  keypad_user.o(.bss..L_MergedGlobals)
+    buffPassword                             0x200001d4   Data           4  keypad_user.o(.bss..L_MergedGlobals)
+    bufferBcd                                0x200001f0   Data           2  ds1307.o(.bss..L_MergedGlobals)
+    i2cHandle                                0x200001f4   Data           4  ds1307.o(.bss..L_MergedGlobals)
+    rtc                                      0x200001f8   Data          16  ds1307.o(.bss..L_MergedGlobals)
+    retUSER                                  0x2000020a   Data           1  fatfs.o(.bss..L_MergedGlobals)
+    USERPath                                 0x2000020b   Data           4  fatfs.o(.bss..L_MergedGlobals)
+    Appli_state                              0x2000020f   Data           1  usb_host.o(.bss.Appli_state)
+    disk                                     0x20000210   Data          12  ff_gen_drv.o(.bss.disk)
+    hUsbHostFS                               0x20000220   Data         984  usb_host.o(.bss.hUsbHostFS)
+    hhcd_USB_OTG_FS                          0x200005f8   Data         992  usbh_conf.o(.bss.hhcd_USB_OTG_FS)
+    hi2c3                                    0x200009d8   Data          84  i2c.o(.bss.hi2c3)
+    hspi2                                    0x20000a2c   Data          88  spi.o(.bss.hspi2)
+    htim3                                    0x20000a84   Data          72  tim.o(.bss.htim3)
+    huart2                                   0x20000acc   Data          72  usart.o(.bss.huart2)
+    huart3                                   0x20000b14   Data          72  usart.o(.bss.huart3)
+    rpacket                                  0x20000b60   Data          88  fingerprint.o(.bss.rpacket)
+    stateCheckInOut                          0x20000bb8   Data           1  main.o(.bss.stateCheckInOut)
+    stateLogin                               0x20000bb9   Data           1  main.o(.bss.stateLogin)
+    timeWaitCheckInOut                       0x20000bc0   Data           8  main.o(.bss.timeWaitCheckInOut)
+    timeWaitLogin                            0x20000bc8   Data           8  main.o(.bss.timeWaitLogin)
+    uwTick                                   0x20000bd0   Data           4  stm32f4xx_hal.o(.bss.uwTick)
 
 
 
@@ -4821,100 +4825,100 @@ Memory Map of the image
 
   Image Entry point : 0x08000189
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x0000a838, Max: 0x00100000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x0000a868, Max: 0x00100000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000a794, Max: 0x00100000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000a7c4, Max: 0x00100000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x08000000   0x08000000   0x00000188   Data   RO            3    RESET               startup_stm32f407xx.o
-    0x08000188   0x08000188   0x00000008   Code   RO         2205  * !!!main             c_w.l(__main.o)
-    0x08000190   0x08000190   0x00000034   Code   RO         2462    !!!scatter          c_w.l(__scatter.o)
-    0x080001c4   0x080001c4   0x0000001a   Code   RO         2464    !!handler_copy      c_w.l(__scatter_copy.o)
+    0x08000188   0x08000188   0x00000008   Code   RO         2201  * !!!main             c_w.l(__main.o)
+    0x08000190   0x08000190   0x00000034   Code   RO         2458    !!!scatter          c_w.l(__scatter.o)
+    0x080001c4   0x080001c4   0x0000001a   Code   RO         2460    !!handler_copy      c_w.l(__scatter_copy.o)
     0x080001de   0x080001de   0x00000002   PAD
-    0x080001e0   0x080001e0   0x0000001c   Code   RO         2466    !!handler_zi        c_w.l(__scatter_zi.o)
-    0x080001fc   0x080001fc   0x00000002   Code   RO         2386    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
-    0x080001fe   0x080001fe   0x00000004   Code   RO         2300    .ARM.Collect$$libinit$$00000001  c_w.l(libinit2.o)
-    0x08000202   0x08000202   0x00000000   Code   RO         2303    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
-    0x08000202   0x08000202   0x00000000   Code   RO         2305    .ARM.Collect$$libinit$$00000006  c_w.l(libinit2.o)
-    0x08000202   0x08000202   0x00000008   Code   RO         2306    .ARM.Collect$$libinit$$00000007  c_w.l(libinit2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         2308    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         2310    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         2312    .ARM.Collect$$libinit$$00000010  c_w.l(libinit2.o)
-    0x0800020a   0x0800020a   0x00000006   Code   RO         2313    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
-    0x08000210   0x08000210   0x00000000   Code   RO         2315    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
-    0x08000210   0x08000210   0x0000000c   Code   RO         2316    .ARM.Collect$$libinit$$00000014  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2317    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2319    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2321    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2323    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2325    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2327    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2329    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2331    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2333    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2335    .ARM.Collect$$libinit$$00000027  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2339    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2341    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2343    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000000   Code   RO         2345    .ARM.Collect$$libinit$$00000034  c_w.l(libinit2.o)
-    0x0800021c   0x0800021c   0x00000002   Code   RO         2346    .ARM.Collect$$libinit$$00000035  c_w.l(libinit2.o)
-    0x0800021e   0x0800021e   0x00000002   Code   RO         2459    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         2415    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         2417    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         2420    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         2423    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         2425    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         2428    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
-    0x08000220   0x08000220   0x00000002   Code   RO         2429    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
-    0x08000222   0x08000222   0x00000000   Code   RO         2209    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
-    0x08000222   0x08000222   0x00000000   Code   RO         2259    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
-    0x08000222   0x08000222   0x00000006   Code   RO         2271    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
-    0x08000228   0x08000228   0x00000000   Code   RO         2261    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
-    0x08000228   0x08000228   0x00000004   Code   RO         2262    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
-    0x0800022c   0x0800022c   0x00000000   Code   RO         2264    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
-    0x0800022c   0x0800022c   0x00000008   Code   RO         2265    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
-    0x08000234   0x08000234   0x00000002   Code   RO         2396    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
-    0x08000236   0x08000236   0x00000000   Code   RO         2435    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
-    0x08000236   0x08000236   0x00000004   Code   RO         2436    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
-    0x0800023a   0x0800023a   0x00000006   Code   RO         2437    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
+    0x080001e0   0x080001e0   0x0000001c   Code   RO         2462    !!handler_zi        c_w.l(__scatter_zi.o)
+    0x080001fc   0x080001fc   0x00000002   Code   RO         2382    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
+    0x080001fe   0x080001fe   0x00000004   Code   RO         2296    .ARM.Collect$$libinit$$00000001  c_w.l(libinit2.o)
+    0x08000202   0x08000202   0x00000000   Code   RO         2299    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
+    0x08000202   0x08000202   0x00000000   Code   RO         2301    .ARM.Collect$$libinit$$00000006  c_w.l(libinit2.o)
+    0x08000202   0x08000202   0x00000008   Code   RO         2302    .ARM.Collect$$libinit$$00000007  c_w.l(libinit2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         2304    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         2306    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         2308    .ARM.Collect$$libinit$$00000010  c_w.l(libinit2.o)
+    0x0800020a   0x0800020a   0x00000006   Code   RO         2309    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
+    0x08000210   0x08000210   0x00000000   Code   RO         2311    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
+    0x08000210   0x08000210   0x0000000c   Code   RO         2312    .ARM.Collect$$libinit$$00000014  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2313    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2315    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2317    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2319    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2321    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2323    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2325    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2327    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2329    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2331    .ARM.Collect$$libinit$$00000027  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2335    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2337    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2339    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000000   Code   RO         2341    .ARM.Collect$$libinit$$00000034  c_w.l(libinit2.o)
+    0x0800021c   0x0800021c   0x00000002   Code   RO         2342    .ARM.Collect$$libinit$$00000035  c_w.l(libinit2.o)
+    0x0800021e   0x0800021e   0x00000002   Code   RO         2455    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         2411    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         2413    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         2416    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         2419    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         2421    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         2424    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
+    0x08000220   0x08000220   0x00000002   Code   RO         2425    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
+    0x08000222   0x08000222   0x00000000   Code   RO         2205    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
+    0x08000222   0x08000222   0x00000000   Code   RO         2255    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
+    0x08000222   0x08000222   0x00000006   Code   RO         2267    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
+    0x08000228   0x08000228   0x00000000   Code   RO         2257    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
+    0x08000228   0x08000228   0x00000004   Code   RO         2258    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
+    0x0800022c   0x0800022c   0x00000000   Code   RO         2260    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
+    0x0800022c   0x0800022c   0x00000008   Code   RO         2261    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
+    0x08000234   0x08000234   0x00000002   Code   RO         2392    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
+    0x08000236   0x08000236   0x00000000   Code   RO         2431    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
+    0x08000236   0x08000236   0x00000004   Code   RO         2432    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
+    0x0800023a   0x0800023a   0x00000006   Code   RO         2433    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x08000240   0x08000240   0x00000040   Code   RO            4    .text               startup_stm32f407xx.o
-    0x08000280   0x08000280   0x00000028   Code   RO         2101    .text               c_w.l(calloc.o)
-    0x080002a8   0x080002a8   0x0000004e   Code   RO         2103    .text               c_w.l(h1_free.o)
-    0x080002f6   0x080002f6   0x000000f0   Code   RO         2157    .text               c_w.l(lludivv7m.o)
-    0x080003e6   0x080003e6   0x0000001a   Code   RO         2189    .text               c_w.l(atoi.o)
-    0x08000400   0x08000400   0x0000003e   Code   RO         2191    .text               c_w.l(strlen.o)
-    0x0800043e   0x0800043e   0x00000018   Code   RO         2193    .text               c_w.l(strcat.o)
-    0x08000456   0x08000456   0x0000008a   Code   RO         2195    .text               c_w.l(rt_memcpy_v6.o)
-    0x080004e0   0x080004e0   0x00000044   Code   RO         2197    .text               c_w.l(rt_memclr.o)
-    0x08000524   0x08000524   0x0000004e   Code   RO         2199    .text               c_w.l(rt_memclr_w.o)
-    0x08000572   0x08000572   0x00000006   Code   RO         2203    .text               c_w.l(heapauxi.o)
-    0x08000578   0x08000578   0x00000008   Code   RO         2217    .text               c_w.l(rt_heap_descriptor_intlibspace.o)
-    0x08000580   0x08000580   0x00000008   Code   RO         2222    .text               c_w.l(rt_errno_addr_intlibspace.o)
-    0x08000588   0x08000588   0x00000004   Code   RO         2224    .text               c_w.l(hguard.o)
-    0x0800058c   0x0800058c   0x0000008a   Code   RO         2226    .text               c_w.l(init_alloc.o)
-    0x08000616   0x08000616   0x0000005e   Code   RO         2232    .text               c_w.l(h1_alloc.o)
-    0x08000674   0x08000674   0x00000070   Code   RO         2251    .text               c_w.l(strtol.o)
-    0x080006e4   0x080006e4   0x00000064   Code   RO         2253    .text               c_w.l(rt_memcpy_w.o)
-    0x08000748   0x08000748   0x00000008   Code   RO         2255    .text               c_w.l(libspace.o)
-    0x08000750   0x08000750   0x00000010   Code   RO         2273    .text               c_w.l(rt_ctype_table.o)
-    0x08000760   0x08000760   0x00000000   Code   RO         2277    .text               c_w.l(maybetermalloc1.o)
-    0x08000760   0x08000760   0x0000000e   Code   RO         2279    .text               c_w.l(h1_init.o)
-    0x0800076e   0x0800076e   0x00000034   Code   RO         2281    .text               c_w.l(h1_extend.o)
-    0x080007a2   0x080007a2   0x0000009e   Code   RO         2289    .text               c_w.l(_strtoul.o)
-    0x08000840   0x08000840   0x0000000e   Code   RO         2291    .text               c_w.l(defsig_rtmem_outer.o)
-    0x0800084e   0x0800084e   0x0000004a   Code   RO         2351    .text               c_w.l(sys_stackheap_outer.o)
-    0x08000898   0x08000898   0x00000008   Code   RO         2358    .text               c_w.l(rt_locale_intlibspace.o)
-    0x080008a0   0x080008a0   0x0000001c   Code   RO         2364    .text               c_w.l(_chval.o)
-    0x080008bc   0x080008bc   0x00000012   Code   RO         2369    .text               c_w.l(exit.o)
-    0x080008ce   0x080008ce   0x0000000a   Code   RO         2371    .text               c_w.l(defsig_exit.o)
-    0x080008d8   0x080008d8   0x00000050   Code   RO         2377    .text               c_w.l(defsig_rtmem_inner.o)
-    0x08000928   0x08000928   0x0000000c   Code   RO         2389    .text               c_w.l(sys_exit.o)
-    0x08000934   0x08000934   0x00000002   Code   RO         2393    .text               c_w.l(use_no_semi.o)
-    0x08000936   0x08000936   0x00000000   Code   RO         2395    .text               c_w.l(indicate_semi.o)
-    0x08000936   0x08000936   0x00000032   Code   RO         2404    .text               c_w.l(defsig_general.o)
-    0x08000968   0x08000968   0x0000007c   Code   RO         2408    .text               c_w.l(strcmpv7em.o)
-    0x080009e4   0x080009e4   0x0000000e   Code   RO         2430    .text               c_w.l(sys_wrch.o)
+    0x08000280   0x08000280   0x00000028   Code   RO         2097    .text               c_w.l(calloc.o)
+    0x080002a8   0x080002a8   0x0000004e   Code   RO         2099    .text               c_w.l(h1_free.o)
+    0x080002f6   0x080002f6   0x000000f0   Code   RO         2153    .text               c_w.l(lludivv7m.o)
+    0x080003e6   0x080003e6   0x0000001a   Code   RO         2185    .text               c_w.l(atoi.o)
+    0x08000400   0x08000400   0x0000003e   Code   RO         2187    .text               c_w.l(strlen.o)
+    0x0800043e   0x0800043e   0x00000018   Code   RO         2189    .text               c_w.l(strcat.o)
+    0x08000456   0x08000456   0x0000008a   Code   RO         2191    .text               c_w.l(rt_memcpy_v6.o)
+    0x080004e0   0x080004e0   0x00000044   Code   RO         2193    .text               c_w.l(rt_memclr.o)
+    0x08000524   0x08000524   0x0000004e   Code   RO         2195    .text               c_w.l(rt_memclr_w.o)
+    0x08000572   0x08000572   0x00000006   Code   RO         2199    .text               c_w.l(heapauxi.o)
+    0x08000578   0x08000578   0x00000008   Code   RO         2213    .text               c_w.l(rt_heap_descriptor_intlibspace.o)
+    0x08000580   0x08000580   0x00000008   Code   RO         2218    .text               c_w.l(rt_errno_addr_intlibspace.o)
+    0x08000588   0x08000588   0x00000004   Code   RO         2220    .text               c_w.l(hguard.o)
+    0x0800058c   0x0800058c   0x0000008a   Code   RO         2222    .text               c_w.l(init_alloc.o)
+    0x08000616   0x08000616   0x0000005e   Code   RO         2228    .text               c_w.l(h1_alloc.o)
+    0x08000674   0x08000674   0x00000070   Code   RO         2247    .text               c_w.l(strtol.o)
+    0x080006e4   0x080006e4   0x00000064   Code   RO         2249    .text               c_w.l(rt_memcpy_w.o)
+    0x08000748   0x08000748   0x00000008   Code   RO         2251    .text               c_w.l(libspace.o)
+    0x08000750   0x08000750   0x00000010   Code   RO         2269    .text               c_w.l(rt_ctype_table.o)
+    0x08000760   0x08000760   0x00000000   Code   RO         2273    .text               c_w.l(maybetermalloc1.o)
+    0x08000760   0x08000760   0x0000000e   Code   RO         2275    .text               c_w.l(h1_init.o)
+    0x0800076e   0x0800076e   0x00000034   Code   RO         2277    .text               c_w.l(h1_extend.o)
+    0x080007a2   0x080007a2   0x0000009e   Code   RO         2285    .text               c_w.l(_strtoul.o)
+    0x08000840   0x08000840   0x0000000e   Code   RO         2287    .text               c_w.l(defsig_rtmem_outer.o)
+    0x0800084e   0x0800084e   0x0000004a   Code   RO         2347    .text               c_w.l(sys_stackheap_outer.o)
+    0x08000898   0x08000898   0x00000008   Code   RO         2354    .text               c_w.l(rt_locale_intlibspace.o)
+    0x080008a0   0x080008a0   0x0000001c   Code   RO         2360    .text               c_w.l(_chval.o)
+    0x080008bc   0x080008bc   0x00000012   Code   RO         2365    .text               c_w.l(exit.o)
+    0x080008ce   0x080008ce   0x0000000a   Code   RO         2367    .text               c_w.l(defsig_exit.o)
+    0x080008d8   0x080008d8   0x00000050   Code   RO         2373    .text               c_w.l(defsig_rtmem_inner.o)
+    0x08000928   0x08000928   0x0000000c   Code   RO         2385    .text               c_w.l(sys_exit.o)
+    0x08000934   0x08000934   0x00000002   Code   RO         2389    .text               c_w.l(use_no_semi.o)
+    0x08000936   0x08000936   0x00000000   Code   RO         2391    .text               c_w.l(indicate_semi.o)
+    0x08000936   0x08000936   0x00000032   Code   RO         2400    .text               c_w.l(defsig_general.o)
+    0x08000968   0x08000968   0x0000007c   Code   RO         2404    .text               c_w.l(strcmpv7em.o)
+    0x080009e4   0x080009e4   0x0000000e   Code   RO         2426    .text               c_w.l(sys_wrch.o)
     0x080009f2   0x080009f2   0x00000002   PAD
     0x080009f4   0x080009f4   0x00000002   Code   RO          113    .text.BusFault_Handler  stm32f4xx_it.o
     0x080009f6   0x080009f6   0x00000002   PAD
@@ -4930,7 +4934,7 @@ Memory Map of the image
     0x08000e3a   0x08000e3a   0x00000002   PAD
     0x08000e3c   0x08000e3c   0x00000006   Code   RO           15    .text.Error_Handler  main.o
     0x08000e42   0x08000e42   0x00000002   PAD
-    0x08000e44   0x08000e44   0x0000004c   Code   RO         2066    .text.FATFS_LinkDriver  ff_gen_drv.o
+    0x08000e44   0x08000e44   0x0000004c   Code   RO         2062    .text.FATFS_LinkDriver  ff_gen_drv.o
     0x08000e90   0x08000e90   0x00000028   Code   RO          702    .text.HAL_Delay     stm32f4xx_hal.o
     0x08000eb8   0x08000eb8   0x000001a6   Code   RO          501    .text.HAL_GPIO_Init  stm32f4xx_hal_gpio.o
     0x0800105e   0x0800105e   0x00000002   PAD
@@ -5017,7 +5021,7 @@ Memory Map of the image
     0x080036f6   0x080036f6   0x00000002   PAD
     0x080036f8   0x080036f8   0x00000002   Code   RO         1165    .text.HAL_TIM_PWM_PulseFinishedCallback  stm32f4xx_hal_tim.o
     0x080036fa   0x080036fa   0x00000002   PAD
-    0x080036fc   0x080036fc   0x0000004a   Code   RO         1805    .text.HAL_TIM_PeriodElapsedCallback  keypad_user.o
+    0x080036fc   0x080036fc   0x0000004a   Code   RO         1801    .text.HAL_TIM_PeriodElapsedCallback  keypad_user.o
     0x08003746   0x08003746   0x00000002   PAD
     0x08003748   0x08003748   0x00000002   Code   RO         1169    .text.HAL_TIM_TriggerCallback  stm32f4xx_hal_tim.o
     0x0800374a   0x0800374a   0x00000002   PAD
@@ -5043,7 +5047,7 @@ Memory Map of the image
     0x080046b4   0x080046b4   0x00000666   Code   RO         1763    .text.KEYPAD_Scan   keypad.o
     0x08004d1a   0x08004d1a   0x00000002   PAD
     0x08004d1c   0x08004d1c   0x00000018   Code   RO          218    .text.MX_DriverVbusFS  usbh_platform.o
-    0x08004d34   0x08004d34   0x0000001c   Code   RO         1941    .text.MX_FATFS_Init  fatfs.o
+    0x08004d34   0x08004d34   0x0000001c   Code   RO         1937    .text.MX_FATFS_Init  fatfs.o
     0x08004d50   0x08004d50   0x0000023a   Code   RO           33    .text.MX_GPIO_Init  gpio.o
     0x08004f8a   0x08004f8a   0x00000002   PAD
     0x08004f8c   0x08004f8c   0x00000042   Code   RO           42    .text.MX_I2C3_Init  i2c.o
@@ -5062,20 +5066,20 @@ Memory Map of the image
     0x08005174   0x08005174   0x0000000c   Code   RO          127    .text.OTG_FS_IRQHandler  stm32f4xx_it.o
     0x08005180   0x08005180   0x00000002   Code   RO          121    .text.PendSV_Handler  stm32f4xx_it.o
     0x08005182   0x08005182   0x00000002   PAD
-    0x08005184   0x08005184   0x00000346   Code   RO         1870    .text.SD_PowerOn    fatfs_sd.o
+    0x08005184   0x08005184   0x00000346   Code   RO         1866    .text.SD_PowerOn    fatfs_sd.o
     0x080054ca   0x080054ca   0x00000002   PAD
-    0x080054cc   0x080054cc   0x000000a0   Code   RO         1886    .text.SD_ReadyWait  fatfs_sd.o
-    0x0800556c   0x0800556c   0x0000016e   Code   RO         1878    .text.SD_RxDataBlock  fatfs_sd.o
+    0x080054cc   0x080054cc   0x000000a0   Code   RO         1882    .text.SD_ReadyWait  fatfs_sd.o
+    0x0800556c   0x0800556c   0x0000016e   Code   RO         1874    .text.SD_RxDataBlock  fatfs_sd.o
     0x080056da   0x080056da   0x00000002   PAD
-    0x080056dc   0x080056dc   0x000004b0   Code   RO         1872    .text.SD_SendCmd    fatfs_sd.o
-    0x08005b8c   0x08005b8c   0x00000240   Code   RO         1882    .text.SD_TxDataBlock  fatfs_sd.o
-    0x08005dcc   0x08005dcc   0x00000344   Code   RO         1868    .text.SD_disk_initialize  fatfs_sd.o
-    0x08006110   0x08006110   0x000002d6   Code   RO         1884    .text.SD_disk_ioctl  fatfs_sd.o
+    0x080056dc   0x080056dc   0x000004b0   Code   RO         1868    .text.SD_SendCmd    fatfs_sd.o
+    0x08005b8c   0x08005b8c   0x00000240   Code   RO         1878    .text.SD_TxDataBlock  fatfs_sd.o
+    0x08005dcc   0x08005dcc   0x00000344   Code   RO         1864    .text.SD_disk_initialize  fatfs_sd.o
+    0x08006110   0x08006110   0x000002d6   Code   RO         1880    .text.SD_disk_ioctl  fatfs_sd.o
     0x080063e6   0x080063e6   0x00000002   PAD
-    0x080063e8   0x080063e8   0x000000f6   Code   RO         1876    .text.SD_disk_read  fatfs_sd.o
+    0x080063e8   0x080063e8   0x000000f6   Code   RO         1872    .text.SD_disk_read  fatfs_sd.o
     0x080064de   0x080064de   0x00000002   PAD
-    0x080064e0   0x080064e0   0x00000014   Code   RO         1874    .text.SD_disk_status  fatfs_sd.o
-    0x080064f4   0x080064f4   0x00000124   Code   RO         1880    .text.SD_disk_write  fatfs_sd.o
+    0x080064e0   0x080064e0   0x00000014   Code   RO         1870    .text.SD_disk_status  fatfs_sd.o
+    0x080064f4   0x080064f4   0x00000124   Code   RO         1876    .text.SD_disk_write  fatfs_sd.o
     0x08006618   0x08006618   0x00000120   Code   RO         1015    .text.SPI_WaitFlagStateUntilTimeout  stm32f4xx_hal_spi.o
     0x08006738   0x08006738   0x00000002   Code   RO          117    .text.SVC_Handler   stm32f4xx_it.o
     0x0800673a   0x0800673a   0x00000002   PAD
@@ -5204,106 +5208,105 @@ Memory Map of the image
     0x08008d5a   0x08008d5a   0x00000002   PAD
     0x08008d5c   0x08008d5c   0x00000368   Code   RO          295    .text.USB_SetCurrentMode  stm32f4xx_ll_usb.o
     0x080090c4   0x080090c4   0x00000938   Code   RO          377    .text.USB_StopHost  stm32f4xx_ll_usb.o
-    0x080099fc   0x080099fc   0x00000004   Code   RO         1923    .text.USER_initialize  user_diskio_1.o
-    0x08009a00   0x08009a00   0x00000004   Code   RO         1931    .text.USER_ioctl    user_diskio_1.o
-    0x08009a04   0x08009a04   0x00000004   Code   RO         1927    .text.USER_read     user_diskio_1.o
-    0x08009a08   0x08009a08   0x00000004   Code   RO         1925    .text.USER_status   user_diskio_1.o
-    0x08009a0c   0x08009a0c   0x00000004   Code   RO         1929    .text.USER_write    user_diskio_1.o
+    0x080099fc   0x080099fc   0x00000004   Code   RO         1919    .text.USER_initialize  user_diskio_1.o
+    0x08009a00   0x08009a00   0x00000004   Code   RO         1927    .text.USER_ioctl    user_diskio_1.o
+    0x08009a04   0x08009a04   0x00000004   Code   RO         1923    .text.USER_read     user_diskio_1.o
+    0x08009a08   0x08009a08   0x00000004   Code   RO         1921    .text.USER_status   user_diskio_1.o
+    0x08009a0c   0x08009a0c   0x00000004   Code   RO         1925    .text.USER_write    user_diskio_1.o
     0x08009a10   0x08009a10   0x00000002   Code   RO          115    .text.UsageFault_Handler  stm32f4xx_it.o
     0x08009a12   0x08009a12   0x00000002   PAD
     0x08009a14   0x08009a14   0x0000007a   Code   RO         1657    .text.bt_handle     button.o
     0x08009a8e   0x08009a8e   0x00000002   PAD
-    0x08009a90   0x08009a90   0x0000011c   Code   RO         1639    .text.bt_press_callback  buton_user.o
-    0x08009bac   0x08009bac   0x00000002   Code   RO         1655    .text.bt_press_timout_callback  button.o
-    0x08009bae   0x08009bae   0x00000002   PAD
-    0x08009bb0   0x08009bb0   0x00000002   Code   RO         1653    .text.bt_release_callback  button.o
-    0x08009bb2   0x08009bb2   0x00000002   PAD
-    0x08009bb4   0x08009bb4   0x000000b0   Code   RO         1702    .text.fingerFastSearch  fingerprint.o
-    0x08009c64   0x08009c64   0x0000002c   Code   RO         1673    .text.fingerHandle  finger_user.o
-    0x08009c90   0x08009c90   0x0000000c   Code   RO         1706    .text.getConfidence  fingerprint.o
-    0x08009c9c   0x08009c9c   0x000001f8   Code   RO         1828    .text.getDateTime   ds1307.o
-    0x08009e94   0x08009e94   0x0000000c   Code   RO         1704    .text.getFingerID   fingerprint.o
-    0x08009ea0   0x08009ea0   0x0000008e   Code   RO         1698    .text.getImage      fingerprint.o
-    0x08009f2e   0x08009f2e   0x00000002   PAD
-    0x08009f30   0x08009f30   0x00000094   Code   RO         1700    .text.getImage2Tz   fingerprint.o
-    0x08009fc4   0x08009fc4   0x000000da   Code   RO         1811    .text.getPassword   keypad_user.o
-    0x0800a09e   0x0800a09e   0x00000002   PAD
-    0x0800a0a0   0x0800a0a0   0x00000084   Code   RO         1637    .text.handleButton  buton_user.o
-    0x0800a124   0x0800a124   0x00000046   Code   RO         1635    .text.initButton    buton_user.o
-    0x0800a16a   0x0800a16a   0x00000002   PAD
-    0x0800a16c   0x0800a16c   0x00000020   Code   RO         1671    .text.initFinger    finger_user.o
-    0x0800a18c   0x0800a18c   0x00000028   Code   RO         1807    .text.initKeyPad    keypad_user.o
-    0x0800a1b4   0x0800a1b4   0x0000007e   Code   RO         1684    .text.init_fingerprint  fingerprint.o
-    0x0800a232   0x0800a232   0x00000002   PAD
-    0x0800a234   0x0800a234   0x0000004c   Code   RO         1788    .text.lcdCheckInOut  lcd_user.o
-    0x0800a280   0x0800a280   0x00000030   Code   RO         1782    .text.lcdHanle      lcd_user.o
-    0x0800a2b0   0x0800a2b0   0x00000080   Code   RO         1784    .text.lcdInit       lcd_user.o
-    0x0800a330   0x0800a330   0x0000008e   Code   RO         1708    .text.led_mode      fingerprint.o
-    0x0800a3be   0x0800a3be   0x00000002   PAD
-    0x0800a3c0   0x0800a3c0   0x000000c8   Code   RO           11    .text.main          main.o
-    0x0800a488   0x0800a488   0x00000016   Code   RO         1822    .text.rtcInit       ds1307.o
-    0x0800a49e   0x0800a49e   0x00000002   PAD
-    0x0800a4a0   0x0800a4a0   0x0000011c   Code   RO         1690    .text.send          fingerprint.o
-    0x0800a5bc   0x0800a5bc   0x0000002c   Code   RO         2367    locale$$code        c_w.l(lc_ctype_c.o)
-    0x0800a5e8   0x0800a5e8   0x0000001a   Code   RO         2387    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x0800a602   0x0800a602   0x00000010   Data   RO         1471    .rodata.AHBPrescTable  system_stm32f4xx.o
-    0x0800a612   0x0800a612   0x00000008   Data   RO         1472    .rodata.APBPrescTable  system_stm32f4xx.o
-    0x0800a61a   0x0800a61a   0x00000002   PAD
-    0x0800a61c   0x0800a61c   0x00000030   Data   RO         1774    .rodata.KEYPAD_CfgParam  keypad_cfg.o
-    0x0800a64c   0x0800a64c   0x00000004   Data   RO         1625    .rodata.str1.1      usbh_cdc.o
-    0x0800a650   0x0800a650   0x00000012   Data   RO         1795    .rodata.str1.1      lcd_user.o
-    0x0800a662   0x0800a662   0x00000002   PAD
-    0x0800a664   0x0800a664   0x00000020   Data   RO         2461    Region$$Table       anon$$obj.o
-    0x0800a684   0x0800a684   0x00000110   Data   RO         2366    locale$$data        c_w.l(lc_ctype_c.o)
+    0x08009a90   0x08009a90   0x00000114   Code   RO         1639    .text.bt_press_callback  buton_user.o
+    0x08009ba4   0x08009ba4   0x00000002   Code   RO         1655    .text.bt_press_timout_callback  button.o
+    0x08009ba6   0x08009ba6   0x00000002   PAD
+    0x08009ba8   0x08009ba8   0x00000002   Code   RO         1653    .text.bt_release_callback  button.o
+    0x08009baa   0x08009baa   0x00000002   PAD
+    0x08009bac   0x08009bac   0x000000b0   Code   RO         1702    .text.fingerFastSearch  fingerprint.o
+    0x08009c5c   0x08009c5c   0x0000002c   Code   RO         1673    .text.fingerHandle  finger_user.o
+    0x08009c88   0x08009c88   0x0000000c   Code   RO         1706    .text.getConfidence  fingerprint.o
+    0x08009c94   0x08009c94   0x000001f8   Code   RO         1824    .text.getDateTime   ds1307.o
+    0x08009e8c   0x08009e8c   0x0000000c   Code   RO         1704    .text.getFingerID   fingerprint.o
+    0x08009e98   0x08009e98   0x0000008e   Code   RO         1698    .text.getImage      fingerprint.o
+    0x08009f26   0x08009f26   0x00000002   PAD
+    0x08009f28   0x08009f28   0x00000094   Code   RO         1700    .text.getImage2Tz   fingerprint.o
+    0x08009fbc   0x08009fbc   0x000000da   Code   RO         1807    .text.getPassword   keypad_user.o
+    0x0800a096   0x0800a096   0x00000002   PAD
+    0x0800a098   0x0800a098   0x00000084   Code   RO         1637    .text.handleButton  buton_user.o
+    0x0800a11c   0x0800a11c   0x00000046   Code   RO         1635    .text.initButton    buton_user.o
+    0x0800a162   0x0800a162   0x00000002   PAD
+    0x0800a164   0x0800a164   0x00000020   Code   RO         1671    .text.initFinger    finger_user.o
+    0x0800a184   0x0800a184   0x00000028   Code   RO         1803    .text.initKeyPad    keypad_user.o
+    0x0800a1ac   0x0800a1ac   0x0000007e   Code   RO         1684    .text.init_fingerprint  fingerprint.o
+    0x0800a22a   0x0800a22a   0x00000002   PAD
+    0x0800a22c   0x0800a22c   0x00000094   Code   RO         1780    .text.lcdHanle      lcd_user.o
+    0x0800a2c0   0x0800a2c0   0x00000048   Code   RO         1790    .text.lcdInit       lcd_user.o
+    0x0800a308   0x0800a308   0x0000008e   Code   RO         1708    .text.led_mode      fingerprint.o
+    0x0800a396   0x0800a396   0x00000002   PAD
+    0x0800a398   0x0800a398   0x000000c8   Code   RO           11    .text.main          main.o
+    0x0800a460   0x0800a460   0x00000016   Code   RO         1818    .text.rtcInit       ds1307.o
+    0x0800a476   0x0800a476   0x00000002   PAD
+    0x0800a478   0x0800a478   0x0000011c   Code   RO         1690    .text.send          fingerprint.o
+    0x0800a594   0x0800a594   0x0000002c   Code   RO         2363    locale$$code        c_w.l(lc_ctype_c.o)
+    0x0800a5c0   0x0800a5c0   0x0000001a   Code   RO         2383    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x0800a5da   0x0800a5da   0x00000010   Data   RO         1471    .rodata.AHBPrescTable  system_stm32f4xx.o
+    0x0800a5ea   0x0800a5ea   0x00000008   Data   RO         1472    .rodata.APBPrescTable  system_stm32f4xx.o
+    0x0800a5f2   0x0800a5f2   0x00000002   PAD
+    0x0800a5f4   0x0800a5f4   0x00000030   Data   RO         1774    .rodata.KEYPAD_CfgParam  keypad_cfg.o
+    0x0800a624   0x0800a624   0x00000004   Data   RO         1625    .rodata.str1.1      usbh_cdc.o
+    0x0800a628   0x0800a628   0x0000006c   Data   RO         1792    .rodata.str1.1      lcd_user.o
+    0x0800a694   0x0800a694   0x00000020   Data   RO         2457    Region$$Table       anon$$obj.o
+    0x0800a6b4   0x0800a6b4   0x00000110   Data   RO         2362    locale$$data        c_w.l(lc_ctype_c.o)
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x0800a798, Size: 0x000011d0, Max: 0x0001c000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x0800a7c8, Size: 0x000011d8, Max: 0x0001c000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x0800a798   0x00000008   Data   RW          737    .data..L_MergedGlobals  stm32f4xx_hal.o
-    0x20000008   0x0800a7a0   0x00000020   Data   RW         1626    .data.CDC_Class     usbh_cdc.o
-    0x20000028   0x0800a7c0   0x00000001   Data   RW         1888    .data.Stat          fatfs_sd.o
-    0x20000029   0x0800a7c1   0x00000003   PAD
-    0x2000002c   0x0800a7c4   0x00000004   Data   RW         1470    .data.SystemCoreClock  system_stm32f4xx.o
-    0x20000030   0x0800a7c8   0x00000014   Data   RW         1933    .data.USER_Driver   user_diskio_1.o
-    0x20000044   0x0800a7dc   0x00000004   PAD
-    0x20000048   0x0800a7e0   0x00000058   Data   RW         1714    .data.fpacket       fingerprint.o
-    0x200000a0        -       0x00000060   Zero   RW         2256    .bss                c_w.l(libspace.o)
+    0x20000000   0x0800a7c8   0x00000008   Data   RW          737    .data..L_MergedGlobals  stm32f4xx_hal.o
+    0x20000008   0x0800a7d0   0x00000020   Data   RW         1626    .data.CDC_Class     usbh_cdc.o
+    0x20000028   0x0800a7f0   0x00000001   Data   RW         1884    .data.Stat          fatfs_sd.o
+    0x20000029   0x0800a7f1   0x00000003   PAD
+    0x2000002c   0x0800a7f4   0x00000004   Data   RW         1470    .data.SystemCoreClock  system_stm32f4xx.o
+    0x20000030   0x0800a7f8   0x00000014   Data   RW         1929    .data.USER_Driver   user_diskio_1.o
+    0x20000044   0x0800a80c   0x00000004   PAD
+    0x20000048   0x0800a810   0x00000058   Data   RW         1714    .data.fpacket       fingerprint.o
+    0x200000a0        -       0x00000060   Zero   RW         2252    .bss                c_w.l(libspace.o)
     0x20000100        -       0x0000001d   Zero   RW           25    .bss..L_MergedGlobals  main.o
-    0x2000011d   0x0800a838   0x00000001   PAD
+    0x2000011d   0x0800a868   0x00000001   PAD
     0x2000011e        -       0x00000006   Zero   RW          129    .bss..L_MergedGlobals  stm32f4xx_it.o
     0x20000124        -       0x00000064   Zero   RW         1642    .bss..L_MergedGlobals  buton_user.o
     0x20000188        -       0x00000036   Zero   RW         1724    .bss..L_MergedGlobals  fingerprint.o
-    0x200001be        -       0x00000002   Zero   RW         1796    .bss..L_MergedGlobals  lcd_user.o
-    0x200001c0        -       0x00000020   Zero   RW         1813    .bss..L_MergedGlobals  keypad_user.o
-    0x200001e0        -       0x00000018   Zero   RW         1832    .bss..L_MergedGlobals  ds1307.o
-    0x200001f8        -       0x00000002   Zero   RW         1889    .bss..L_MergedGlobals  fatfs_sd.o
-    0x200001fa        -       0x00000005   Zero   RW         1947    .bss..L_MergedGlobals  fatfs.o
-    0x200001ff        -       0x00000001   Zero   RW          151    .bss.Appli_state    usb_host.o
-    0x20000200        -       0x0000000c   Zero   RW         2074    .bss.disk           ff_gen_drv.o
-    0x2000020c        -       0x00000004   Zero   RW         1765    .bss.gs_KEYPAD_info  keypad.o
-    0x20000210        -       0x000003d8   Zero   RW          152    .bss.hUsbHostFS     usb_host.o
-    0x200005e8        -       0x000003e0   Zero   RW          209    .bss.hhcd_USB_OTG_FS  usbh_conf.o
-    0x200009c8        -       0x00000054   Zero   RW           48    .bss.hi2c3          i2c.o
-    0x20000a1c        -       0x00000058   Zero   RW           63    .bss.hspi2          spi.o
-    0x20000a74        -       0x00000048   Zero   RW           78    .bss.htim3          tim.o
-    0x20000abc        -       0x00000048   Zero   RW           95    .bss.huart2         usart.o
-    0x20000b04        -       0x00000048   Zero   RW           96    .bss.huart3         usart.o
-    0x20000b4c        -       0x0000000c   Zero   RW         1794    .bss.lcd            lcd_user.o
-    0x20000b58        -       0x00000058   Zero   RW         1722    .bss.rpacket        fingerprint.o
-    0x20000bb0        -       0x00000001   Zero   RW           19    .bss.stateCheckInOut  main.o
-    0x20000bb1        -       0x00000001   Zero   RW           17    .bss.stateLogin     main.o
-    0x20000bb2   0x0800a838   0x00000006   PAD
-    0x20000bb8        -       0x00000008   Zero   RW           21    .bss.timeWaitCheckInOut  main.o
-    0x20000bc0        -       0x00000008   Zero   RW           20    .bss.timeWaitLogin  main.o
-    0x20000bc8        -       0x00000004   Zero   RW          736    .bss.uwTick         stm32f4xx_hal.o
-    0x20000bcc   0x0800a838   0x00000004   PAD
-    0x20000bd0        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f407xx.o
-    0x20000dd0        -       0x00000400   Zero   RW            1    STACK               startup_stm32f407xx.o
+    0x200001be   0x0800a868   0x00000002   PAD
+    0x200001c0        -       0x00000010   Zero   RW         1793    .bss..L_MergedGlobals  lcd_user.o
+    0x200001d0        -       0x00000020   Zero   RW         1809    .bss..L_MergedGlobals  keypad_user.o
+    0x200001f0        -       0x00000018   Zero   RW         1828    .bss..L_MergedGlobals  ds1307.o
+    0x20000208        -       0x00000002   Zero   RW         1885    .bss..L_MergedGlobals  fatfs_sd.o
+    0x2000020a        -       0x00000005   Zero   RW         1943    .bss..L_MergedGlobals  fatfs.o
+    0x2000020f        -       0x00000001   Zero   RW          151    .bss.Appli_state    usb_host.o
+    0x20000210        -       0x0000000c   Zero   RW         2070    .bss.disk           ff_gen_drv.o
+    0x2000021c        -       0x00000004   Zero   RW         1765    .bss.gs_KEYPAD_info  keypad.o
+    0x20000220        -       0x000003d8   Zero   RW          152    .bss.hUsbHostFS     usb_host.o
+    0x200005f8        -       0x000003e0   Zero   RW          209    .bss.hhcd_USB_OTG_FS  usbh_conf.o
+    0x200009d8        -       0x00000054   Zero   RW           48    .bss.hi2c3          i2c.o
+    0x20000a2c        -       0x00000058   Zero   RW           63    .bss.hspi2          spi.o
+    0x20000a84        -       0x00000048   Zero   RW           78    .bss.htim3          tim.o
+    0x20000acc        -       0x00000048   Zero   RW           95    .bss.huart2         usart.o
+    0x20000b14        -       0x00000048   Zero   RW           96    .bss.huart3         usart.o
+    0x20000b5c   0x0800a868   0x00000004   PAD
+    0x20000b60        -       0x00000058   Zero   RW         1722    .bss.rpacket        fingerprint.o
+    0x20000bb8        -       0x00000001   Zero   RW           19    .bss.stateCheckInOut  main.o
+    0x20000bb9        -       0x00000001   Zero   RW           17    .bss.stateLogin     main.o
+    0x20000bba   0x0800a868   0x00000006   PAD
+    0x20000bc0        -       0x00000008   Zero   RW           21    .bss.timeWaitCheckInOut  main.o
+    0x20000bc8        -       0x00000008   Zero   RW           20    .bss.timeWaitLogin  main.o
+    0x20000bd0        -       0x00000004   Zero   RW          736    .bss.uwTick         stm32f4xx_hal.o
+    0x20000bd4   0x0800a868   0x00000004   PAD
+    0x20000bd8        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f407xx.o
+    0x20000dd8        -       0x00000400   Zero   RW            1    STACK               startup_stm32f407xx.o
 
 
-    Execution Region RW_IRAM2 (Exec base: 0x2001c000, Load base: 0x0800a838, Size: 0x00000000, Max: 0x00004000, ABSOLUTE)
+    Execution Region RW_IRAM2 (Exec base: 0x2001c000, Load base: 0x0800a868, Size: 0x00000000, Max: 0x00004000, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
@@ -5315,7 +5318,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       486          0          0          0        100       2265   buton_user.o
+       478          0          0          0        100       2223   buton_user.o
        148          0          0          0          0       2120   button.o
        526          0          0          0         24       6893   ds1307.o
         28          0          0          0          5       2011   fatfs.o
@@ -5329,7 +5332,7 @@ Image component sizes
       2864         54          0          0          4       5674   keypad.o
          0          0         48          0          0       1049   keypad_cfg.o
        332          0          0          0         32       5020   keypad_user.o
-       252         60         18          0         14       4935   lcd_user.o
+       220         12        108          0         16       4600   lcd_user.o
        378          0          0          0         47       4549   main.o
        240          0          0          0         88       5127   spi.o
         64         26        392          0       1536        860   startup_stm32f407xx.o
@@ -5360,9 +5363,9 @@ Image component sizes
         20          0          0         20          0       1993   user_diskio_1.o
 
     ----------------------------------------------------------------------
-     39944        300        522        160       4304     457512   Object Totals
+     39904        252        610        160       4312     457135   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-       224          0          4          7         11          0   (incl. Padding)
+       224          0          2          7         17          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -5441,15 +5444,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     42106        400        794        160       4400     458092   Grand Totals
-     42106        400        794        160       4400     458092   ELF Image Totals
-     42106        400        794        160          0          0   ROM Totals
+     42066        352        882        160       4408     457715   Grand Totals
+     42066        352        882        160       4408     457715   ELF Image Totals
+     42066        352        882        160          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                42900 (  41.89kB)
-    Total RW  Size (RW Data + ZI Data)              4560 (   4.45kB)
-    Total ROM Size (Code + RO Data + RW Data)      43060 (  42.05kB)
+    Total RO  Size (Code + RO Data)                42948 (  41.94kB)
+    Total RW  Size (RW Data + ZI Data)              4568 (   4.46kB)
+    Total ROM Size (Code + RO Data + RW Data)      43108 (  42.10kB)
 
 ==============================================================================
 
