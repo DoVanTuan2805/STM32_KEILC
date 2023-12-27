@@ -4,6 +4,7 @@
 #include "tim.h"
 #include "KEYPAD.h"
 #include "KEYPAD_cfg.h"
+#include "stdbool.h"
 extern TIM_HandleTypeDef htim3;
 
 #define KEY_1       0
@@ -33,4 +34,5 @@ static uint8_t u8_KeyStatesArr[KEYS] = {0};
 void initKeyPad(void);
 char keyPadHandle();
 void getPassword();
+bool handlePassword();
 #endif

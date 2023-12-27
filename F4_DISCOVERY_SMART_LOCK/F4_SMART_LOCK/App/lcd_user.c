@@ -66,6 +66,7 @@ void lcdInit(void)
 //		CLCD_I2C_SetCursor(&lcd, 0, 1);
 //		CLCD_I2C_WriteString(&lcd, "     IN/OUT      ");
 		stateCheckInOutPrev = stateCheckInOut;
+		stateLoginPrev = true;
 }
 
 void lcdNonLogin()

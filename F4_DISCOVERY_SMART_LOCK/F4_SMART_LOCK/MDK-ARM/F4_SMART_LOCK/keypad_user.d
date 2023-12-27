@@ -35,5 +35,5 @@ f4_smart_lock/keypad_user.o: ..\App\keypad_user.c ..\App\keypad_user.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h ..\App\KEYPAD.h \
-  ..\App\KEYPAD_cfg.h ..\Core\Inc\usart.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h
+  ..\App\KEYPAD_cfg.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\Core\Inc\usart.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h

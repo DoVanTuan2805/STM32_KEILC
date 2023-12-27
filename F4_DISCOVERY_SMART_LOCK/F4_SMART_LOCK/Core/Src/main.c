@@ -61,6 +61,7 @@ uint8_t stateCheckInOut;
 bool stateLogin = false;
 uint64_t timeWaitLogin;
 uint64_t timeWaitCheckInOut;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

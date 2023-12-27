@@ -1,13 +1,29 @@
 #include "keypad_user.h"
 #include "usart.h"
 #include "string.h"
+
+
+#define NUM_PASSWORD 2
 #define SIZE_PASSWORD 4
+
+char passWord[NUM_PASSWORD][SIZE_PASSWORD] =
+{
+	{1, 2, 2, 4},
+	{1, 2, 3, 4}
+};
+
 
 static volatile uint8_t index;
 volatile uint8_t press;
 volatile uint8_t statePressPrev;
 volatile uint8_t indexPassword = 0;
 char buffPassword[SIZE_PASSWORD];
+
+extern uint64_t timeWaitLogin;
+extern uint64_t timeWaitCheckInOut;
+
+volatile bool completePassWord;
+volatile bool correctPassWord = false;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -20,6 +36,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				if(u8_KeyStatesArr[index] == KEY_PRESSED)
 				{
 					press = 1;
+					timeWaitLogin = HAL_GetTick();
+					timeWaitCheckInOut = HAL_GetTick();
 					getPassword();
 				}
 				index++;
@@ -31,7 +49,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				index = 0;
 				press = 0;
 		}
-		
+		handlePassword();
 	}
 }
 void initKeyPad(void)
@@ -101,11 +119,13 @@ void getPassword()
 				{
 						if(indexPassword < SIZE_PASSWORD)
 						{
-							buffPassword[indexPassword] = keyPadHandle();
+							buffPassword[indexPassword] = (char)keyPadHandle();
 							indexPassword++;
+							completePassWord = false;
 						}
 						else 
 						{
+							completePassWord = true;
 							indexPassword = 0;
 						}
 						press = 0;
@@ -114,6 +134,23 @@ void getPassword()
 				}
 			
 		}
+}
+bool handlePassword()
+{
+		bool result;
+		if(completePassWord == true)
+		{
+				completePassWord = false;
+				for(int i = 0 ; i <  NUM_PASSWORD; i++ )
+				{
+						result = memcmp(passWord[i],buffPassword, SIZE_PASSWORD);
+						if(result == 0)	
+							memset(buffPassword , '\0', sizeof(buffPassword));
+							break;
+				}
+				correctPassWord = result == 0 ? true : false;
+		}
+		return correctPassWord;
 }
 
 
