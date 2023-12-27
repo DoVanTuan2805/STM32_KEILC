@@ -67,6 +67,8 @@ void Error_Handler(void);
 #define DC_GPIO_Port GPIOB
 #define LED_LCD_Pin GPIO_PIN_11
 #define LED_LCD_GPIO_Port GPIOB
+#define TRIG_Pin GPIO_PIN_15
+#define TRIG_GPIO_Port GPIOB
 #define DT_LOADCELL_Pin GPIO_PIN_8
 #define DT_LOADCELL_GPIO_Port GPIOB
 #define CLK_LOADCELL_Pin GPIO_PIN_9

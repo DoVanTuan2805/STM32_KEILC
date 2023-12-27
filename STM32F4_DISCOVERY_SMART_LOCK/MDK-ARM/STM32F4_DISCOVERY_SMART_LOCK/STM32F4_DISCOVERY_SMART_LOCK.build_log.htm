@@ -1,0 +1,691 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.38.0.0
+Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: tuan do, ABC, LIC=14HV2-9TT93-VE3HA-1JP7N-H1EV5-8YPT7
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.19
+Assembler:       Armasm.exe V6.19
+Linker/Locator:  ArmLink.exe V6.19
+Library Manager: ArmAr.exe V6.19
+Hex Converter:   FromElf.exe V6.19
+CPU DLL:         SARMCM3.DLL V5.38.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.1.0.0
+Dialog DLL:      TCM.DLL V1.56.4.0
+ 
+<h2>Project:</h2>
+D:\STM32\STM32_KEILC\STM32F4_DISCOVERY_SMART_LOCK\MDK-ARM\STM32F4_DISCOVERY_SMART_LOCK.uvprojx
+Project File Date:  12/24/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'STM32F4_DISCOVERY_SMART_LOCK'
+../Core/Src/stm32f4xx_it.c(23): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling stm32f4xx_it.c...
+../Core/Src/freertos.c(21): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling freertos.c...
+../Core/Src/main.c(21): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling main.c...
+../USB_HOST/App/usb_host.c(24): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_core.h(28): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usb_host.c...
+../USB_HOST/Target/usbh_conf.c(22): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_core.h(28): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usbh_conf.c...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_core.c(22): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_core.h(28): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usbh_core.c...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c(21): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_ctlreq.h(29): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h(28): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usbh_ctlreq.c...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c(21): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_ioreq.h(29): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usbh_ioreq.c...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.c(21): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_pipes.h(29): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h(28): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usbh_pipes.c...
+../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Src/usbh_cdc.c(49): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc\usbh_cdc.h(29): warning: In file included from...
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc\usbh_core.h(28): warning: In file included from...
+../USB_HOST/Target\usbh_conf.h(97): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling usbh_cdc.c...
+../Middlewares/Third_Party/FreeRTOS/Source/croutine.c(28): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling croutine.c...
+../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c(37): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling event_groups.c...
+../Middlewares/Third_Party/FreeRTOS/Source/list.c(30): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling list.c...
+../Middlewares/Third_Party/FreeRTOS/Source/queue.c(36): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling queue.c...
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(38): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling stream_buffer.c...
+../Middlewares/Third_Party/FreeRTOS/Source/tasks.c(38): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling tasks.c...
+../Middlewares/Third_Party/FreeRTOS/Source/timers.c(36): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling timers.c...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(57): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(76): warning: '__INLINE' macro redefined [-Wmacro-redefined]
+  #define __INLINE         inline                                     /*!< inline keyword for GNU Compiler       */
+          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(41): note: previous definition is here
+  #define __INLINE                               __inline
+          ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(77): warning: '__STATIC_INLINE' macro redefined [-Wmacro-redefined]
+  #define __STATIC_INLINE  static inline
+          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(44): note: previous definition is here
+  #define __STATIC_INLINE                        static __inline
+          ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(129): error: redefinition of '__enable_irq'
+__STATIC_FORCEINLINE void __enable_irq(void)
+                          ^
+C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\arm_compat.h(113): note: previous definition is here
+__enable_irq(void) {
+^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(140): error: conflicting types for '__disable_irq'
+__STATIC_FORCEINLINE void __disable_irq(void)
+                          ^
+C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\arm_compat.h(66): note: previous definition is here
+__disable_irq(void) {
+^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(151): error: redefinition of '__get_CONTROL'
+__STATIC_FORCEINLINE uint32_t __get_CONTROL(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(142): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_CONTROL(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(181): error: redefinition of '__set_CONTROL'
+__STATIC_FORCEINLINE void __set_CONTROL(uint32_t control)
+                          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(172): note: previous definition is here
+__STATIC_FORCEINLINE void __set_CONTROL(uint32_t control)
+                          ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(205): error: redefinition of '__get_IPSR'
+__STATIC_FORCEINLINE uint32_t __get_IPSR(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(196): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_IPSR(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(219): error: redefinition of '__get_APSR'
+__STATIC_FORCEINLINE uint32_t __get_APSR(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(210): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_APSR(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(233): error: redefinition of '__get_xPSR'
+__STATIC_FORCEINLINE uint32_t __get_xPSR(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(224): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_xPSR(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(247): error: redefinition of '__get_PSP'
+__STATIC_FORCEINLINE uint32_t __get_PSP(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(238): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_PSP(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(277): error: redefinition of '__set_PSP'
+__STATIC_FORCEINLINE void __set_PSP(uint32_t topOfProcStack)
+                          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(268): note: previous definition is here
+__STATIC_FORCEINLINE void __set_PSP(uint32_t topOfProcStack)
+                          ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(301): error: redefinition of '__get_MSP'
+__STATIC_FORCEINLINE uint32_t __get_MSP(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(292): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_MSP(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(331): error: redefinition of '__set_MSP'
+__STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
+                          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(322): note: previous definition is here
+__STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
+                          ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(382): error: redefinition of '__get_PRIMASK'
+__STATIC_FORCEINLINE uint32_t __get_PRIMASK(void)
+                              ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(373): note: previous definition is here
+__STATIC_FORCEINLINE uint32_t __get_PRIMASK(void)
+                              ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(412): error: redefinition of '__set_PRIMASK'
+__STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
+                          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(403): note: previous definition is here
+__STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
+                          ^
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c(79): warning: In file included from...
+../Drivers/CMSIS/Include\cmsis_gcc.h(439): error: redefinition of '__enable_fiq'
+__STATIC_FORCEINLINE void __enable_fault_irq(void)
+                          ^
+../Drivers/CMSIS/Include/cmsis_armclang.h(430): note: expanded from macro '__enable_fault_irq'
+#define __enable_fault_irq                __enable_fiq   /* see arm_compat.h */
+                                          ^
+C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\arm_compat.h(98): note: previous definition is here
+__enable_fiq(void) {
+^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+2 warnings and 20 errors generated.
+compiling cmsis_os.c...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(43): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling heap_4.c...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(33): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(37): error: This port can only be used when the project options are configured to enable hardware floating point support.
+        #error This port can only be used when the project options are configured to enable hardware floating point support.
+         ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(235): error: expected '(' after 'asm'
+__asm void vPortSVCHandler( void )
+      ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(235): error: expected ';' after top-level asm block
+__asm void vPortSVCHandler( void )
+     ^
+     ;
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(237): error: use of undeclared identifier 'PRESERVE8'
+        PRESERVE8
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(253): error: expected '(' after 'asm'
+__asm void prvStartFirstTask( void )
+      ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(253): error: expected ';' after top-level asm block
+__asm void prvStartFirstTask( void )
+     ^
+     ;
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(255): error: use of undeclared identifier 'PRESERVE8'
+        PRESERVE8
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(281): error: expected '(' after 'asm'
+__asm void prvEnableVFP( void )
+      ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(281): error: expected ';' after top-level asm block
+__asm void prvEnableVFP( void )
+     ^
+     ;
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(283): error: use of undeclared identifier 'PRESERVE8'
+        PRESERVE8
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(439): error: expected '(' after 'asm'
+__asm void xPortPendSVHandler( void )
+      ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(439): error: expected ';' after top-level asm block
+__asm void xPortPendSVHandler( void )
+     ^
+     ;
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(441): error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+        extern uxCriticalNesting;
+        ~~~~~~ ^
+        int
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(441): error: redeclaration of 'uxCriticalNesting' with a different type: 'int' vs 'UBaseType_t' (aka 'unsigned long')
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(150): note: previous definition is here
+static UBaseType_t uxCriticalNesting = 0xaaaaaaaa;
+                   ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+compiling port.c...
+../App/FingerPrint.c(3): warning: In file included from...
+../App/FingerPrint.h(5): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling FingerPrint.c...
+../App/FingerPrintUser.c(3): warning: In file included from...
+../App/FingerPrint.h(5): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS\cmsis_os.h(56): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include\FreeRTOS.h(62): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h(52): warning: In file included from...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(171): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(184): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(197): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(211): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F\portmacro.h(231): error: expected 'volatile', 'inline', 'goto', or '('
+        {
+        ^
+5 errors generated.
+compiling FingerPrintUser.c...
+"STM32F4_DISCOVERY_SMART_LOCK\STM32F4_DISCOVERY_SMART_LOCK.axf" - 138 Error(s), 2 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.9.0.pack
+                ARM.CMSIS.5.9.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.6.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F4xx_DFP.2.17.1.pack
+                Keil.STM32F4xx_DFP.2.17.1
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_STM32F4_DISCOVERY_SMART_LOCK
+  C:/Users/admin/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include
+  C:/Users/admin/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.6.0
+      Include file:  CMSIS/Core/Include/tz_context.h
+Target not created.
+Build Time Elapsed:  00:00:03
+</pre>
+</body>
+</html>

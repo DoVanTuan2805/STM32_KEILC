@@ -53,7 +53,9 @@ DMA_HandleTypeDef hdma_adc1;
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_tx;
 
-TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim4;
 
 UART_HandleTypeDef huart1;
 DMA_HandleTypeDef hdma_usart1_tx;
@@ -74,7 +76,9 @@ static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_TIM3_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_TIM1_Init(void);
+static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -92,9 +96,14 @@ uint8_t i;
 uint16_t count= 0;
 uint64_t timeCount;
 uint8_t flag;
-uint8_t cali = 430;
-uint8_t calis;
-uint8_t value = 10;
+
+uint32_t IC_Val1 = 0;
+uint32_t IC_Val2 = 0;
+uint32_t Difference = 0;
+uint8_t Is_First_Captured = 0;  // is the first value captured ?
+uint8_t Distance  = 0;
+uint16_t Distance_Tram,Distance_Chuc, Distance_Dvi , Distance_R;
+
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
@@ -103,6 +112,55 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		flag = 1;
     HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, RX_SIZE);
     size = Size;
+}
+void delay (uint16_t time)
+{
+	__HAL_TIM_SET_COUNTER(&htim4, 0);
+	while (__HAL_TIM_GET_COUNTER (&htim4) < time);
+}
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)  // if the interrupt source is channel1
+	{
+		if (Is_First_Captured==0) // if the first value is not captured
+		{
+			IC_Val1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // read the first value
+			Is_First_Captured = 1;  // set the first captured as true
+			// Now change the polarity to falling edge
+			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_FALLING);
+		}
+
+		else if (Is_First_Captured==1)   // if the first is already captured
+		{
+			IC_Val2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);  // read second value
+			__HAL_TIM_SET_COUNTER(htim, 0);  // reset the counter
+
+			if (IC_Val2 > IC_Val1)
+			{
+				Difference = IC_Val2-IC_Val1;
+			}
+
+			else if (IC_Val1 > IC_Val2)
+			{
+				Difference = (0xffff - IC_Val1) + IC_Val2;
+			}
+
+			Distance = Difference * .034/2;
+			Is_First_Captured = 0; // set it back to false
+
+			// set polarity to rising edge
+			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
+			__HAL_TIM_DISABLE_IT(&htim1, TIM_IT_CC1);
+		}
+	}
+}
+void HCSR04_Read (void)
+{
+	HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_SET);  // pull the TRIG pin HIGH
+	delay(10);  // wait for 10 us
+	HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);  // pull the TRIG pin low
+
+	__HAL_TIM_ENABLE_IT(&htim1, TIM_IT_CC1);
 }
 /* USER CODE END 0 */
 
@@ -138,30 +196,17 @@ int main(void)
   MX_USART1_UART_Init();
   MX_SPI1_Init();
   MX_ADC1_Init();
-  MX_TIM3_Init();
+  MX_TIM2_Init();
+  MX_TIM1_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 	hx711_init(&loadcell , CLK_LOADCELL_GPIO_Port, CLK_LOADCELL_Pin, DT_LOADCELL_GPIO_Port, DT_LOADCELL_Pin);
-	hx711_coef_set(&loadcell, 430); // read afer calibration
-  calis = hx711_coef_get(&loadcell);
-	hx711_tare(&loadcell, 20);
+	hx711_coef_set(&loadcell, -464.356); 			//20000.567  -464.356 354.5// read afer calibration
+	hx711_tare(&loadcell, 50);
+	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
 	
-	ST7735_Init();
-	HAL_GPIO_WritePin(LED_LCD_GPIO_Port, LED_LCD_Pin,1);
-	
-	ST7735_FillRectangleFast(0, 0, ST7735_WIDTH, ST7735_HEIGHT, ST7735_WHITE);
-	
-	ST7735_WriteString(15,10,"Thuc Hanh Cam Bien", Font_7x10, ST7735_RED, ST7735_WHITE);
-	
-	ST7735_RectangleFast(5, 5, 150, 118, ST7735_RED);
-	
-	ST7735_DrawLineW(5, 25, 150, ST7735_RED);
-	
-	ST7735_DrawImage(10,35,20, 20, temperature);
-	
-	ST7735_DrawImage(10,65,20, 20, gas);
-	
-	ST7735_DrawImage(10,95,20, 20, pressure);
-	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+	HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
+	HAL_TIM_Base_Start_IT(&htim4);
 	
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, RX_SIZE);
 	__HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
@@ -171,7 +216,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		count = ((TIM3->CNT)>>2);
+		HCSR04_Read();					// SR04
+		count = ((TIM2->CNT)>>2);		// ENCODER
+		weight = hx711_weight(&loadcell, 20);// +357.6		 // HX711	
 		if(HAL_GetTick() - timeReadSensor >= 500)
 		{
 				HAL_ADC_Start_DMA(&hadc1, &adc, 1);
@@ -180,61 +227,15 @@ int main(void)
 			
 		}
 		if(HAL_GetTick() - timePicture >= 300)
-		{	
-				if (flag == 1)
-				{
-						flag = 0;
-						if(rxBuffer[0] == '+')
-						{
-							value += 10;
-							hx711_coef_set(&loadcell, cali + value); // read afer calibration
-						}
-						else if (rxBuffer[0] == '-')
-						{
-							value -= 10;
-							hx711_coef_set(&loadcell, cali - value); // read afer calibration
-						}
-						
-						calis = hx711_coef_get(&loadcell);
-				}
+		{		
 				
-				weight = hx711_weight(&loadcell, 5);
 				float voltage = ( adc * 3.3 / 4096.0 );
-				TempC = voltage * 100.0;
+				TempC = voltage * 100.0;		// LM35
 			
-				sprintf((char*)buffTx, "%.1f/%d/%d\n",weight, Gas, count); 
+				sprintf((char*)buffTx, "%.1f/%.1f/%d\n",weight, TempC, Distance); 
 				HAL_UART_Transmit_DMA(&huart1,buffTx,strlen((char*)buffTx));
 				//memset((char*)buffTx, '0', sizeof(buffTx));
 			
-				sprintf((char*)buffData, "%.1f", TempC);
-				ST7735_WriteString(40,35,(char*)buffData, Font_11x18, ST7735_GREEN, ST7735_WHITE);
-				
-				sprintf((char*)buffData, "%d", Gas);
-				ST7735_WriteString(40,65,(char*)buffData, Font_11x18, ST7735_GREEN, ST7735_WHITE);
-				
-				sprintf((char*)buffData, "%d", sensor3);
-				ST7735_WriteString(40,95,(char*)buffData, Font_11x18, ST7735_GREEN, ST7735_WHITE);
-				
-				//memset((char*)buffData, '0', sizeof(buffData));
-				
-				i++;
-				if( i == 1)
-				{
-					ST7735_DrawImage(95,45,50, 50, frame_0);
-				}
-				else if( i == 2)
-				{
-					ST7735_DrawImage(95,45,50, 50, frame_1);
-				}
-				else if( i == 3)
-				{
-					ST7735_DrawImage(95,45,50, 50, frame_2);
-				}
-				else if( i == 4)
-				{
-					ST7735_DrawImage(95,45,50, 50, frame_3);
-					i = 0;
-				}
 				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 				timePicture = HAL_GetTick();
 		}
@@ -377,51 +378,155 @@ static void MX_SPI1_Init(void)
 }
 
 /**
-  * @brief TIM3 Initialization Function
+  * @brief TIM1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_TIM3_Init(void)
+static void MX_TIM1_Init(void)
 {
 
-  /* USER CODE BEGIN TIM3_Init 0 */
+  /* USER CODE BEGIN TIM1_Init 0 */
 
-  /* USER CODE END TIM3_Init 0 */
+  /* USER CODE END TIM1_Init 0 */
 
-  TIM_Encoder_InitTypeDef sConfig = {0};
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_IC_InitTypeDef sConfigIC = {0};
 
-  /* USER CODE BEGIN TIM3_Init 1 */
+  /* USER CODE BEGIN TIM1_Init 1 */
 
-  /* USER CODE END TIM3_Init 1 */
-  htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
-  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 600;
-  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
-  sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
-  sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 10;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
-  sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
-  sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 0;
-  if (HAL_TIM_Encoder_Init(&htim3, &sConfig) != HAL_OK)
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 72-1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 0xffff-1;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_IC_Init(&htim1) != HAL_OK)
   {
     Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM3_Init 2 */
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+  sConfigIC.ICFilter = 0;
+  if (HAL_TIM_IC_ConfigChannel(&htim1, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
 
-  /* USER CODE END TIM3_Init 2 */
+  /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_Encoder_InitTypeDef sConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 65535;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+  sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+  sConfig.IC1Filter = 0;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+  sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+  sConfig.IC2Filter = 0;
+  if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 72-1;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 0xffff-1;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
 
 }
 
@@ -499,12 +604,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, RST_LCD_Pin|CS_Pin|LED_Pin|DC_Pin
-                          |LED_LCD_Pin|CLK_LOADCELL_Pin, GPIO_PIN_RESET);
+                          |LED_LCD_Pin|TRIG_Pin|CLK_LOADCELL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : RST_LCD_Pin CS_Pin LED_Pin DC_Pin
-                           LED_LCD_Pin CLK_LOADCELL_Pin */
+                           LED_LCD_Pin TRIG_Pin CLK_LOADCELL_Pin */
   GPIO_InitStruct.Pin = RST_LCD_Pin|CS_Pin|LED_Pin|DC_Pin
-                          |LED_LCD_Pin|CLK_LOADCELL_Pin;
+                          |LED_LCD_Pin|TRIG_Pin|CLK_LOADCELL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

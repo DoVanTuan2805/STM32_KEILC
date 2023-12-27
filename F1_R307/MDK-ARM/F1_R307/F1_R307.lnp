@@ -1,0 +1,28 @@
+--cpu Cortex-M3
+"f1_r307\startup_stm32f103xb.o"
+"f1_r307\main.o"
+"f1_r307\gpio.o"
+"f1_r307\usart.o"
+"f1_r307\stm32f1xx_it.o"
+"f1_r307\stm32f1xx_hal_msp.o"
+"f1_r307\stm32f1xx_hal_timebase_tim.o"
+"f1_r307\stm32f1xx_hal_gpio_ex.o"
+"f1_r307\stm32f1xx_hal_tim.o"
+"f1_r307\stm32f1xx_hal_tim_ex.o"
+"f1_r307\stm32f1xx_hal_uart.o"
+"f1_r307\stm32f1xx_hal.o"
+"f1_r307\stm32f1xx_hal_rcc.o"
+"f1_r307\stm32f1xx_hal_rcc_ex.o"
+"f1_r307\stm32f1xx_hal_gpio.o"
+"f1_r307\stm32f1xx_hal_dma.o"
+"f1_r307\stm32f1xx_hal_cortex.o"
+"f1_r307\stm32f1xx_hal_pwr.o"
+"f1_r307\stm32f1xx_hal_flash.o"
+"f1_r307\stm32f1xx_hal_flash_ex.o"
+"f1_r307\stm32f1xx_hal_exti.o"
+"f1_r307\system_stm32f1xx.o"
+"f1_r307\fingerprint.o"
+--strict --scatter "F1_R307\F1_R307.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "F1_R307.map" -o F1_R307\F1_R307.axf

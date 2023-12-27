@@ -22,26 +22,23 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 D:\STM32\STM32_KEILC\STM32_DO_LUONG\MDK-ARM\STM32_DO_LUONG.uvprojx
-Project File Date:  12/16/2023
+Project File Date:  12/21/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'STM32_DO_LUONG'
-../Core/Src/main.c(95): warning: implicit conversion from 'int' to 'uint8_t' (aka 'unsigned char') changes value from 430 to 174 [-Wconstant-conversion]
-uint8_t cali = 430;
-        ~~~~   ^~~
-../Core/Src/main.c(177): warning: incompatible pointer types passing 'uint16_t *' (aka 'unsigned short *') to parameter of type 'uint32_t *' (aka 'unsigned int *') [-Wincompatible-pointer-types]
+../Core/Src/main.c(224): warning: incompatible pointer types passing 'uint16_t *' (aka 'unsigned short *') to parameter of type 'uint32_t *' (aka 'unsigned int *') [-Wincompatible-pointer-types]
                                 HAL_ADC_Start_DMA(&hadc1, &adc, 1);
                                                           ^~~~
 ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_adc.h(928): note: passing argument to parameter 'pData' here
 HAL_StatusTypeDef       HAL_ADC_Start_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData, uint32_t Length);
                                                                              ^
-2 warnings generated.
+1 warning generated.
 compiling main.c...
 linking...
-Program Size: Code=22964 RO-data=28328 RW-data=32 ZI-data=2312  
+Program Size: Code=21884 RO-data=520 RW-data=12 ZI-data=2460  
 FromELF: creating hex file...
-"STM32_DO_LUONG\STM32_DO_LUONG.axf" - 0 Error(s), 2 Warning(s).
+"STM32_DO_LUONG\STM32_DO_LUONG.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
