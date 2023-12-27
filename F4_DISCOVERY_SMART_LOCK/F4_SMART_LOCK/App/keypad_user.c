@@ -12,7 +12,7 @@ char passWord[NUM_PASSWORD][SIZE_PASSWORD] =
 	{1, 2, 3, 4}
 };
 
-static uint64_t timeWaitShowMainLcd;
+uint64_t timeWaitShowMainLcd;
 
 static volatile uint8_t index;
 volatile uint8_t press;
@@ -42,7 +42,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 					press = 1;
 					timeWaitLogin = HAL_GetTick();
 					timeWaitCheckInOut = HAL_GetTick();
-					getPassword();
+					if(stateLogin == true)
+					{
+						if (stateCheckInOut != 0)
+						{
+							getPassword();
+						}
+					}
 				}
 				index++;
 				
@@ -158,16 +164,9 @@ bool handlePassword()
 						{
 							clearLCD();
 							timeWaitShowMainLcd = HAL_GetTick();
-							
 						}
 				}
 				correctPassWord = result == 0 ? true : false;
-				if(HAL_GetTick() - timeWaitShowMainLcd > 2000)
-				{
-					stateLogin = false;
-					stateCheckInOut = 0;
-					lcdNonLogin();
-				}
 		}
 		
 		return correctPassWord;

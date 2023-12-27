@@ -120,12 +120,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	//HAL_Delay(1000);
 	rtcInit(&hi2c3);
-	//setDateTime("2023-12-27 09:05:10", DS1307_MINIMAL_BUFFER_LENGTH);	
+	//setDateTime("2023-12-28 00:07:10", DS1307_MINIMAL_BUFFER_LENGTH);	
 	initButton();
 	lcdInit();
 	initKeyPad();
 	initFinger();
-	
 	
 	//writeTimeToSD((char*)timeDs1307);
 	
@@ -137,9 +136,9 @@ int main(void)
   {
 //		time = rtc.second;
 		//keyPadHandle(&dataKey);
-		lcdHanle();
-		handleButton();
 		
+		handleButton();
+		lcdHanle();
 		if(HAL_GetTick() - timeLed > 500)
 		{	
 			HAL_GPIO_TogglePin(LD6_GPIO_Port, LD6_Pin);

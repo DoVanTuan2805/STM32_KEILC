@@ -1,6 +1,7 @@
 #include "buton_user.h"
 #include "lcd_user.h"
 #include "main.h"
+#include "keypad_user.h"
 Button_t bt1, bt2, bt3, detectFinger;
 uint8_t fingerId, confidence; 
 uint16_t templateCount;
@@ -9,6 +10,17 @@ extern uint8_t stateCheckInOut;			// from file main.c
 extern bool stateLogin;							// from file main.c
 extern uint64_t timeWaitLogin;			// from file main.c
 extern uint64_t timeWaitCheckInOut;	// from file main.c
+
+extern uint64_t timeWaitShowMainLcd;
+extern uint8_t indexPassword;				// from file keypad_user.c
+extern bool correctPassWord;				// from file keypad_user.c
+extern bool completePassWord;			// file keypad_user
+
+int8_t fingerCheck;
+bool completeFinger;
+uint64_t timeWaitShowMainFinger;
+
+bool completePassWordPrev;
 
 void initButton(void)
 {
@@ -26,11 +38,54 @@ void handleButton(void)
 		if(HAL_GetTick() - timeWaitLogin > 5000)
 		{
 			stateLogin = false;
+			indexPassword = 0;
 		}
 		if(HAL_GetTick() - timeWaitCheckInOut > 5000)
 		{
 			stateCheckInOut = 0;
+			indexPassword = 0;
 			//stateLogin = false;
+		}
+		if(completeFinger == true)
+		{
+				if(correctPassWord == true)
+				{
+					checkInOutComplete();
+				}
+				else if(correctPassWord == false){
+					checkInOutError();
+				}
+				if(HAL_GetTick() - timeWaitShowMainFinger > 2000)
+				{
+						indexPassword = 0;
+						completeFinger = false;
+						stateLogin = false;
+						stateCheckInOut = 0;
+						lcdNonLogin();
+				}
+		}
+		if(completePassWord == true)
+		{
+				if(completePassWordPrev != completePassWord)
+				{
+						completePassWordPrev = completePassWord;
+						handlePassword();
+				}
+				if(correctPassWord == true)
+				{
+					checkInOutComplete();
+				}
+				else if(correctPassWord == false){
+					checkInOutError();
+				}
+				if(HAL_GetTick() - timeWaitShowMainLcd > 2000)
+				{
+					completePassWord = false;
+					stateLogin = false;
+					stateCheckInOut = 0;
+					indexPassword = 0;
+				}
+				
 		}
 }
 void bt_press_callback(Button_t *button) {
@@ -62,13 +117,34 @@ void bt_press_callback(Button_t *button) {
 		}
 		else if (button == &detectFinger)
 		{
-			uint8_t check = fingerHandle();
-			//templateCount = get_template_number();
-			if(check == FINGERPRINT_OK)
+			if(stateLogin == true)
 			{
-					fingerId = getFingerID();
-					confidence = getConfidence();
-					//delete_fingerprint(fingerId);
+					if(stateCheckInOut != 0)
+					{
+							fingerCheck = fingerHandle();
+							//templateCount = get_template_number();
+							if(fingerCheck == FINGERPRINT_OK)
+							{
+									
+									completeFinger = true;
+									correctPassWord = true;
+
+									fingerId = getFingerID();
+									confidence = getConfidence();
+									//delete_fingerprint(fingerId);
+							}
+							else 
+							{
+									completeFinger = true;
+									correctPassWord = false;
+							}
+							
+							timeWaitShowMainFinger = HAL_GetTick();
+							timeWaitLogin = HAL_GetTick();
+							timeWaitCheckInOut = HAL_GetTick();
+							clearLCD();
+					}
 			}
 		}
+		
 }

@@ -38,4 +38,6 @@ f4_smart_lock/buton_user.o: ..\App\buton_user.c ..\App\buton_user.h \
   ..\App\finger_user.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h ..\App\fingerprint.h \
   ..\Core\Inc\usart.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
-  ..\App\lcd_user.h ..\App\i2c-lcd.h ..\Core\Inc\i2c.h
+  ..\App\lcd_user.h ..\App\i2c-lcd.h ..\Core\Inc\i2c.h \
+  ..\App\keypad_user.h ..\Core\Inc\tim.h ..\App\KEYPAD.h \
+  ..\App\KEYPAD_cfg.h

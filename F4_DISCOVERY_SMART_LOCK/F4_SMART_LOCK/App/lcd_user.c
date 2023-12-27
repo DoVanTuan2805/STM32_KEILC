@@ -10,8 +10,8 @@ static bool stateLoginPrev;						// file button_user
 static uint8_t stateCheckInOutPrev;		// file button_user
 
 extern bool correctPassWord;			// file keypad_user
-extern bool completePassWord;
-
+extern bool completePassWord;			// file keypad_user
+extern bool completeFinger;					// from file button_user
 extern uint8_t indexPassword;
 //bool ArrayScreen( Screen_t screen)
 //{
@@ -26,54 +26,46 @@ extern uint8_t indexPassword;
 //}
 
 void lcdHanle()
-{
-		handlePassword();
-		if (completePassWord == false)		// 
+{	
+		if(completeFinger == false)
 		{
-				if (stateCheckInOutPrev != stateCheckInOut)
+				if (completePassWord == false)		// 
 				{
-						stateCheckInOutPrev = stateCheckInOut;
-						goto SHOW_CHECK_IN_OUT;
-				}
-				if (stateLoginPrev != stateLogin)
-				{	
-						stateLoginPrev = stateLogin;
-					
-						if(stateLogin == false)
+						if (stateCheckInOutPrev != stateCheckInOut)
 						{
-								//ArrayScreen(SCREEN_NON_LOGIN);
-								lcdNonLogin();
+								stateCheckInOutPrev = stateCheckInOut;
+								goto SHOW_CHECK_IN_OUT;
 						}
-						else if (stateLogin == true)
-						{
-							SHOW_CHECK_IN_OUT:
-								if(stateCheckInOut == 0)
+						if (stateLoginPrev != stateLogin)
+						{	
+								stateLoginPrev = stateLogin;
+							
+								if(stateLogin == false)
 								{
-										//ArrayScreen(SCREEN_CHECK_INOUT);
-									lcdCheckInOut();
+										//ArrayScreen(SCREEN_NON_LOGIN);
+										lcdNonLogin();
 								}
-								else if (stateCheckInOut == 1)			// CHECK IN
+								else if (stateLogin == true)
 								{
-									//ArrayScreen(SCREEN_WAIT_CHECKIN);
-									waitCheckIn();
-								}
-								else if (stateCheckInOut == 2)		// CHECK OUT
-								{
-									//ArrayScreen(SCREEN_WAIT_CHECKOUT);
-									waitCheckOut();
+									SHOW_CHECK_IN_OUT:
+										if(stateCheckInOut == 0)
+										{
+												//ArrayScreen(SCREEN_CHECK_INOUT);
+											lcdCheckInOut();
+										}
+										else if (stateCheckInOut == 1)			// CHECK IN
+										{
+											//ArrayScreen(SCREEN_WAIT_CHECKIN);
+											waitCheckIn();
+										}
+										else if (stateCheckInOut == 2)		// CHECK OUT
+										{
+											//ArrayScreen(SCREEN_WAIT_CHECKOUT);
+											waitCheckOut();
+										}
 								}
 						}
-				}
-				enteringPassword();
-		}
-		else if (completePassWord == true)
-		{
-				if(correctPassWord == true)
-				{
-					checkInOutComplete();
-				}
-				else if(correctPassWord == false){
-					checkInOutError();
+						enteringPassword();
 				}
 		}
 }

@@ -31,38 +31,21 @@ void writeTimeToSD(char *buffTime)
   	if (fresult == FR_OK) 
 			send_uart ("SD CARD MOUNTED successfully...\n");
 
-		fresult = f_open(&fil, fileTimeName, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
-		//f_puts("This data is from the FILE1.txt. And it was written using ...f_puts... \n", &fil);
+		fresult = f_open(&fil, fileTimeName, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);				// CREAT FILE
 		f_close(&fil);
 		
-		fresult = f_open(&fil, fileTimeName, FA_READ);
+		/* READ FILE */
+		fresult = f_open(&fil, fileTimeName, FA_READ);					
 		f_gets(buffer, f_size(&fil), &fil);
 		send_uart(buffer);
 		memset(buffer, '\0', sizeof(buffer));			// clear buffer
 		f_close(&fil);
 		
-		/*********************UPDATING an existing file ***************************/
-
-  	/* Open the file with write access */
+		/*	UPDATE FILE */
   	fresult = f_open(&fil, fileTimeName, FA_OPEN_EXISTING | FA_READ | FA_WRITE);
-  	/* Move to offset to the end of the file */
-  	fresult = f_lseek(&fil, f_size(&fil));			
-
-  	/* write the string to the file */
-  	fresult = f_puts(buffTime, &fil);
+  	fresult = f_lseek(&fil, f_size(&fil));						// MOVE TO END FILE
+  	fresult = f_puts(buffTime, &fil);									// PUT DATA
   	f_close (&fil);
-  	memset(buffer, '\0', sizeof(buffer));			// clear buffer
-
-  	/* Open to read the file */
-  	fresult = f_open (&fil, fileTimeName, FA_READ);
-		//fresult = f_lseek(&fil, 20);		// tro toi vi tri 10
-  	/* Read string from the file */
-  	fresult = f_read (&fil, buffer, f_size(&fil), &br);
-  	if (fresult == FR_OK)send_uart ("\nBelow is the data from updated file2.txt : \n");
-  	send_uart(buffer);
-  	send_uart("\n\n");
-  	/* Close file */
-  	f_close(&fil);
   	memset(buffer, '\0', sizeof(buffer));			// clear buffer
 		
   	/* Unmount SDCARD */
