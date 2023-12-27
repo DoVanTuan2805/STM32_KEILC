@@ -55,8 +55,8 @@ void CLCD_I2C_Init(CLCD_I2C_Name* LCD, I2C_HandleTypeDef* hi2c_CLCD, uint8_t Add
 {
 	LCD->I2C = hi2c_CLCD;
 	LCD->ADDRESS = Address;
-	LCD->COLUMS = Colums;
-	LCD->ROWS = Rows;
+	LCD->COLUMS_LCD = Colums;
+	LCD->ROWS_LCD = Rows;
 	
 	LCD->FUNCTIONSET = LCD_FUNCTIONSET|LCD_4BITMODE|LCD_2LINE|LCD_5x8DOTS;
 	LCD->ENTRYMODE = LCD_ENTRYMODESET|LCD_ENTRYLEFT|LCD_ENTRYSHIFTDECREMENT;
@@ -85,13 +85,13 @@ void CLCD_I2C_Init(CLCD_I2C_Name* LCD, I2C_HandleTypeDef* hi2c_CLCD, uint8_t Add
 void CLCD_I2C_SetCursor(CLCD_I2C_Name* LCD, uint8_t Xpos, uint8_t Ypos)
 {
 	uint8_t DRAM_ADDRESS = 0x00;
-	if(Xpos >= LCD->COLUMS)
+	if(Xpos >= LCD->COLUMS_LCD)
 	{
-		Xpos = LCD->COLUMS - 1;
+		Xpos = LCD->COLUMS_LCD - 1;
 	}
-	if(Ypos >= LCD->ROWS)
+	if(Ypos >= LCD->ROWS_LCD)
 	{
-		Ypos = LCD->ROWS -1;
+		Ypos = LCD->ROWS_LCD -1;
 	}
 	if(Ypos == 0)
 	{

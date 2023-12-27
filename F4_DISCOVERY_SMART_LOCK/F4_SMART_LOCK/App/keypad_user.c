@@ -1,7 +1,7 @@
 #include "keypad_user.h"
 #include "usart.h"
 #include "string.h"
-
+#include "lcd_user.h"
 
 #define NUM_PASSWORD 2
 #define SIZE_PASSWORD 4
@@ -12,6 +12,7 @@ char passWord[NUM_PASSWORD][SIZE_PASSWORD] =
 	{1, 2, 3, 4}
 };
 
+static uint64_t timeWaitShowMainLcd;
 
 static volatile uint8_t index;
 volatile uint8_t press;
@@ -19,9 +20,12 @@ volatile uint8_t statePressPrev;
 volatile uint8_t indexPassword = 0;
 char buffPassword[SIZE_PASSWORD];
 
-extern uint64_t timeWaitLogin;
-extern uint64_t timeWaitCheckInOut;
+extern uint64_t timeWaitLogin;							// from file main.c
+extern uint64_t timeWaitCheckInOut;					// from file main.c
+extern bool stateLogin;								// from file main.c
+extern uint8_t stateCheckInOut;				// from file main.c
 
+extern uint8_t stateLcd;						// from file lcd_user.c
 volatile bool completePassWord;
 volatile bool correctPassWord = false;
 
@@ -45,12 +49,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 		else 
 		{
-				
 				index = 0;
 				press = 0;
 		}
-		handlePassword();
+
 	}
+		
 }
 void initKeyPad(void)
 {
@@ -140,16 +144,32 @@ bool handlePassword()
 		bool result;
 		if(completePassWord == true)
 		{
-				completePassWord = false;
 				for(int i = 0 ; i <  NUM_PASSWORD; i++ )
 				{
 						result = memcmp(passWord[i],buffPassword, SIZE_PASSWORD);
 						if(result == 0)	
-							memset(buffPassword , '\0', sizeof(buffPassword));
+						{
+							//memset(buffPassword , '\0', sizeof(buffPassword));
+							clearLCD();
+							timeWaitShowMainLcd = HAL_GetTick();
 							break;
+						}
+						else
+						{
+							clearLCD();
+							timeWaitShowMainLcd = HAL_GetTick();
+							
+						}
 				}
 				correctPassWord = result == 0 ? true : false;
+				if(HAL_GetTick() - timeWaitShowMainLcd > 2000)
+				{
+					stateLogin = false;
+					stateCheckInOut = 0;
+					lcdNonLogin();
+				}
 		}
+		
 		return correctPassWord;
 }
 

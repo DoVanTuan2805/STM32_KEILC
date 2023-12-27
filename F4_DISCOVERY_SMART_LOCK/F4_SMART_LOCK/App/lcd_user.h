@@ -4,6 +4,7 @@
 #include "i2c-lcd.h"
 #include "i2c.h"
 
+static uint8_t stateLcd = 0;
 
 #define NUM_OF_SCREEN 4
 #include "stdbool.h"
@@ -23,7 +24,10 @@ void lcdNonLogin(void);
 void lcdCheckInOut(void);
 void waitCheckIn(void);
 void waitCheckOut(void);
-
+void checkInOutComplete(void);
+void checkInOutError(void);
+void enteringPassword();
+void clearLCD(void);
 void lcdHanle(void);
 
 //static void ( *handleScreen[NUM_OF_SCREEN] )= 

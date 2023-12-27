@@ -178,7 +178,7 @@
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>stateLogin</ItemText>
+          <ItemText>stateLogin,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>6</count>

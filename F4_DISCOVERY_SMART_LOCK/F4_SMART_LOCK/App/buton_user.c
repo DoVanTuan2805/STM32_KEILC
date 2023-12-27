@@ -5,10 +5,10 @@ Button_t bt1, bt2, bt3, detectFinger;
 uint8_t fingerId, confidence; 
 uint16_t templateCount;
 
-extern uint8_t stateCheckInOut;
-extern bool stateLogin;
-extern uint64_t timeWaitLogin;
-extern uint64_t timeWaitCheckInOut;
+extern uint8_t stateCheckInOut;			// from file main.c
+extern bool stateLogin;							// from file main.c
+extern uint64_t timeWaitLogin;			// from file main.c
+extern uint64_t timeWaitCheckInOut;	// from file main.c
 
 void initButton(void)
 {

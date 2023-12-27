@@ -58,8 +58,8 @@ typedef struct
 {
 	I2C_HandleTypeDef* I2C;
 	uint8_t ADDRESS;
-	uint8_t COLUMS;
-	uint8_t ROWS;
+	uint8_t COLUMS_LCD;
+	uint8_t ROWS_LCD;
 	uint8_t ENTRYMODE;
 	uint8_t DISPLAYCTRL;
 	uint8_t CURSORSHIFT;
