@@ -4,6 +4,8 @@
 
 extern UART_HandleTypeDef huart3;
 
+static char *fileTimeName = "dataTime.txt";
+
 FATFS fs;  // file system
 FIL fil; // File
 FILINFO fno;
@@ -24,39 +26,69 @@ void send_uart (char *string)
 	uint8_t len = strlen (string);
 	HAL_UART_Transmit(&huart3, (uint8_t *) string, len, HAL_MAX_DELAY);  // transmit in blocking mode
 }
+void initSDCard()
+{
 
+		fresult = f_mount(&fs, "/", 1);					// KET NOI VOI THE NHO
+		fresult == FR_OK  
+				? send_uart ("SD CARD MOUNTED successfully...\n") 
+				: send_uart ("SD CARD MOUNTED error...\n");
+		
+		fresult = f_open(&fil, fileTimeName, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);				// CREAT FILE				// NEU CHUA CO FILE "fileTimeName" THI SE TAO FILE NAY
+		//fresult = f_open(&fil, fileTimeName, FA_OPEN_EXISTING | FA_READ | FA_WRITE);				// CREAT FILE
+		fresult == FR_OK ? send_uart ("SD CARD OPEN successfully...\n") : send_uart ("SD CARD OPEN error...\n");
+		f_close(&fil);
+	
+		fresult = f_mount(NULL, "/", 1);		// NGAT KET NOI VOI THE NHO
+  	fresult == FR_OK  
+				? send_uart ("SD CARD UNMOUNTED successfully...\n") 
+				: send_uart ("SD CARD UNMOUNTED error...\n");
+}
 void writeTimeToSD(char *buffTime)
 {
 		fresult = f_mount(&fs, "/", 1);
-  	if (fresult == FR_OK) 
-			send_uart ("SD CARD MOUNTED successfully...\n");
-
-		fresult = f_open(&fil, fileTimeName, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);				// CREAT FILE
-		f_close(&fil);
+		fresult == FR_OK  
+				? send_uart ("SD CARD MOUNTED successfully...\n") 
+				: send_uart ("SD CARD MOUNTED error...\n");
+	
 		
+		/*	UPDATE FILE */
+  	fresult = f_open(&fil, fileTimeName,  FA_OPEN_EXISTING | FA_READ | FA_WRITE);				// MO FILE
+  	fresult = f_lseek(&fil, f_size(&fil));						// MOVE TO END FILE
+  	fresult = f_puts(buffTime, &fil);									// PUT DATA
+  	f_close (&fil);
+  	
+	
 		/* READ FILE */
 		fresult = f_open(&fil, fileTimeName, FA_READ);					
-		f_gets(buffer, f_size(&fil), &fil);
+		fresult = f_read(&fil, buffer, f_size(&fil), &br);
 		send_uart(buffer);
 		memset(buffer, '\0', sizeof(buffer));			// clear buffer
 		f_close(&fil);
 		
-		/*	UPDATE FILE */
-  	fresult = f_open(&fil, fileTimeName, FA_OPEN_EXISTING | FA_READ | FA_WRITE);
-  	fresult = f_lseek(&fil, f_size(&fil));						// MOVE TO END FILE
-  	fresult = f_puts(buffTime, &fil);									// PUT DATA
-  	f_close (&fil);
-  	memset(buffer, '\0', sizeof(buffer));			// clear buffer
 		
   	/* Unmount SDCARD */
   	fresult = f_mount(NULL, "/", 1);
-  	if (fresult == FR_OK) send_uart ("SD CARD UNMOUNTED successfully...\n");
+  	fresult == FR_OK  
+				? send_uart ("SD CARD UNMOUNTED successfully...\n") 
+				: send_uart ("SD CARD UNMOUNTED error...\n");
 }
 void deleteFile(char *name)
 {
+		fresult = f_mount(&fs, "/", 1);
+		fresult == FR_OK  
+				? send_uart ("SD CARD MOUNTED successfully...\n") 
+				: send_uart ("SD CARD MOUNTED error...\n");
+	
 		fresult = f_unlink(name);
-  	if (fresult == FR_OK) 
-			send_uart("file1.txt removed successfully...\n");
+  	fresult == FR_OK  
+				? send_uart ("SD CARD REMOVE successfully...\n") 
+				: send_uart ("SD CARD REMOVE error...\n");
+	
+		fresult = f_mount(NULL, "/", 1);
+		fresult == FR_OK  
+				? send_uart ("SD CARD UNMOUNTED successfully...\n") 
+				: send_uart ("SD CARD UNMOUNTED error...\n");
 }
 
 

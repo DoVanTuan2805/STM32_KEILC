@@ -2,6 +2,7 @@
 #include "stdbool.h"
 #include "buton_user.h"
 #include "keypad_user.h"
+#include "ds1307.h"
 CLCD_I2C_Name lcd;
 extern I2C_HandleTypeDef hi2c3;
 extern bool stateLogin;								// from file main.c
@@ -13,6 +14,8 @@ extern bool correctPassWord;			// file keypad_user
 extern bool completePassWord;			// file keypad_user
 extern bool completeFinger;					// from file button_user
 extern uint8_t indexPassword;
+
+extern char timeDs1307[DS1307_MINIMAL_BUFFER_LENGTH];		// from file main.c
 //bool ArrayScreen( Screen_t screen)
 //{
 //	if(screen < NUM_OF_SCREEN)
@@ -116,13 +119,16 @@ void checkInOutComplete()
 		{
 				CLCD_I2C_SetCursor(&lcd, 0, 0);
 				CLCD_I2C_WriteString(&lcd, "COMPLETE IN ");
-
 		} 
 		else if(stateCheckInOut == 2 )
 		{
 				CLCD_I2C_SetCursor(&lcd, 0, 0);
 				CLCD_I2C_WriteString(&lcd, "COMPLETE OUT");
 		}
+		CLCD_I2C_SetCursor(&lcd, 0, 1);
+		getDateTime((char*)timeDs1307, DS1307_MINIMAL_BUFFER_LENGTH);
+		CLCD_I2C_WriteString(&lcd, timeDs1307);
+		
 }
 void checkInOutError()
 {
@@ -137,6 +143,9 @@ void checkInOutError()
 				CLCD_I2C_SetCursor(&lcd, 0, 0);
 				CLCD_I2C_WriteString(&lcd, "ERROR CHECKOUT  ");
 		}
+		CLCD_I2C_SetCursor(&lcd, 0, 1);
+		getDateTime((char*)timeDs1307, DS1307_MINIMAL_BUFFER_LENGTH);
+		CLCD_I2C_WriteString(&lcd, timeDs1307);
 }
 void enteringPassword()
 {

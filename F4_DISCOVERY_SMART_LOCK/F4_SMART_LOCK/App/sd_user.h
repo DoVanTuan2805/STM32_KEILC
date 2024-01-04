@@ -4,8 +4,9 @@
 #include "fatfs.h"
 #include "fatfs_sd.h"
 
-static char *fileTimeName = "dataTime.txt";
 
+
+void initSDCard(void);
 void deleteFile(char *name);
 void writeTimeToSD(char *buff);
 

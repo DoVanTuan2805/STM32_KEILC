@@ -40,4 +40,5 @@ f4_smart_lock/lcd_user.o: ..\App\lcd_user.c ..\App\lcd_user.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h ..\App\fingerprint.h \
   ..\Core\Inc\usart.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\App\keypad_user.h ..\Core\Inc\tim.h ..\App\KEYPAD.h \
-  ..\App\KEYPAD_cfg.h
+  ..\App\KEYPAD_cfg.h ..\App\ds1307.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h

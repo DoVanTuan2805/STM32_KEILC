@@ -77,7 +77,7 @@ void MX_USB_HOST_Process(void);
 uint8_t time;
 char dataKey;
 uint64_t timeLed;
-uint8_t timeDs1307[DS1307_MINIMAL_BUFFER_LENGTH + 2];
+char timeDs1307[DS1307_MINIMAL_BUFFER_LENGTH];
 bool door = false;
 
 /* USER CODE END 0 */
@@ -120,13 +120,26 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	//HAL_Delay(1000);
 	rtcInit(&hi2c3);
-	//setDateTime("2023-12-28 00:07:10", DS1307_MINIMAL_BUFFER_LENGTH);	
+	//setDateTime("2023-12-28 00:07:10", DS1307_MINIMAL_BUFFER_LENGTH);					// DAT THOI GIAN
 	initButton();
 	lcdInit();
 	initKeyPad();
 	initFinger();
 	
-	//writeTimeToSD((char*)timeDs1307);
+	//deleteFile("dataTime.txt");
+	initSDCard();
+//	uint8_t i = 0;
+//	while(1)
+//	{
+//			if(save_fingerprint(i) == FINGERPRINT_OK)
+//			{
+//					i++;
+//			}
+//	}
+	
+//	getDateTime((char*)timeDs1307, DS1307_MINIMAL_BUFFER_LENGTH);
+//	strcat((char*)timeDs1307, "\n");
+//	writeTimeToSD((char*)timeDs1307);
 	
   /* USER CODE END 2 */
 
@@ -134,6 +147,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		
 //		time = rtc.second;
 		//keyPadHandle(&dataKey);
 		
@@ -141,10 +155,11 @@ int main(void)
 		lcdHanle();
 		if(HAL_GetTick() - timeLed > 500)
 		{	
+			//writeTimeToSD("xinchao\n");
 			HAL_GPIO_TogglePin(LD6_GPIO_Port, LD6_Pin);
 			getDateTime((char*)timeDs1307, DS1307_MINIMAL_BUFFER_LENGTH);
-			strcat((char*)timeDs1307, "\n");
-			HAL_UART_Transmit(&huart3, timeDs1307 , strlen((char*)timeDs1307), HAL_MAX_DELAY);
+			//strcat((char*)timeDs1307, "\n");
+			//HAL_UART_Transmit(&huart3, timeDs1307 , strlen((char*)timeDs1307), HAL_MAX_DELAY);
 			timeLed = HAL_GetTick();
 		}
     /* USER CODE END WHILE */

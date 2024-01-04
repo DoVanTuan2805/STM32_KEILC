@@ -145,7 +145,7 @@ uint8_t receive() {
 		memset(dataRx, '\0', sizeof(dataRx));	
 }
 
-uint8_t save_fingerprint(uint8_t id) {
+uint8_t save_fingerprint(uint8_t id) {					// THEM VAN TAY
     uint8_t temp;
 		
 
@@ -202,7 +202,7 @@ uint8_t save_fingerprint(uint8_t id) {
 
 
 
-uint8_t delete_fingerprint(uint8_t id)
+uint8_t delete_fingerprint(uint8_t id)					// XOA VAN TAY THEO ID
 {
 		uint8_t data[5];
 		data[0] = FINGERPRINT_DELETE;
@@ -286,11 +286,11 @@ uint8_t fingerFastSearch(void)
 			return 0;
 		}
 }	
-uint16_t getFingerID(void)
+uint16_t getFingerID(void)				// ID TRONG BO NHO ROM
 {
 	return fingerInfor.fingerID;
 }
-uint16_t getConfidence(void)
+uint16_t getConfidence(void)				// 
 {
 	return fingerInfor.confidence;
 }
@@ -318,7 +318,7 @@ uint16_t get_template_number() {
     return (((uint16_t)rpacket.data[1]) << 8) + ((uint16_t)rpacket.data[2]);
 }
 
-void reset_database() {
+void reset_database() {				// XOA HET VAN TAY
     uint8_t temp;
     // 1. GetImage
     temp = FINGERPRINT_EMPTY;

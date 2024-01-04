@@ -40,4 +40,11 @@ f4_smart_lock/buton_user.o: ..\App\buton_user.c ..\App\buton_user.h \
   ..\Core\Inc\usart.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\App\lcd_user.h ..\App\i2c-lcd.h ..\Core\Inc\i2c.h \
   ..\App\keypad_user.h ..\Core\Inc\tim.h ..\App\KEYPAD.h \
-  ..\App\KEYPAD_cfg.h
+  ..\App\KEYPAD_cfg.h ..\App\sd_user.h ..\FATFS\App\fatfs.h \
+  ..\Middlewares\Third_Party\FatFs\src\ff.h \
+  ..\Middlewares\Third_Party\FatFs\src\integer.h \
+  ..\FATFS\Target\ffconf.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  ..\Middlewares\Third_Party\FatFs\src\ff_gen_drv.h \
+  ..\Middlewares\Third_Party\FatFs\src\diskio.h \
+  ..\FATFS\Target\user_diskio.h ..\App\fatfs_sd.h ..\App\ds1307.h

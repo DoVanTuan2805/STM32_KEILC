@@ -2,6 +2,8 @@
 #include "lcd_user.h"
 #include "main.h"
 #include "keypad_user.h"
+#include "sd_user.h"
+#include "ds1307.h"
 Button_t bt1, bt2, bt3, detectFinger;
 uint8_t fingerId, confidence; 
 uint16_t templateCount;
@@ -10,11 +12,22 @@ extern uint8_t stateCheckInOut;			// from file main.c
 extern bool stateLogin;							// from file main.c
 extern uint64_t timeWaitLogin;			// from file main.c
 extern uint64_t timeWaitCheckInOut;	// from file main.c
-
+extern char timeDs1307[DS1307_MINIMAL_BUFFER_LENGTH];			// from file main.c
 extern uint64_t timeWaitShowMainLcd;
 extern uint8_t indexPassword;				// from file keypad_user.c
 extern bool correctPassWord;				// from file keypad_user.c
 extern bool completePassWord;			// file keypad_user
+extern char buffPassword[4];				
+
+extern char dataCheck[DS1307_MINIMAL_BUFFER_LENGTH + 22];
+extern char Id[4];
+
+extern char *correctCheckOut;
+extern char *incorrectCheckOut;
+
+extern char *correctCheckIn;
+extern char *incorrectCheckIn;
+
 
 int8_t fingerCheck;
 bool completeFinger;
@@ -55,7 +68,7 @@ void handleButton(void)
 				else if(correctPassWord == false){
 					checkInOutError();
 				}
-				if(HAL_GetTick() - timeWaitShowMainFinger > 2000)
+				if(HAL_GetTick() - timeWaitShowMainFinger > 2000)				// 2s reset main LCD
 				{
 						indexPassword = 0;
 						completeFinger = false;
@@ -68,9 +81,11 @@ void handleButton(void)
 		{
 				if(completePassWordPrev != completePassWord)
 				{
+						handlePassword();	
 						completePassWordPrev = completePassWord;
-						handlePassword();
+						memset(buffPassword, '\0', sizeof(buffPassword));
 				}
+				
 				if(correctPassWord == true)
 				{
 					checkInOutComplete();
@@ -78,14 +93,15 @@ void handleButton(void)
 				else if(correctPassWord == false){
 					checkInOutError();
 				}
-				if(HAL_GetTick() - timeWaitShowMainLcd > 2000)
+				if(HAL_GetTick() - timeWaitShowMainLcd > 2000)			// 2s reset main LCD
 				{
 					completePassWord = false;
+					completePassWordPrev = completePassWord;
 					stateLogin = false;
 					stateCheckInOut = 0;
 					indexPassword = 0;
+					
 				}
-				
 		}
 }
 void bt_press_callback(Button_t *button) {
@@ -117,31 +133,60 @@ void bt_press_callback(Button_t *button) {
 		}
 		else if (button == &detectFinger)
 		{
-			if(stateLogin == true)
+			if(stateLogin == true)			// trang thai dang nhap
 			{
-					if(stateCheckInOut != 0)
+					if(stateCheckInOut != 0)			// ktra co dang check in/out ?
 					{
+							// "abcxyz"
+						
 							fingerCheck = fingerHandle();
 							//templateCount = get_template_number();
-							if(fingerCheck == FINGERPRINT_OK)
+							memset(Id,'\0', strlen(Id));												// XOA DU LIEU TRUOC DO
+							memset(dataCheck,'\0', sizeof(dataCheck));					// XOA DU LIEU TRUOC DO
+							memcpy(dataCheck, timeDs1307, sizeof(timeDs1307));				// COPY THOI GIAN DOC DUOC VAO BIEN "dataCheck"
+							//HAL_UART_Transmit(&huart3,(uint8_t*)dataCheck , strlen((char*)dataCheck), HAL_MAX_DELAY);
+							if(fingerCheck == FINGERPRINT_OK)				// VAN TAY DUNG
 							{
-									
 									completeFinger = true;
 									correctPassWord = true;
 
 									fingerId = getFingerID();
 									confidence = getConfidence();
 									//delete_fingerprint(fingerId);
+									sprintf(Id, " %2d", fingerId);					// DUA DU LIEU "fingerId" VAO BIEN "Id"
+									strcat(dataCheck, Id);									// GHEP CHUOI "Id" VAO BIEN "dataCheck"
+									if(stateCheckInOut == 1) 		// CHECK IN
+									{
+											strcat(dataCheck, correctCheckIn);			
+									}
+									else if (stateCheckInOut == 2) 		// CHECK OUT
+									{
+											strcat(dataCheck, correctCheckOut);
+									}
+									HAL_UART_Transmit(&huart3,(uint8_t*)dataCheck , strlen((char*)dataCheck), HAL_MAX_DELAY);
+									writeTimeToSD(dataCheck);					// GHI VAO THE NHO
 							}
-							else 
+							else 																	// VAY TAY SAI 
 							{
 									completeFinger = true;
 									correctPassWord = false;
+								
+									strcat(dataCheck, " xx");					// ID
+									if(stateCheckInOut == 1) 		// CHECK IN
+									{
+											strcat(dataCheck, incorrectCheckIn);
+									}
+									else if (stateCheckInOut == 2) 		// CHECK OUT
+									{
+											strcat(dataCheck, incorrectCheckOut);
+									}
+									HAL_UART_Transmit(&huart3,(uint8_t*)dataCheck , strlen((char*)dataCheck), HAL_MAX_DELAY);
+									writeTimeToSD(dataCheck);				// GHI VAO THE NHO
 							}
 							
-							timeWaitShowMainFinger = HAL_GetTick();
-							timeWaitLogin = HAL_GetTick();
-							timeWaitCheckInOut = HAL_GetTick();
+							timeWaitShowMainFinger = HAL_GetTick();			// THOI GIAN CHO DE VE MAN HINH TRUOC KHI LOGIN
+							timeWaitLogin = HAL_GetTick();							
+							timeWaitCheckInOut = HAL_GetTick();					
 							clearLCD();
 					}
 			}
