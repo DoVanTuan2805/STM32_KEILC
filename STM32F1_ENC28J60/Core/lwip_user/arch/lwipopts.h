@@ -45,9 +45,9 @@
 #define LWIP_SOCKET                     0
 
 
-#define LWIP_DHCP                       0
+#define LWIP_DHCP                       0				// DISABLE DHCP
 #define MEM_ALIGNMENT                   4  
-#define LWIP_DNS                        1
+#define LWIP_DNS                        1				// ENABLE DNS
 
 
 /* Minimal changes to opt.h required for tcp unit tests: */

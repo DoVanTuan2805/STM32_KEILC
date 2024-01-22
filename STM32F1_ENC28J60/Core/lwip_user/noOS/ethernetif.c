@@ -154,8 +154,8 @@ low_level_output(struct netif *netif, struct pbuf *p)
        time. The size of the data in each pbuf is kept in the ->len
        variable. */
     //send data from(q->payload, q->len);
-	memcpy((uint8_t*)&lwip_buf[send_len], (uint8_t*)q->payload, q->len);
-	send_len +=q->len;
+		memcpy((uint8_t*)&lwip_buf[send_len], (uint8_t*)q->payload, q->len);
+		send_len += q->len;
   }
    // signal that packet should be sent();
   //ENC28J60_Packet_Send(send_len,lwip_buf);
@@ -215,8 +215,8 @@ low_level_input(struct netif *netif)
        * actually received size. In this case, ensure the tot_len member of the
        * pbuf is the sum of the chained pbuf len members.
        */
-		memcpy((uint8_t*)q->payload, (uint8_t*)&lwip_buf[rev_len],q->len);
-		rev_len +=q->len;
+				memcpy((uint8_t*)q->payload, (uint8_t*)&lwip_buf[rev_len],q->len);
+				rev_len +=q->len;
     }
    // acknowledge that packet has been read();
 
@@ -271,7 +271,8 @@ ethernetif_input(struct netif *netif)
 #endif /* PPPOE_SUPPORT */
     /* full packet send to tcpip_thread to process */
     if (netif->input(p, netif)!=ERR_OK)
-     { LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+     { 
+			 LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
        pbuf_free(p);
        p = NULL;
      }

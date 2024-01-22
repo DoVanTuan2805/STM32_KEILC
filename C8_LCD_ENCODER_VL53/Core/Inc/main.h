@@ -74,6 +74,7 @@ void Error_Handler(void);
 #define MS2_GPIO_Port GPIOB
 #define MS1_Pin GPIO_PIN_4
 #define MS1_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

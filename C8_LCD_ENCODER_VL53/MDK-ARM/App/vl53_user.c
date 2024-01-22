@@ -22,8 +22,8 @@ void vl53_user_init()
 }
 uint16_t getVL53SingleMode()
 {
-		static uint16_t data;
+		static float data;
 		VL53L0X_PerformSingleRangingMeasurement(Dev, &RangingData);
-		data = RangingData.RangeMilliMeter;
+		data = RangingData.RangeMilliMeter  * 1.0;
 		return data;
 }

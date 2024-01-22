@@ -18,13 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "A7860C_command.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +51,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -57,7 +59,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-uint64_t timeLed;
 /* USER CODE END 0 */
 
 /**
@@ -93,18 +94,31 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+
   /* USER CODE END 2 */
 
+  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		if( HAL_GetTick() - timeLed > 100)
-		{
-			//HAL_UART_Transmit(&huart1,CON_TO_MQTT('0',"tcp://test.mosquitto.org:1883", "60", "1"), sizeof(CON_TO_MQTT('0',"tcp://test.mosquitto.org:1883", "60", "1")), 1000);
-			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-			timeLed =  HAL_GetTick();
-		}
+//		if( HAL_GetTick() - timeLed > 2000)
+//		{
+//			if(checkCommand == 0)
+//			{
+//				HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+//			}
+//			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+//			//sprintf(dataTx, "AT\r\n");
+//			//HAL_UART_Transmit_DMA(&huart1,(uint8_t*)dataTx, sizeof(dataTx));
+//			timeLed =  HAL_GetTick();
+//		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

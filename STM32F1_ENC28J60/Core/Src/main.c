@@ -116,8 +116,8 @@ int main(void)
 	dns_initialize();
 	mqtt_client_cfg_t mqtt_cfg = 
 	{
-			.periodic_sub_req_s = 1,            // second
-			.broker_addr = "broker.hivemq.com",
+			.periodic_sub_req_s = 1,            // period second
+			.broker_addr = "broker.hivemq.com",	
 			.port = 1883,
 			.password = NULL,
 			.client_id = "465d777f41f140b69fcdd258c1d38671",
@@ -130,7 +130,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		lwip_periodic_handle();	
+		lwip_periodic_handle();				// HANDLE CONNECT ETH
 		if(ETH_IPOK())
 		{
 				//ETH_CONNECT_OK = 1;

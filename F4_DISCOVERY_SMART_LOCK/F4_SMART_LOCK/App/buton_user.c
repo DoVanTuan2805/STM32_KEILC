@@ -61,6 +61,7 @@ void handleButton(void)
 		}
 		if(completeFinger == true)
 		{
+				
 				if(correctPassWord == true)
 				{
 					checkInOutComplete();
@@ -68,8 +69,9 @@ void handleButton(void)
 				else if(correctPassWord == false){
 					checkInOutError();
 				}
-				if(HAL_GetTick() - timeWaitShowMainFinger > 2000)				// 2s reset main LCD
+				if(HAL_GetTick() - timeWaitShowMainFinger > 5000)				// 2s reset main LCD
 				{
+						HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, 0);
 						indexPassword = 0;
 						completeFinger = false;
 						stateLogin = false;
@@ -79,6 +81,7 @@ void handleButton(void)
 		}
 		if(completePassWord == true)
 		{
+				
 				if(completePassWordPrev != completePassWord)
 				{
 						handlePassword();	
@@ -88,13 +91,16 @@ void handleButton(void)
 				
 				if(correctPassWord == true)
 				{
+					HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, 1);
 					checkInOutComplete();
 				}
 				else if(correctPassWord == false){
+					HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, 0);
 					checkInOutError();
 				}
-				if(HAL_GetTick() - timeWaitShowMainLcd > 2000)			// 2s reset main LCD
+				if(HAL_GetTick() - timeWaitShowMainLcd > 5000)			// 2s reset main LCD
 				{
+					HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, 0);
 					completePassWord = false;
 					completePassWordPrev = completePassWord;
 					stateLogin = false;
@@ -149,9 +155,11 @@ void bt_press_callback(Button_t *button) {
 							{
 									completeFinger = true;
 									correctPassWord = true;
-
 									fingerId = getFingerID();
 									confidence = getConfidence();
+								
+									HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, 1);
+								
 									//delete_fingerprint(fingerId);
 									sprintf(Id, " %2d", fingerId);					// DUA DU LIEU "fingerId" VAO BIEN "Id"
 									strcat(dataCheck, Id);									// GHEP CHUOI "Id" VAO BIEN "dataCheck"
@@ -170,6 +178,7 @@ void bt_press_callback(Button_t *button) {
 							{
 									completeFinger = true;
 									correctPassWord = false;
+									HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, 0);
 								
 									strcat(dataCheck, " xx");					// ID
 									if(stateCheckInOut == 1) 		// CHECK IN

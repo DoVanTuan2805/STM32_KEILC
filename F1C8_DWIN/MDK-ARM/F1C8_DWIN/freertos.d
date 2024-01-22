@@ -42,6 +42,12 @@ f1c8_dwin\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.
 f1c8_dwin\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 f1c8_dwin\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 f1c8_dwin\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+f1c8_dwin\freertos.o: ../Core/Inc/dma.h
 f1c8_dwin\freertos.o: ../Core/Inc/usart.h
+f1c8_dwin\freertos.o: ../Core/Inc/gpio.h
+f1c8_dwin\freertos.o: ../App/A7860C_command.h
 f1c8_dwin\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 f1c8_dwin\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+f1c8_dwin\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+f1c8_dwin\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+f1c8_dwin\freertos.o: ../App/MQTT_Sim_Config.h

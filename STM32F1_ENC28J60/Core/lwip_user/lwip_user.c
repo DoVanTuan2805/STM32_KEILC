@@ -103,10 +103,10 @@ char ETH_IPOK(void)
 		gatewayIP[2]=(lwip_netif.netmask.addr>>16)&0x000000FF;
 		gatewayIP[3]=(lwip_netif.netmask.addr>>24)&0x000000FF;
 		
-		subnetmask[0]=lwip_netif.gw.addr&0x000000FF;
-		subnetmask[1]=(lwip_netif.gw.addr>>8)&0x000000FF;
-		subnetmask[2]=(lwip_netif.gw.addr>>16)&0x000000FF;
-		subnetmask[3]=(lwip_netif.gw.addr>>24)&0x000000FF;
+		subnetmask[0]=	lwip_netif.gw.addr 				& 0x000000FF;
+		subnetmask[1]=	(lwip_netif.gw.addr>>8) 	& 0x000000FF;
+		subnetmask[2]=	(lwip_netif.gw.addr>>16) 	& 0x000000FF;
+		subnetmask[3]=	(lwip_netif.gw.addr>>24) 	& 0x000000FF;
 		return 1;
 	}
 	else return 0;
@@ -209,7 +209,3 @@ uint32_t sys_rand()
 {
     return SysTick->VAL;
 }
-//uint32_t LWIP_RAND(void)
-//{
-//	return HAL_GetTick();
-//}
