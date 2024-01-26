@@ -25,13 +25,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "Keypad_user.h"
+#include "flash.h"
 #include "Button_user.h"
 #include "ILI9431_user.h"
+#include "step_user.h"
 #include "string.h"
 #include "stdio.h"
 #include "math.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#include "logo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +62,7 @@ float ROUND = 360;
 #define  DOT  (ROUND / inputAngle)
 
 
+volatile EncoderNew_t encoderCurr;
 typedef enum 
 {
 		CW,
@@ -65,17 +70,17 @@ typedef enum
 }direction_t;
 
 volatile direction_t dirEncoder1, dirEncoder2;
-volatile int8_t valueEncoder1, valueEncoder2;
+volatile int16_t valueEncoder1, valueEncoder2;
 
-volatile bool changeData;
-bool changeAngle;
-bool changeMode;
+volatile bool changeData, changeEncoder1 ,changeEncoder2;
 
-extern Screen_t screen;
 
-Screen_t screen_s;
+Screen_t screenCurr = AUTO_SCREEN, screenLast;
 
 dataUser_t dataUserInput;
+
+static uint32_t pulseStep2;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,21 +90,30 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t pulse;
 volatile uint8_t dataEncoder1 = 0, dataEncoder2 = 0;
 uint64_t timeLed;
 uint8_t stateBT1, stateBT2;
+char key;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance == htim10.Instance)
 	{
-			if(pulse != 0)
+			if(pulseStep2 != 0)
 			{
-				HAL_GPIO_TogglePin(PUL2_GPIO_Port, PUL2_Pin);
-				pulse--;
+					HAL_GPIO_TogglePin(PUL2_GPIO_Port, PUL2_Pin);
+					pulseStep2--;
+					HAL_TIM_Encoder_Stop_IT(&htim2, TIM_CHANNEL_1 | TIM_CHANNEL_2);
 			}
-			
+			else 
+			{
+					HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_1 | TIM_CHANNEL_2);
+			}
+	}
+	if(htim->Instance == htim11.Instance)
+	{
+			KEYPAD_Scan(0);
+			key = getKey();
 	}
 }
 
@@ -107,60 +121,66 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 		if(htim->Instance == htim2.Instance)
 		{
+			changeData = true;
+			changeEncoder1 = true;
+			encoderCurr = ENCODER1;
+			
 			dirEncoder1 = __HAL_TIM_IS_TIM_COUNTING_DOWN(&htim2);
-			valueEncoder1 = -__HAL_TIM_GetCounter(&htim2) / 4;
-			if(valueEncoder1 <= (ROUND / DOT))
+			valueEncoder1 = -__HAL_TIM_GetCounter(&htim2)/4;
+			if(dirEncoder1 == CCW)		//  NGUOC
 			{
-					
-					if(dirEncoder1 == CCW)		//  NGUOC
+					if(valueEncoder1 > 0)
 					{
-							if(valueEncoder1 > 0)
-							{
-									dataEncoder1 = valueEncoder1;
-									
-							}
-							else if (valueEncoder1 <= 0) 
-							{
-									dataEncoder1 = (ROUND / DOT) - abs(valueEncoder1);
-									
-							}
+							dataEncoder1 = valueEncoder1;
 					}
-					else if (dirEncoder1 == CW)		//  THUAN
+					else if (valueEncoder1 <= 0) 
 					{
-							if(valueEncoder1 > 0)
-							{
-									dataEncoder1 = valueEncoder1;
-							}
-							else if (valueEncoder1 <= 0)
-							{
-									dataEncoder1 = (ROUND / DOT) - abs(valueEncoder1);
-							}
+							dataEncoder1 = (ROUND / DOT) - abs(valueEncoder1);
+							
 					}
-					changeData = true;
 			}
-			else 
+			else if (dirEncoder1 == CW)		//  THUAN
 			{
-					__HAL_TIM_SetCounter(&htim2, 1);
+					if(valueEncoder1 > 0)
+					{
+							dataEncoder1 = valueEncoder1;
+					}
+					else if (valueEncoder1 <= 0)
+					{
+							dataEncoder1 = (ROUND / DOT) - abs(valueEncoder1);
+					}
 			}
-			if(screen_s == AUTO_SCREEN)
+			
+			if(screenCurr == AUTO_SCREEN)
 			{
-					dataUserInput.Angle = dataEncoder1;
+					if(dataEncoder1 > (inputAngle - 1))
+					{
+							__HAL_TIM_SetCounter(&htim2, -4);
+					}
+					if(dataEncoder1 <= inputAngle || dataEncoder1 >= 0)								
+					{
+							dataUserInput.AngleStep = valueEncoder1 * (ROUND / inputAngle);
+							dataUserInput.AngleTFT = valueEncoder1;
+					}
 			}
-			if(screen_s == MANUAL_SCREEN)
+			else if(screenCurr == MANUAL_SCREEN)
 			{
-				if(dataEncoder1 <= 3 && dataEncoder1 > 0)
-				{
-						dataUserInput.page = dataEncoder1;
-				}
+					if(dataEncoder1 <= 3 && dataEncoder1 > 0)
+					{
+							dataUserInput.page = dataEncoder1;
+					}
+					else if(dataEncoder1 > 3 || dataEncoder1 < 0)
+					{	
+							__HAL_TIM_SetCounter(&htim2, -4);
+					}
 			}
 		}
 		else if(htim->Instance == htim4.Instance)
 		{
-				changeData = true;
 				valueEncoder2 = __HAL_TIM_GetCounter(&htim4) / 4;
 				dirEncoder2 = __HAL_TIM_IS_TIM_COUNTING_DOWN(&htim4);
-			
-				if(valueEncoder2 <= (ROUND / DOT))
+				
+				if(valueEncoder2 <= 360 && valueEncoder2 > 0)
 				{
 						if(dirEncoder2 == CCW)		//  NGUOC
 						{
@@ -186,14 +206,19 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 										dataEncoder2 = (ROUND / DOT) - abs(valueEncoder2);
 								}
 						}
-						dataUserInput.encoder2 = dataEncoder2;
+						dataUserInput.encoder2 = dataEncoder2 - 1;
 				}
-				else 
+				else if (valueEncoder2 > 360 || valueEncoder2 <= 0)
 				{
-						__HAL_TIM_SetCounter(&htim4, 1);
+						__HAL_TIM_SetCounter(&htim4, 4);
 				}
+				changeData = true;
+				changeEncoder2 = true;
+				encoderCurr = ENCODER2;
 		}
 }
+
+
 /* USER CODE END 0 */
 
 /**
@@ -230,41 +255,64 @@ int main(void)
   MX_TIM9_Init();
   MX_TIM4_Init();
   MX_TIM10_Init();
+  MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Base_Start_IT(&htim10);
 	
+	HAL_TIM_Base_Start_IT(&htim10);
 	
 	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,1);
 	
 	initButton();
 	initILI();
 	
-	drawCircleAngle(DOT);
+	dataUserInput.numAngle = DOT;
+	dataUserInput.OneRound = 1;
+	dataUserInput.AngleStep = 0;
+	changeEncoder1 = true;
+	changeEncoder2 = false;
+	drawCircleAngle(dataUserInput);
 	
 	HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_1 | TIM_CHANNEL_2);
 	HAL_TIM_Encoder_Start_IT(&htim4, TIM_CHANNEL_1 | TIM_CHANNEL_2);
+	__HAL_TIM_SetCounter(&htim2, -4);
+	__HAL_TIM_SetCounter(&htim4, 4);
+	initKeypad();
+	
+	//ILI9341_Draw_Image((const char*)snow_tiger, SCREEN_VERTICAL_2);
+	//ILI9341_Draw_Image((const char*)logo, SCREEN_HORIZONTAL_2);
+	//HAL_Delay(5000);
+	clearLCD();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		
 		stateBT1 = HAL_GPIO_ReadPin(BT1_GPIO_Port, BT1_Pin);
 		stateBT2 = HAL_GPIO_ReadPin(BT2_GPIO_Port, BT2_Pin);
 		buttonHandle();
-		if(changeData == true || changeMode == true)
+		
+		if(HAL_GetTick() - timeLed > 100)
 		{
-				changeData = false;
-				changeMode = false;
-				ArrayTFT(screen_s, dataUserInput);
+				if(screenLast != screenCurr)
+				{
+						clearLCD();
+						ArrayTFT(screenCurr, dataUserInput);
+						screenLast = screenCurr;
+				}
+				if(changeData == true)
+				{
+						changeData = false;
+						ArrayTFT(screenCurr, dataUserInput);
+						pulseStep2 = stepAngle(dataUserInput.AngleStep);
+				}
+				//HAL_GPIO_TogglePin(DIR2_GPIO_Port, DIR2_Pin);
+				//pulse = 6400;
+				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+				timeLed = HAL_GetTick();
 		}
-		if(HAL_GetTick() - timeLed > 1000)
-		{
-			//HAL_GPIO_TogglePin(DIR2_GPIO_Port, DIR2_Pin);
-			//pulse = 6400;
-			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-			timeLed = HAL_GetTick();
-		}
+		dataUserInput.numAngle = DOT;
 		
     /* USER CODE END WHILE */
 

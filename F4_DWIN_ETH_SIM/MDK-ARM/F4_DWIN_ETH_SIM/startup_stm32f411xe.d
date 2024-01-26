@@ -1,1 +1,0 @@
-f4_dwin_eth_sim\startup_stm32f411xe.o: startup_stm32f411xe.s

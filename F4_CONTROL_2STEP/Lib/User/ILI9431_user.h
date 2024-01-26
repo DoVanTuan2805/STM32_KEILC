@@ -9,12 +9,22 @@
 
 extern const Font Font1;
 
+typedef enum 
+{
+		ENCODER1,
+		ENCODER2
+}EncoderNew_t;
 typedef struct
 {
+	uint8_t slot;
 	uint8_t page;
-	int8_t Angle;
+	int8_t AngleTFT;
 	int8_t encoder2;
 	uint8_t key;
+	int16_t AngleStep;
+	uint16_t numAngle;
+	uint16_t OneRound;
+	
 }dataUser_t;
 
 #define NUM_OF_SCREEN 2
@@ -22,12 +32,13 @@ typedef struct
 bool ArrayTFT(Screen_t screen, dataUser_t dataUser);
 
 void initILI(void);
-void drawCircleAngle(uint8_t angle);
+void drawCircleAngle(dataUser_t dataUser);
 void drawLineInCircle( dataUser_t dataUser);
 
 void drawLayout(dataUser_t dataUser);
 void layoutManual(dataUser_t dataUser);
-
-
+void clearLCD(void);
+void BlynkSlot(uint8_t slot);
+void clearOneSlot(uint8_t slot);
 
 #endif

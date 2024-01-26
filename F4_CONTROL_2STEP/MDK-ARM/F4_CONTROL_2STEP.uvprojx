@@ -10,7 +10,6 @@
       <TargetName>F4_CONTROL_2STEP</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pArmCC>6190000::V6.19::.\ARMCLANG</pArmCC>
       <pCCUsed>6190000::V6.19::.\ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
@@ -341,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F401xC</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Lib/ILI9341;../Lib/Button;../Lib/User</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Lib/ILI9341;../Lib/Button;../Lib/User;../Lib/Flash;../Lib/Keypad</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -754,6 +753,11 @@
               <FileType>5</FileType>
               <FilePath>..\Lib\ILI9341\4x4_font.h</FilePath>
             </File>
+            <File>
+              <FileName>logo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Lib\ILI9341\logo.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -763,6 +767,31 @@
               <FileName>button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Lib\Button\button.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Flash</GroupName>
+          <Files>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\Flash\flash.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Keypad</GroupName>
+          <Files>
+            <File>
+              <FileName>KEYPAD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\Keypad\KEYPAD.c</FilePath>
+            </File>
+            <File>
+              <FileName>KEYPAD_cfg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\Keypad\KEYPAD_cfg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -783,6 +812,11 @@
               <FileName>Keypad_user.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Lib\User\Keypad_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>step_user.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\User\step_user.c</FilePath>
             </File>
           </Files>
         </Group>

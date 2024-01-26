@@ -1,0 +1,467 @@
+#include <stdio.h>
+#include <string.h>
+#include "lwip/pbuf.h"
+#include "lwip/apps/mqtt.h"
+#include "lwip/apps/mqtt_priv.h"
+#include "lwip/netif.h"
+#include "lwip/dns.h"
+//#include "gsm.h"
+#include "mqtt_client.h"
+#include "main.h"
+#include "lwip_user.h"
+#include "uart.h"
+#include "stm32f4xx_hal.h"
+extern UART_HandleTypeDef huart1;
+#define MQTT_KEEP_ALIVE_INTERVAL 600
+#define MQTT_TOPIC_MAX_NAME_LENGTH 10
+
+static char m_mqtt_publish_topic_name[MQTT_TOPIC_MAX_NAME_LENGTH];
+static char m_mqtt_subscribe_topic_name[MQTT_TOPIC_MAX_NAME_LENGTH];
+static char m_mqtt_tx_buffer[100];		// 256
+
+static ip_addr_t m_mqtt_server_address;
+static mqtt_client_t m_mqtt_static_client;
+static uint8_t m_is_valid_sub_topic;
+static uint8_t m_is_dns_resolved = 0;
+static uint8_t m_sub_req_err_count;
+
+static mqtt_client_cfg_t m_cfg;
+static mqtt_client_state_t m_mqtt_state = MQTT_CLIENT_STATE_DISCONNECTED;
+static bool m_mqtt_process_now = false;
+
+static void mqtt_sub_request_cb(void *arg, err_t result)
+{
+    /* Just print the result code here for simplicity, 
+        normal behaviour would be to take some action if subscribe fails like 
+        notifying user, retry subscribe or disconnect from server 
+    */
+    if (result != ERR_OK)
+    {
+				Uart_Printf("Retry send subscribe...\n");
+        m_sub_req_err_count++;
+        if (m_sub_req_err_count >= 5)
+        {
+            /* close mqtt connection */
+            mqtt_disconnect(&m_mqtt_static_client);
+
+            m_sub_req_err_count = 0;
+            m_mqtt_state = MQTT_CLIENT_STATE_DISCONNECTED;
+        }
+        else
+        {
+            err_t err = mqtt_subscribe(&m_mqtt_static_client,
+                                       m_mqtt_subscribe_topic_name,
+                                       SUB_QoS,
+                                       mqtt_sub_request_cb,
+                                       arg);
+            if (err != ERR_OK)
+            {
+								Uart_Printf("mqtt_subscribe error\n");
+            }
+        }
+    }
+    else
+    {
+        m_sub_req_err_count = 0;
+        m_mqtt_process_now = true;
+				//Uart_Printf("Subscribed\n");
+    }
+}
+
+/* 3. Implementing callbacks for incoming publish and data */
+/* The idea is to demultiplex topic and create some reference to be used in data callbacks
+   Example here uses a global variable, better would be to use a member in arg
+   If RAM and CPU budget allows it, the easiest implementation might be to just take a copy of
+   the topic string and use it in mqtt_incoming_data_cb
+*/
+static void mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len)
+{
+    //DEBUG_INFO("MQTT publish cb topic %s, length %u\r\n", topic, (unsigned int)tot_len);
+
+    /* Decode topic string into a user defined reference */
+    if (strcmp(topic, m_mqtt_subscribe_topic_name) == 0)
+    {
+        m_is_valid_sub_topic = 1;
+    }
+    else
+    {
+        /* For all other topics */
+        m_is_valid_sub_topic = 0;
+    }
+}
+
+static void mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
+{
+    //DEBUG_INFO("MQTT data cb, length %d, flags %u\r\n", len, (unsigned int)flags);
+		char dataRecv[30];
+    if (flags & MQTT_DATA_FLAG_LAST)
+    {
+        /* Last fragment of payload received (or whole part if payload fits receive buffer
+              See MQTT_VAR_HEADER_BUFFER_LEN)  */
+
+				sprintf(dataRecv, "Payload data: %s\r\n", (char*)data);
+				Uart_Printf((char*)dataRecv);
+        if (m_is_valid_sub_topic == 1)
+        {
+            m_is_valid_sub_topic = 0;
+
+            /* Update firmware message  */
+            if (strstr((char *)data, "UDFW,"))
+            {
+                //DEBUG_INFO("Update firmware\r\n");
+            }
+            else if (strstr((char *)data, "PLEASE RESET"))
+            {
+                NVIC_SystemReset();
+            }
+        }
+        memset(m_mqtt_static_client.rx_buffer, 0, MQTT_VAR_HEADER_BUFFER_LEN);
+    }
+    else
+    {
+        /* Handle fragmented payload, store in buffer, write to file or whatever */
+    }
+}
+
+static void mqtt_client_connection_callback(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
+{
+    //DEBUG_INFO("mqtt_client_connection_callback reason: %d\r\n", status);
+
+    err_t err;
+    if (status == MQTT_CONNECT_ACCEPTED)
+    {
+        //DEBUG_INFO("mqtt_connection_cb: Successfully connected\r\n");
+        m_mqtt_process_now = true;
+        m_mqtt_state = MQTT_CLIENT_STATE_CONNECTED;
+
+        /* Setup callback for incoming publish requests */
+        mqtt_set_inpub_callback(client, mqtt_incoming_publish_cb, mqtt_incoming_data_cb, arg);
+
+        /* Subscribe to a topic named "fire/sub/IMEI" with QoS level 1, 
+            call mqtt_sub_request_cb with result */
+        //DEBUG_INFO("Subscribe %s\r\n", m_mqtt_subscribe_topic_name);
+        err = mqtt_subscribe(client, m_mqtt_subscribe_topic_name, SUB_QoS, mqtt_sub_request_cb, arg);
+
+        if (err != ERR_OK)
+        {
+            //DEBUG_INFO("mqtt_subscribe return: %d\r\n", err);
+        }
+    }
+    else
+    {
+        //DEBUG_INFO("[%s] mqtt connection status %d\r\n", __FUNCTION__);
+        mqtt_disconnect(&m_mqtt_static_client);
+        /* Its more nice to be connected, so try to reconnect */
+        m_mqtt_state = MQTT_CLIENT_STATE_DISCONNECTED;
+    }
+}
+
+/* -----------------------------------------------------------------
+4. Using outgoing publish
+*/
+/* Called when publish is complete either with sucess or failure */
+static void mqtt_pub_request_cb(void *arg, err_t result)
+{
+    if (result != ERR_OK)
+    {
+        //DEBUG_INFO("Publish result: %d\r\n", result);
+    }
+    else
+    {
+        //DEBUG_INFO("Publish: OK\r\n");
+    }
+}
+
+
+static void mqtt_client_send_heart_beat(void)
+{
+		snprintf(m_mqtt_tx_buffer, sizeof(m_mqtt_tx_buffer), "%s", "Xin chao cac ban");
+
+    err_t err = mqtt_publish(&m_mqtt_static_client,
+                             m_mqtt_publish_topic_name,
+                             m_mqtt_tx_buffer,
+                             strlen(m_mqtt_tx_buffer),
+                             PUB_QoS,
+                             PUB_RETAIN,
+                             mqtt_pub_request_cb,
+                             NULL);
+		Uart_Printf("Publish data\n");
+	//DEBUG_INFO("Publish data \"%s\" to topic %s\r\n", "Xin chao cac ban", m_mqtt_publish_topic_name);  
+    if (err != ERR_OK)
+    {
+        //DEBUG_INFO("Publish err: %d\r\n", err);
+				Uart_Printf("error publish\n");
+        return;
+    }
+}
+
+static void mqtt_client_send_subscribe_req(void)
+{
+    /* Subscribe to a topic named "qrm/imei/st_data" with QoS level 1, call mqtt_sub_request_cb with result */
+    err_t err = mqtt_subscribe(&m_mqtt_static_client, 
+                                m_mqtt_subscribe_topic_name, 
+                                SUB_QoS, 
+                                mqtt_sub_request_cb, NULL);
+
+    //DEBUG_INFO("%s: topic %s, error %d\r\n", __FUNCTION__, m_mqtt_subscribe_topic_name, err);
+	
+	Uart_Printf("Subscribe data\n");
+}
+
+static void heart_beat_msg_tick(void)
+{
+    mqtt_client_send_heart_beat();
+}
+
+static int8_t mqtt_connect_broker(mqtt_client_t *client)
+{
+    struct mqtt_connect_client_info_t client_info =
+        {
+            m_cfg.client_id,
+            NULL, NULL,               //User, pass
+            MQTT_KEEP_ALIVE_INTERVAL, //Keep alive in seconds, 0 - disable
+            NULL, NULL, 0, 0          //Will topic, will msg, will QoS, will retain
+        };
+
+    /* Minimal amount of information required is client identifier, so set it here */
+    client_info.client_user = m_cfg.user_name;
+    client_info.client_pass = m_cfg.password;
+
+    /* 
+    * Initiate client and connect to server, if this fails immediately an error code is returned
+    * otherwise mqtt_connection_cb will be called with connection result after attempting 
+    * to establish a connection with the server. 
+    * For now MQTT version 3.1.1 is always used 
+    */
+    err_t err = mqtt_client_connect(client,
+                                    &m_mqtt_server_address,
+                                    m_cfg.port,
+                                    mqtt_client_connection_callback,
+                                    0,
+                                    &client_info);
+
+    /* For now just print the result code if something goes wrong */
+    if (err != ERR_OK)
+    {
+        //DEBUG_INFO("mqtt_connect return %d\r\n", err);
+        if (err == ERR_ISCONN)
+        {
+            //DEBUG_INFO("MQTT already connected\r\n");
+        }
+    }
+    else
+    {
+//        DEBUG_INFO("Host %s:%d %s, client id %s\r\n",
+//                   m_cfg.broker_addr,
+//                   m_cfg.port,
+//                   ipaddr_ntoa(&m_mqtt_server_address),
+//                   m_cfg.client_id);
+        //DEBUG_INFO("mqtt_client_connect: OK\r\n");
+    }
+
+    return err;
+}
+
+/**
+ * @brief DNS found callback when using DNS names as server address.
+ */
+static void mqtt_dns_found(const char *hostname, const ip_addr_t *ipaddr, void *arg)
+{
+    //DEBUG_INFO("mqtt_dns_found: %s\r\n", hostname);
+		Uart_Printf("mqtt_dns_found \r\n");
+    LWIP_UNUSED_ARG(hostname);
+    LWIP_UNUSED_ARG(arg);
+
+    if (ipaddr != NULL)
+    {
+        /* Address resolved, send request */
+        m_mqtt_server_address.addr = ipaddr->addr;
+        //DEBUG_INFO("Server address resolved = %s\r\n", ipaddr_ntoa(&m_mqtt_server_address));
+        Uart_Printf("Server address resolved\r\n");
+				m_is_dns_resolved = 1;
+        m_mqtt_process_now = true;
+    }
+    else
+    {
+        /* DNS resolving failed -> try another server */
+        //DEBUG_INFO("mqtt_dns_found: Failed to resolve server address resolved, trying next server\r\n");
+        Uart_Printf("mqtt_dns_found: Failed to resolve server address resolved, trying next server\r\n");
+				m_is_dns_resolved = 0;
+    }
+}
+
+/**
+ * @note Task call every 1s
+ */
+void mqtt_client_polling_task(void *arg)
+{
+    static uint8_t mqtt_tick = 0;
+    static uint32_t tick = 0, last_time_send_sub_request = 0, last_time_send_hearbeat = 0;
+    static uint32_t m_current_tick;
+    uint32_t now = HAL_GetTick();
+
+    if ((now - m_current_tick >= (uint32_t)2000) || m_mqtt_process_now)
+    {
+        m_mqtt_process_now = false;
+        m_current_tick = now;
+    }
+    else
+    {
+        return;
+    }
+
+    static bool m_mqtt_allow = false;
+    if (ETH_IPOK())			// get ip oke
+    {
+        if (m_mqtt_allow == false)
+        {
+            m_mqtt_allow = true;
+            if (mqtt_client_is_connected(&m_mqtt_static_client))
+            {
+								Uart_Printf("MQTT STATE CONNECT 1\r\n");
+                mqtt_disconnect(&m_mqtt_static_client);
+                m_mqtt_state = MQTT_CLIENT_STATE_DISCONNECTED;
+								
+            }
+
+            //DEBUG_INFO("MQTT thread started\r\n");
+						Uart_Printf("MQTT thread started\r\n");
+        }
+    }
+    else
+    {
+        if (m_mqtt_allow)
+        {
+            //DEBUG_INFO("MQTT thread stopped\r\n");
+						Uart_Printf("MQTT thread stopped\r\n");
+						
+        }
+        m_mqtt_allow = false;
+    }
+
+    if (m_mqtt_allow)
+    {
+        mqtt_tick++;
+        switch (m_mqtt_state)
+        {
+        case MQTT_CLIENT_STATE_DISCONNECTED:
+            /* init client info...*/
+            m_is_dns_resolved = 0;
+            m_mqtt_state = MQTT_CLIENT_STATE_RESOLVE_HOSTNAME;
+            mqtt_tick = 4;
+						Uart_Printf("MQTT STATE DISCONNECT \r\n");
+            break;
+
+        case MQTT_CLIENT_STATE_RESOLVE_HOSTNAME:
+            if (!m_is_dns_resolved)
+            {
+                if (mqtt_tick >= 5)
+                {
+                    mqtt_tick = 0;
+
+                    err_t err = dns_gethostbyname(m_cfg.broker_addr,
+                                                  &m_mqtt_server_address,
+                                                  mqtt_dns_found,
+                                                  NULL);
+										Uart_Printf("Connect DNS \r\n");
+                    if (err == ERR_INPROGRESS)
+                    {
+                        /* DNS request sent, wait for sntp_dns_found being called */
+//                        DEBUG_INFO("sntp_request: %d - Waiting for server %s address to be resolved\r\n", 
+//                                    err,
+//                                    m_cfg.broker_addr);
+													Uart_Printf("Waiting for server\r\n");
+										}
+                    else if (err == ERR_OK)
+                    {
+//                        DEBUG_INFO("DNS resolved aready, host %s, mqtt_ipaddr = %s\r\n",
+//                                   m_cfg.broker_addr,
+//                                   ipaddr_ntoa(&m_mqtt_server_address));
+												Uart_Printf("DNS resolved aready\r\n");
+                        m_is_dns_resolved = 1;
+                    }
+                }
+            }
+            else
+            {
+                mqtt_tick = 9;
+                m_mqtt_state = MQTT_CLIENT_STATE_CONNECTING;
+            }
+            break;
+
+        case MQTT_CLIENT_STATE_CONNECTING:
+            if (mqtt_tick >= 10)
+            {
+                if (mqtt_connect_broker(&m_mqtt_static_client) == ERR_OK)
+                {
+                    mqtt_tick = 5; /* Gui login sau 5s */
+                }
+                else
+                {
+                    mqtt_tick = 0;
+                }
+            }
+            break;
+
+        case MQTT_CLIENT_STATE_CONNECTED:
+        {
+            tick = now;
+
+            if (last_time_send_sub_request == 0 || last_time_send_sub_request > tick)
+            {
+                last_time_send_sub_request = tick;
+            }
+
+            if (mqtt_client_is_connected(&m_mqtt_static_client))
+            {
+								Uart_Printf("MQTT CONNECTED \r\n");
+                /* Send subscribe message periodic */
+                if (tick >= (last_time_send_sub_request + m_cfg.periodic_sub_req_s*1000))
+                {
+                    last_time_send_sub_request = tick;
+                    mqtt_client_send_subscribe_req();
+                }
+                
+                if (tick - last_time_send_hearbeat >= (uint32_t)3000)
+                {
+                    last_time_send_hearbeat = tick;
+                    /* Send heartbeat message */
+                    heart_beat_msg_tick();
+                }
+            }
+            else
+            {
+                m_mqtt_state = MQTT_CLIENT_STATE_DISCONNECTED;
+            }
+        }
+        break;
+        default:
+            break;
+        }
+    }
+    else
+    {
+        mqtt_tick = 4;
+    }
+}
+
+bool mqtt_client_is_connected_to_broker(void)
+{
+    if (m_mqtt_state == MQTT_CLIENT_STATE_CONNECTED)
+        return true;
+
+    return false;
+}
+
+void mqtt_client_initialize(mqtt_client_cfg_t *cfg)
+{
+    memcpy(&m_cfg, cfg, sizeof(mqtt_client_cfg_t));
+    snprintf(m_mqtt_publish_topic_name, sizeof(m_mqtt_publish_topic_name), "%s", "pub_stm32");
+    snprintf(m_mqtt_subscribe_topic_name, sizeof(m_mqtt_subscribe_topic_name), "%s", "sub_stm32");
+		Uart_Printf("MQTT client init\r\n");
+//		Uart_Printf((char*)m_cfg.broker_addr);
+//		uint8_t data1[10];
+//		sprintf((char*)data1, "%d\n", m_cfg.port);
+//		Uart_Printf((char*)data1);
+		//HAL_UART_Transmit(&huart1, (uint8_t*)m_cfg.port, sizeof(m_cfg.port), 1000);
+}

@@ -27,9 +27,13 @@
 "f4_control_2step\ili9341_gfx.o"
 "f4_control_2step\ili9341_stm32_driver.o"
 "f4_control_2step\button.o"
+"f4_control_2step\flash.o"
+"f4_control_2step\keypad.o"
+"f4_control_2step\keypad_cfg.o"
 "f4_control_2step\ili9431_user.o"
 "f4_control_2step\button_user.o"
 "f4_control_2step\keypad_user.o"
+"f4_control_2step\step_user.o"
 --strict --scatter "F4_CONTROL_2STEP\F4_CONTROL_2STEP.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

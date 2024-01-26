@@ -30,11 +30,13 @@ f4_control_2step/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Core\Inc\dma.h ..\Core\Inc\spi.h ..\Core\Inc\tim.h \
-  ..\Core\Inc\gpio.h ..\Lib\User\Button_user.h ..\Lib\Button\button.h \
+  ..\Core\Inc\gpio.h ..\Lib\User\Keypad_user.h ..\Lib\Keypad\KEYPAD.h \
+  ..\Lib\Flash\flash.h ..\Lib\User\Button_user.h ..\Lib\Button\button.h \
   ..\Lib\User\ILI9431_user.h ..\Lib\ILI9341\ILI9341_STM32_Driver.h \
   ..\Lib\ILI9341\ILI9341_GFX.h ..\Lib\ILI9341\4x4_font.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\Lib\User\step_user.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h ..\Lib\ILI9341\logo.h

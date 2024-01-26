@@ -4,10 +4,10 @@
 #include "tim.h"
 Button_t bt1, bt2;
 
+extern dataUser_t dataUserInput;
 extern bool changeMode;
 static Screen_t screen;
-
-extern Screen_t screen_s;
+extern Screen_t screenCurr;
 void initButton(void)
 {
 		Button_Init(&bt1, BT1_GPIO_Port, BT1_Pin);
@@ -24,16 +24,15 @@ void bt_press_callback(Button_t *button) {
 	{
 			if (screen == MANUAL_SCREEN)
 			{
-					changeMode = true;
 					screen = AUTO_SCREEN;
-					__HAL_TIM_SetCounter(&htim2, 1);
 			}
 			else if (screen == AUTO_SCREEN)
 			{
-					changeMode = true;
 					screen = MANUAL_SCREEN;
-					__HAL_TIM_SetCounter(&htim2, 1);
+					__HAL_TIM_SetCounter(&htim2, -4);
+					dataUserInput.page = 1;
 			}
-			screen_s = screen;
+			screenCurr = screen;
+			
 	}
 }
