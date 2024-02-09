@@ -32,12 +32,13 @@ f4_control_step_v2/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Core\Inc\dma.h ..\Core\Inc\spi.h ..\Core\Inc\tim.h \
   ..\Core\Inc\gpio.h ..\Lib\Encoder\encoder.h ..\Lib\User\Keypad_user.h \
   ..\Lib\Keypad\KEYPAD.h ..\Lib\Flash\flash.h ..\Lib\User\Button_user.h \
-  ..\Lib\Button\button.h ..\Lib\User\ILI9431_user.h \
-  ..\Lib\ILI9341\ILI9341_STM32_Driver.h ..\Lib\ILI9341\ILI9341_GFX.h \
-  ..\Lib\ILI9341\4x4_font.h \
+  ..\Lib\Button\button.h ..\Lib\User\user_ex.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\Lib\User\ILI9431_user.h ..\Lib\ILI9341\ILI9341_STM32_Driver.h \
+  ..\Lib\ILI9341\ILI9341_GFX.h ..\Lib\ILI9341\4x4_font.h \
   ..\Lib\User\step_user.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h ..\Lib\ILI9341\logo.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  ..\Lib\ILI9341\mainTFT.h ..\Lib\User\Flash_user.h

@@ -10,7 +10,7 @@ __weak void increse_callback(uint16_t GPIO_Pin)
 }
 void handleInterruptEncoder(uint16_t GPIO_Pin, GPIO_TypeDef* GPIO_A_PORT, uint16_t GPIO_A_Pin, GPIO_TypeDef* GPIO_B_PORT, uint16_t GPIO_B_Pin)
 {
-		if(HAL_GetTick() - timeReadEncoder > 20)
+		if(HAL_GetTick() - timeReadEncoder > 50)
 		{
 				if(GPIO_Pin == GPIO_A_Pin)
 				{

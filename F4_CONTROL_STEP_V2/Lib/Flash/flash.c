@@ -25,7 +25,15 @@ uint32_t getSector(uint32_t address)
 		}
 		else if (address >= 0x08020000 && address < 0x0803FFFF)
 		{
-				return FLASH_SECTOR_4;
+				return FLASH_SECTOR_5;
+		}
+		else if (address >= 0x08040000 && address < 0x0805FFFF)
+		{
+				return 6;
+		}
+		else if (address >= 0x08060000 && address < 0x0807FFFF)
+		{
+				return 7;
 		}
 }
 

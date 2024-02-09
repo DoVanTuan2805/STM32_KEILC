@@ -34,7 +34,8 @@ f4_control_step_v2/ili9431_user.o: ..\Lib\User\ILI9431_user.c \
   ..\Core\Inc\gpio.h ..\Core\Inc\main.h ..\Lib\ILI9341\ILI9341_GFX.h \
   ..\Lib\ILI9341\4x4_font.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  ..\Lib\User\Button_user.h ..\Lib\Button\button.h \
+  ..\Lib\User\Button_user.h ..\Lib\Button\button.h ..\Lib\User\user_ex.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h

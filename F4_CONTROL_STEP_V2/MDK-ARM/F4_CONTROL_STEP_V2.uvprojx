@@ -662,6 +662,11 @@
               <FileType>1</FileType>
               <FilePath>..\Lib\ILI9341\ILI9341_STM32_Driver.c</FilePath>
             </File>
+            <File>
+              <FileName>mainTFT.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Lib\ILI9341\mainTFT.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -711,6 +716,16 @@
               <FileName>step_user.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Lib\User\step_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>Flash_user.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\User\Flash_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_ex.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Lib\User\user_ex.h</FilePath>
             </File>
           </Files>
         </Group>

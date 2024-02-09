@@ -43,6 +43,7 @@ void uartReceive()					// INTERRUPT DMA
 		flagRx = true;
 		bufferRx[indexRx++] = dataRx;		
 		HAL_UART_Receive_DMA(huart, &dataRx, 1);
+		
 }
 void clearRxBuffer(void)
 {

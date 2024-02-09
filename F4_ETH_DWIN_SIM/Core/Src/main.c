@@ -53,7 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+Button_t btRst;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,7 +95,13 @@ void Mqtt_on_message(char *topic, char *payload)
 		}
 		
 }
-uint8_t stateBT1, stateBT2, stateBT3;
+void bt_press_callback(Button_t *button) 
+{
+		if(button == &btRst)
+		{
+				NVIC_SystemReset();
+		}
+}
 /* USER CODE END 0 */
 
 /**
@@ -136,6 +142,8 @@ int main(void)
 	HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
 	HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
 	HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+	
+	Button_Init(&btRst, BT1_GPIO_Port, BT1_Pin);
 	
 	UART_init(&huart6);
 	/*
@@ -183,6 +191,7 @@ int main(void)
 			.Qos = 0
 	};
 	subcribeTopic(mqttSub);
+	
 	MQTTsetCallbackMess(Mqtt_on_message);
   /* USER CODE END 2 */
 
@@ -190,9 +199,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		stateBT1 = HAL_GPIO_ReadPin(BT1_GPIO_Port, BT1_Pin);
-		stateBT2 = HAL_GPIO_ReadPin(BT2_GPIO_Port, BT2_Pin);
-		stateBT3 = HAL_GPIO_ReadPin(BT3_GPIO_Port, BT3_Pin);
+		bt_handle(&btRst);
 		SimLoop();
 		if(HAL_GetTick() - time > 100)
 		{
@@ -200,6 +207,7 @@ int main(void)
 			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 			time = HAL_GetTick();
 		}
+		
 		/*
 		lwip_periodic_handle();				// HANDLE CONNECT ETH
 		if(ETH_IPOK())

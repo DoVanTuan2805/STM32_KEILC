@@ -106,7 +106,7 @@ void ILI9341_SPI_Init(void)
 /*Send data (char) to LCD*/
 void ILI9341_SPI_Send(unsigned char SPI_Data)
 {
-		HAL_SPI_Transmit_DMA(&HSPI_INSTANCE, &SPI_Data, sizeof(SPI_Data));
+		HAL_SPI_Transmit_DMA(&HSPI_INSTANCE, &SPI_Data, 1);
 }
 #elif
 void ILI9341_SPI_Send(unsigned char SPI_Data)

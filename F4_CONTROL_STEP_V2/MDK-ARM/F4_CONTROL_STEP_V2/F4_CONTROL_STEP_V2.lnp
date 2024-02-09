@@ -35,6 +35,7 @@
 "f4_control_step_v2\ili9431_user.o"
 "f4_control_step_v2\keypad_user.o"
 "f4_control_step_v2\step_user.o"
+"f4_control_step_v2\flash_user.o"
 --strict --scatter "F4_CONTROL_STEP_V2\F4_CONTROL_STEP_V2.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
