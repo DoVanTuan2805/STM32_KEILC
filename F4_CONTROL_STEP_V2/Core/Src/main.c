@@ -702,7 +702,10 @@ int main(void)
 		dataUserInput.dataSetup.changePulse = false;
 
 		// DEFINE NUMINDEX
-		}
+		memset(dataUserInput.dataSetup.arrayNumIndex, '0', sizeof(dataUserInput.dataSetup.arrayNumIndex));
+		dataUserInput.dataSetup.indexArrayNumI = 0;
+		dataUserInput.dataSetup.changeNumIndex = false;
+	}
 	// DEFINE TOTAL CREATE
 	{
 		dataUserInput.dataSetupRotation.indexPageInRotation = 1;
