@@ -26,6 +26,7 @@
 "f4_control_step_v2\system_stm32f4xx.o"
 "f4_control_step_v2\button.o"
 "f4_control_step_v2\flash.o"
+"f4_control_step_v2\savetoflash.o"
 "f4_control_step_v2\ili9341_gfx.o"
 "f4_control_step_v2\ili9341_stm32_driver.o"
 "f4_control_step_v2\keypad.o"

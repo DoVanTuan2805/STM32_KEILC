@@ -26,4 +26,6 @@ f4_flash_struct/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
-  ..\Core\Inc\gpio.h ..\Lib\User\Flash_user.h ..\Lib\Flash\flash.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h ..\Core\Inc\gpio.h \
+  ..\Lib\User\Flash_user.h ..\Lib\Flash\flash.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h

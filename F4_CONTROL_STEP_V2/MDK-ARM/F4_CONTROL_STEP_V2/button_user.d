@@ -35,4 +35,5 @@ f4_control_step_v2/button_user.o: ..\Lib\User\Button_user.c \
   ..\Lib\ILI9341\ILI9341_STM32_Driver.h ..\Lib\ILI9341\ILI9341_GFX.h \
   ..\Lib\ILI9341\4x4_font.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h ..\Lib\User\step_user.h

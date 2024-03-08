@@ -39,6 +39,7 @@
 #include "mainTFT.h"
 #include "Flash_user.h"
 #include "user_ex.h"
+#include "saveToFlash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,21 +60,29 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-extern float ROUND;
+extern uint8_t u8COLUMS;
+extern bool changeButton;
+
+uint8_t *arrayRotationW, *arrayRotationR;
 
 dataUser_t dataUserInput;
+dataSaveFlash_t dataWriteFlash, dataReadFlash;
+dataPage_t dataPageW;
 
-volatile int16_t valueEncoder1, valueEncoder2;
 volatile bool changeEncoder1, changeEncoder2;
-extern bool changeButton;
-Screen_t screenCurr = ENCODER_ROTATION_SCREEN, screenPrev = HAND_ROTATION_SCREEN;
 
-uint64_t timeLed, timePress;
+Screen_t screenCurr = ENCODER_ROTATION_SCREEN, screenPrev = ANGLE_MAIN_SCREEN;
+
+volatile uint64_t timeLed, timeKeyPad;
 
 char keyPressCurr, keyPressLast;
+bool stateSaveSetup, stateSaveRotation;
 
-dataSaveFlash_t dataWriteFlash, dataReadFlash;
-bool stateSaveSetup;
+uint8_t arrayTest[5];
+
+volatile uint32_t pulseStep;
+volatile bool isRun;
+bool check; // FOR SCREEN LOOP MODE
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -86,252 +95,352 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-
+	if (htim->Instance == htim9.Instance) // 100ms
+	{
+	}
+	if (htim->Instance == htim10.Instance)
+	{
+		{
+			if (dataUserInput.dataSetup.LoopMode == true)
+			{
+				if (pulseStep == 0)
+				{
+					pulseStep = dataUserInput.dataSetup.pulse;
+				}
+			}
+		}
+		{
+			if (screenCurr != SETUP_SCREEN)
+			{
+				dataUserInput.dataSetup.LoopMode = false;
+			}
+		}
+		if (pulseStep != 0)
+		{
+			isRun = true;
+			pulseStep--;
+			HAL_GPIO_TogglePin(PUL2_GPIO_Port, PUL2_Pin);
+		}
+		else if (pulseStep == 0)
+		{
+			isRun = false;
+		}
+	}
 	if (htim->Instance == htim11.Instance)
 	{
 		handleKeypadInTimer();
 		keyPressCurr = getKey();
 		if (keyPressLast != keyPressCurr)
 		{
-
-			keyPressLast = keyPressCurr;
+			if (HAL_GetTick() - timeKeyPad > 50)
 			{
-				// SET UP SCREEN LOOP MODE, PULSE , SPEED
-				if (screenCurr == SETUP_SCREEN)
-				{
-					changeButton = true;
-					if (dataUserInput.indexPageInSetup == 1)
-					{
-						// SET UP LOOP MODE
-						if (dataUserInput.indexSlotInSetup == 1)
-						{
-							if (keyPressCurr == '#')
-							{
-
-								if (dataUserInput.dataSetup.LoopMode == false)
-								{
-									dataUserInput.dataSetup.LoopMode = true;
-								}
-								else if (dataUserInput.dataSetup.LoopMode == true)
-								{
-									dataUserInput.dataSetup.LoopMode = false;
-								}
-							}
-						}
-						// SET UP PULSE
-						else if (dataUserInput.indexSlotInSetup == 2)
-						{
-							// PRESS NUMBER PULSE
-							if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
-							{
-								dataUserInput.dataSetup.changePulse = true;
-								if (keyPressCurr == '*')
-								{
-									keyPressCurr = '.';
-								}
-								if (dataUserInput.dataSetup.indexArrayPulse > sizeof(dataUserInput.dataSetup.arrayPulse))
-								{
-									dataUserInput.dataSetup.indexArrayPulse = 0;
-								}
-								dataUserInput.dataSetup.arrayPulse[dataUserInput.dataSetup.indexArrayPulse++] = (char)keyPressCurr;
-							}
-							// COMFIRM PULSE -> SAVE TO FLASH
-							else if (keyPressCurr == '#')
-							{
-								dataUserInput.dataSetup.changePulse = false;
-								dataUserInput.dataSetup.indexArrayPulse = 0;
-								dataUserInput.dataSetup.pulse = atoi(dataUserInput.dataSetup.arrayPulse);
-								sprintf(dataWriteFlash.Pulse, "%llu", dataUserInput.dataSetup.pulse);
-								stateSaveSetup = true; // START SAVE SETUP
-							}
-						}
-						// SET UP SPEED
-						else if (dataUserInput.indexSlotInSetup == 3)
-						{
-							// PRESS NUMBER SPEED
-							if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
-							{
-								dataUserInput.dataSetup.changeSpeed = true;
-								if (keyPressCurr == '*')
-								{
-									keyPressCurr = '.';
-								}
-								if (dataUserInput.dataSetup.indexArraySpeed < sizeof(dataUserInput.dataSetup.arraySpeed))
-								{
-									dataUserInput.dataSetup.arraySpeed[dataUserInput.dataSetup.indexArraySpeed++] = (char)keyPressCurr;
-								}
-								else
-								{
-									dataUserInput.dataSetup.indexArraySpeed = 0;
-								}
-							}
-							// COMFIRM SPEED -> SAVE TO FLASH
-							else if (keyPressCurr == '#')
-							{
-								dataUserInput.dataSetup.changeSpeed = false;
-								dataUserInput.dataSetup.indexArraySpeed = 0;
-								dataUserInput.dataSetup.speed = atoi(dataUserInput.dataSetup.arraySpeed);
-								if (dataUserInput.dataSetup.speed > MAX_SPEED)
-								{
-									dataUserInput.dataSetup.speed = MAX_SPEED;
-								}
-								sprintf(dataWriteFlash.Speed, "%d", dataUserInput.dataSetup.speed);
-								stateSaveSetup = true; // START SAVE SETUP
-							}
-						}
-					}
-				}
-				// SELECT SCREEN CREATE OR MODIFY
-				if (screenCurr == SELECT_CREAT_MODIFY_SCREEN)
-				{
-					if (keyPressCurr == '#')
-					{
-						if (dataUserInput.indexCreateModify == 1)
-						{
-						}
-						else if (dataUserInput.indexCreateModify == 2)
-						{
-							screenCurr = CREATE_ROTATION_SCREEEN;
-						}
-					}
-				}
-				// SELECT SCREEN CREATE
-				if (screenCurr == CREATE_ROTATION_SCREEEN)
-				{
-					if (dataUserInput.indexCreate == 1)
-					{
-						changeButton = true;
-						// PRESS NUMBER PAGE
-						if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
-						{
-							dataUserInput.dataSetupRotation.changeCreatPage = true;
-							if (keyPressCurr == '*')
-							{
-								keyPressCurr = '.';
-							}
-							if (dataUserInput.dataSetupRotation.indexStrPage < sizeof(dataUserInput.dataSetupRotation.strPage))
-							{
-								dataUserInput.dataSetupRotation.strPage[dataUserInput.dataSetupRotation.indexStrPage++] = (char)keyPressCurr;
-							}
-							else
-							{
-								dataUserInput.dataSetupRotation.indexStrPage = 0;
-							}
-						}
-						// COMFIRM PAGE -> SAVE TO FLASH
-						else if (keyPressCurr == '#')
-						{
-							dataUserInput.dataSetupRotation.nPage = atoi(dataUserInput.dataSetupRotation.strPage);
-							dataUserInput.dataSetupRotation.changeCreatPage = false;
-							dataUserInput.dataSetupRotation.indexStrPage = 0;
-						}
-					}
-					else if (dataUserInput.indexCreate == 2)
-					{
-						changeButton = true;
-						// PRESS NUMBER PAGE
-						if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
-						{
-							dataUserInput.dataSetupRotation.changeCreatPage = true;
-							if (keyPressCurr == '*')
-							{
-								keyPressCurr = '.';
-							}
-							if (dataUserInput.dataSetupRotation.indexStrSlot < sizeof(dataUserInput.dataSetupRotation.strSlot))
-							{
-								dataUserInput.dataSetupRotation.strSlot[dataUserInput.dataSetupRotation.indexStrSlot++] = (char)keyPressCurr;
-							}
-							else
-							{
-								dataUserInput.dataSetupRotation.indexStrSlot = 0;
-							}
-						}
-						// COMFIRM PAGE -> SAVE TO FLASH
-						else if (keyPressCurr == '#')
-						{
-							dataUserInput.dataSetupRotation.nSlot = atoi(dataUserInput.dataSetupRotation.strSlot);
-							dataUserInput.dataSetupRotation.changeCreatPage = false;
-							dataUserInput.dataSetupRotation.indexStrSlot = 0;
-						}
-					}
-				}
-				if (screenCurr == HAND_ROTATION_SCREEN)
-				{
-								}
-			}
-			{
-				if (keyPressCurr == 'A') // ON/OFF MANUAL ANGLE
-				{
-					if (screenCurr != ANGLE_SETUP_SCREEN && screenCurr != ANGLE_SETUP_SCREEN && screenCurr != HAND_ROTATION_SCREEN && screenCurr != SETUP_SCREEN)
-					{
-						if (screenCurr == ENCODER_ROTATION_SCREEN)
-						{
-							screenCurr = FLOOR_MAIN_SCREEN;
-						}
-						else if (screenCurr == CHEATER_SCREEN)
-						{
-							screenCurr = FLOOR_MAIN_SCREEN;
-						}
-						else if (screenCurr == FLOOR_MAIN_SCREEN)
-						{
-							screenCurr = ANGLE_MAIN_SCREEN;
-						}
-						else if (screenCurr == ANGLE_MAIN_SCREEN)
-						{
-							screenCurr = FLOOR_MAIN_SCREEN;
-						}
-					}
-				}
-				else if (keyPressCurr == 'B') // ON/OFF MANUAL ROTATION
+				keyPressLast = keyPressCurr;
 				{
 					if (screenCurr == ENCODER_ROTATION_SCREEN)
 					{
-						screenCurr = SELECT_CREAT_MODIFY_SCREEN;
+						changeButton = true;
+						if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
+						{
+							dataUserInput.bKeypadEncoder = true;
+							if (keyPressCurr == '*')
+							{
+								keyPressCurr = '.';
+							}
+							if (dataUserInput.indexRotEn < 2)
+							{
+								dataUserInput.arrayRotEn[dataUserInput.indexRotEn] = (char)keyPressCurr;
+								dataUserInput.indexRotEn++;
+							}
+							else
+							{
+								dataUserInput.indexRotEn = 0;
+							}
+						}
+						else if (keyPressCurr == '#')
+						{
+							uint8_t rot = atoi(dataUserInput.arrayRotEn);
+							if (rot > dataUserInput.IndexRotation)
+							{
+								rot = dataUserInput.IndexRotation;
+							}
+							dataUserInput.RotationInTFT = rot * (ROUND / dataUserInput.IndexRotation);
+							dataUserInput.bKeypadEncoder = false;
+							memset(dataUserInput.arrayRotEn, '\0', sizeof(dataUserInput.arrayRotEn));
+							dataUserInput.indexRotEn = 0;
+						}
 					}
-					else if (screenCurr == SELECT_CREAT_MODIFY_SCREEN)
+					// SET UP SCREEN LOOP MODE, PULSE , SPEED
+					else if (screenCurr == SETUP_SCREEN)
 					{
-						screenCurr = ENCODER_ROTATION_SCREEN;
+						changeButton = true;
+						if (dataUserInput.indexPageInSetup == 1)
+						{
+							// SET UP LOOP MODE
+							if (dataUserInput.indexSlotInSetup == 1)
+							{
+								if (keyPressCurr == '#')
+								{
+									if (dataUserInput.dataSetup.LoopMode == false)
+									{
+										dataUserInput.dataSetup.LoopMode = true;
+										check = false;
+									}
+									else if (dataUserInput.dataSetup.LoopMode == true)
+									{
+										dataUserInput.dataSetup.LoopMode = false;
+									}
+								}
+							}
+							// SET UP PULSE
+							else if (dataUserInput.indexSlotInSetup == 2)
+							{
+								// PRESS NUMBER PULSE
+								if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
+								{
+									dataUserInput.dataSetup.changePulse = true;
+									if (keyPressCurr == '*')
+									{
+										keyPressCurr = '.';
+									}
+									if (dataUserInput.dataSetup.indexArrayPulse > sizeof(dataUserInput.dataSetup.arrayPulse))
+									{
+										dataUserInput.dataSetup.indexArrayPulse = 0;
+									}
+									dataUserInput.dataSetup.arrayPulse[dataUserInput.dataSetup.indexArrayPulse] = (char)keyPressCurr;
+									dataUserInput.dataSetup.indexArrayPulse++;
+								}
+								// COMFIRM PULSE -> SAVE TO FLASH
+								else if (keyPressCurr == '#')
+								{
+									dataUserInput.dataSetup.changePulse = false;
+									dataUserInput.dataSetup.indexArrayPulse = 0;
+									dataUserInput.dataSetup.pulse = atoi(dataUserInput.dataSetup.arrayPulse);
+									// sscanf(dataUserInput.dataSetup.arrayPulse, "%lld", &dataUserInput.dataSetup.pulse);
+									stateSaveSetup = true; // START SAVE SETUP
+								}
+							}
+							// SET UP SPEED
+							else if (dataUserInput.indexSlotInSetup == 3)
+							{
+								// PRESS NUMBER SPEED
+								if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
+								{
+									dataUserInput.dataSetup.changeSpeed = true;
+									if (keyPressCurr == '*')
+									{
+										keyPressCurr = '.';
+									}
+									if (dataUserInput.dataSetup.indexArraySpeed > sizeof(dataUserInput.dataSetup.arraySpeed))
+									{
+										dataUserInput.dataSetup.indexArraySpeed = 0;
+									}
+									dataUserInput.dataSetup.arraySpeed[dataUserInput.dataSetup.indexArraySpeed] = (char)keyPressCurr;
+									dataUserInput.dataSetup.indexArraySpeed++;
+								}
+								// COMFIRM SPEED -> SAVE TO FLASH
+								else if (keyPressCurr == '#')
+								{
+									dataUserInput.dataSetup.changeSpeed = false;
+									dataUserInput.dataSetup.indexArraySpeed = 0;
+									dataUserInput.dataSetup.speed = atoi(dataUserInput.dataSetup.arraySpeed);
+									// sscanf(dataUserInput.dataSetup.arraySpeed, "%d", &dataUserInput.dataSetup.speed);
+									stateSaveSetup = true; // START SAVE SETUP
+								}
+							}
+						}
+						else if (dataUserInput.indexPageInSetup == 2)
+						{
+							if (dataUserInput.indexSlotInSetup == 1)
+							{
+								// SET UP NUM INDEX
+								if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
+								{
+									dataUserInput.dataSetup.changeNumIndex = true;
+									if (keyPressCurr == '*')
+									{
+										keyPressCurr = '.';
+									}
+									if (dataUserInput.dataSetup.indexArrayNumI > sizeof(dataUserInput.dataSetup.arrayNumIndex))
+									{
+										dataUserInput.dataSetup.indexArrayNumI = 0;
+									}
+									dataUserInput.dataSetup.arrayNumIndex[dataUserInput.dataSetup.indexArrayNumI] = (char)keyPressCurr;
+									dataUserInput.dataSetup.indexArrayNumI++;
+								}
+								// COMFIRM NUM INDEX -> SAVE TO FLASH
+								else if (keyPressCurr == '#')
+								{
+									dataUserInput.dataSetup.changeNumIndex = false;
+									dataUserInput.dataSetup.indexArrayNumI = 0;
+									dataUserInput.dataSetup.numIndex = atoi(dataUserInput.dataSetup.arrayNumIndex);
+									// sscanf(dataUserInput.dataSetup.arrayNumIndex, "%d", &dataUserInput.dataSetup.numIndex);
+									stateSaveSetup = true;
+								}
+							}
+						}
 					}
-					else
+					// INPUT TOTAL PAGE
+					else if (screenCurr == INPUT_TOTAL_PAGE_SCREEN)
 					{
-						screenCurr = ENCODER_ROTATION_SCREEN;
+						changeButton = true;
+						if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
+						{
+
+							dataUserInput.dataSetupRotation.changeCreatPage = true;
+							if (keyPressCurr == '*')
+							{
+								keyPressCurr = '.';
+							}
+							if (dataUserInput.dataSetupRotation.indexStrTotalPage < sizeof(dataUserInput.dataSetupRotation.strTotalPage))
+							{
+								dataUserInput.dataSetupRotation.strTotalPage[dataUserInput.dataSetupRotation.indexStrTotalPage] = (char)keyPressCurr;
+								dataUserInput.dataSetupRotation.indexStrTotalPage++;
+							}
+							else
+							{
+								dataUserInput.dataSetupRotation.indexStrTotalPage = 0;
+							}
+						}
+						else if (keyPressCurr == '#')
+						{
+							dataUserInput.dataSetupRotation.indexStrTotalPage = 0;
+							dataPageW.totalPage = atoi(dataUserInput.dataSetupRotation.strTotalPage);
+							if (dataPageW.totalPage >= 5)
+							{
+								dataPageW.totalPage = 5;
+							}
+							dataUserInput.dataSetupRotation.changeCreatPage = false;
+							dataUserInput.dataSetup.totalPage = dataPageW.totalPage;
+							dataWriteFlash.totalPage = dataPageW.totalPage;
+							stateSaveSetup = true;
+						}
+					}
+					// INPUT ROTATION
+					else if (screenCurr == HAND_ROTATION_SCREEN)
+					{
+						changeButton = true;
+
+						if (keyPressCurr != '#' && keyPressCurr != 'A' && keyPressCurr != 'B' && keyPressCurr != 'C' && keyPressCurr != 'D' && keyPressCurr != 'x')
+						{
+							dataUserInput.dataSetupRotation.changeCreatPage = true;
+							if (keyPressCurr == '*')
+							{
+								keyPressCurr = '.';
+							}
+							if (dataUserInput.dataSetupRotation.indexStrRotation < 2)
+							{
+								dataUserInput.dataSetupRotation.strRotation[dataUserInput.dataSetupRotation.indexStrRotation] = (char)keyPressCurr;
+								dataUserInput.dataSetupRotation.indexStrRotation++;
+							}
+							else
+							{
+								dataUserInput.dataSetupRotation.indexStrRotation = 0;
+							}
+						}
+						else if (keyPressCurr == '#')
+						{
+							dataPageW.indexArrRCur = (dataUserInput.dataSetupRotation.indexSlotInRotation) + ((dataUserInput.dataSetupRotation.indexPageInRotation - 1) * 3);
+							dataPageW.dataRotation[dataPageW.page][dataPageW.indexArrRCur] = atoi(dataUserInput.dataSetupRotation.strRotation);
+							if (dataPageW.dataRotation[dataPageW.page][dataPageW.indexArrRCur] >= dataUserInput.dataSetup.numIndex)
+							{
+								dataPageW.dataRotation[dataPageW.page][dataPageW.indexArrRCur] = dataUserInput.dataSetup.numIndex;
+							}
+							dataUserInput.dataSetupRotation.indexStrRotation = 0;
+							memset(dataUserInput.dataSetupRotation.strRotation, '0', 2);
+							dataUserInput.dataSetupRotation.changeCreatPage = false;
+						}
+					}
+					else if (screenCurr == ANGLE_MAIN_SCREEN)
+					{
+						if (keyPressCurr == '#')
+						{
+							changeButton = true;
+							// for (uint8_t i = 0; i < dataUserInput.dataAngleInMain.rotation_3; i++)
+							// {
+							// 	dataUserInput.RotationInTFT += ROUND / dataUserInput.IndexRotation;
+							// }
+							dataUserInput.RotationInTFT = dataUserInput.dataAngleInMain.rotation_3 * (ROUND / dataUserInput.IndexRotation);
+						}
 					}
 				}
-				else if (keyPressCurr == 'C') // ON/OFF CHEATER
 				{
-					if (screenCurr != ANGLE_SETUP_SCREEN && screenCurr != ANGLE_SETUP_SCREEN && screenCurr != HAND_ROTATION_SCREEN && screenCurr != SETUP_SCREEN)
+					if (keyPressCurr == 'A') // ON/OFF MANUAL ANGLE
+					{
+						if (screenCurr != HAND_ROTATION_SCREEN && screenCurr != SETUP_SCREEN && screenCurr != INPUT_TOTAL_PAGE_SCREEN)
+						{
+							if (screenCurr == ENCODER_ROTATION_SCREEN)
+							{
+								screenCurr = FLOOR_MAIN_SCREEN;
+							}
+							else if (screenCurr == CHEATER_SCREEN)
+							{
+								screenCurr = FLOOR_MAIN_SCREEN;
+							}
+							else if (screenCurr == FLOOR_MAIN_SCREEN)
+							{
+								screenCurr = ANGLE_MAIN_SCREEN;
+							}
+							else if (screenCurr == ANGLE_MAIN_SCREEN)
+							{
+								screenCurr = FLOOR_MAIN_SCREEN;
+							}
+						}
+					}
+					else if (keyPressCurr == 'B') // ON/OFF MANUAL ROTATION
 					{
 						if (screenCurr == ENCODER_ROTATION_SCREEN)
 						{
-							screenCurr = CHEATER_SCREEN;
+							screenCurr = INPUT_TOTAL_PAGE_SCREEN;
 						}
-						else if (screenCurr == CHEATER_SCREEN)
+						else if (screenCurr == INPUT_TOTAL_PAGE_SCREEN)
 						{
 							screenCurr = ENCODER_ROTATION_SCREEN;
 						}
-						else if (screenCurr == ANGLE_MAIN_SCREEN || screenCurr == FLOOR_MAIN_SCREEN)
+						else
 						{
-							screenCurr = CHEATER_SCREEN;
+							screenCurr = ENCODER_ROTATION_SCREEN;
 						}
 					}
+					else if (keyPressCurr == 'C') // ON/OFF CHEATER
+					{
+						if (screenCurr != HAND_ROTATION_SCREEN && screenCurr != SETUP_SCREEN && screenCurr != INPUT_TOTAL_PAGE_SCREEN)
+						{
+							if (screenCurr == ENCODER_ROTATION_SCREEN)
+							{
+								screenCurr = CHEATER_SCREEN;
+							}
+							else if (screenCurr == CHEATER_SCREEN)
+							{
+								screenCurr = ENCODER_ROTATION_SCREEN;
+							}
+							else if (screenCurr == ANGLE_MAIN_SCREEN || screenCurr == FLOOR_MAIN_SCREEN)
+							{
+								screenCurr = CHEATER_SCREEN;
+							}
+						}
+					}
+					else if (keyPressCurr == 'D') // SET-UP
+					{
+						screenCurr = SETUP_SCREEN;
+					}
 				}
-				else if (keyPressCurr == 'D') // SET-UP
-				{
-					screenCurr = SETUP_SCREEN;
-				}
+				timeKeyPad = HAL_GetTick();
 			}
 		}
 	}
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if (GPIO_Pin == A1_Pin)
+	if (isRun == false)
 	{
-		handleInterruptEncoder(GPIO_Pin, A1_GPIO_Port, A1_Pin, B1_GPIO_Port, B1_Pin);
-	}
-	else if (GPIO_Pin == A2_Pin)
-	{
-		handleInterruptEncoder(GPIO_Pin, A2_GPIO_Port, A2_Pin, B2_GPIO_Port, B2_Pin);
+		if (GPIO_Pin == A1_Pin)
+		{
+			handleInterruptEncoder(GPIO_Pin, A1_GPIO_Port, A1_Pin, B1_GPIO_Port, B1_Pin);
+		}
+		else if (GPIO_Pin == A2_Pin)
+		{
+			handleInterruptEncoder(GPIO_Pin, A2_GPIO_Port, A2_Pin, B2_GPIO_Port, B2_Pin);
+		}
 	}
 }
 void increse_callback(uint16_t GPIO_Pin)
@@ -373,42 +482,51 @@ void increse_callback(uint16_t GPIO_Pin)
 				dataUserInput.indexPageInSetup = 1;
 			}
 		}
+		else if (screenCurr == ANGLE_MAIN_SCREEN)
+		{
+			if (dataUserInput.dataAngleInMain.indexAngle < u8COLUMS)
+			{
+				dataUserInput.dataAngleInMain.indexAngle++;
+			}
+		}
+		else if (screenCurr == FLOOR_MAIN_SCREEN)
+		{
+			dataUserInput.indexFloorInRotation++;
+			dataUserInput.dataAngleInMain.indexAngle = 0;
+			if (dataUserInput.indexFloorInRotation > dataUserInput.dataSetup.totalPage - 1)
+			{
+				dataUserInput.indexFloorInRotation = 1;
+			}
+		}
 	}
 	else if (GPIO_Pin == A2_Pin) // 	ENCODER RIGHT
 	{
 		changeEncoder2 = true;
 		if (screenCurr == HAND_ROTATION_SCREEN)
 		{
-			dataUserInput.dataSetupRotation.indexSlotInRotation++;
-			if (dataUserInput.dataSetupRotation.indexSlotInRotation > 3)
+			dataUserInput.dataSetupRotation.changeCreatPage = false;
+			if (strcmp(dataUserInput.dataSetupRotation.strRotation, "00") != 0)
 			{
-				dataUserInput.dataSetupRotation.indexSlotInRotation = 1;
-				dataUserInput.dataSetupRotation.indexPageInRotation++;
+				memset(dataUserInput.dataSetupRotation.strRotation, '0', 2);
 			}
-			if (dataUserInput.dataSetupRotation.indexPageInRotation > (dataUserInput.dataSetupRotation.nSlot / 3))
+			dataUserInput.dataSetupRotation.indexStrRotation = 0;
+			if (dataUserInput.dataSetupRotation.indexPageInRotation < u8COLUMS / 3) // 90 : tong so vi tri co the luu
+			{
+				dataUserInput.dataSetupRotation.indexSlotInRotation++;
+				if (dataUserInput.dataSetupRotation.indexSlotInRotation > 3)
+				{
+					dataUserInput.dataSetupRotation.indexSlotInRotation = 1;
+					dataUserInput.dataSetupRotation.indexPageInRotation++;
+				}
+			}
+			else if (dataUserInput.dataSetupRotation.indexPageInRotation >= u8COLUMS / 3)
 			{
 				dataUserInput.dataSetupRotation.indexPageInRotation = 1;
 			}
 		}
 		else if (screenCurr == CHEATER_SCREEN)
 		{
-			dataUserInput.fCheater += 0.1;
-		}
-		else if (screenCurr == SELECT_CREAT_MODIFY_SCREEN)
-		{
-			dataUserInput.indexCreateModify++;
-			if (dataUserInput.indexCreateModify > 2)
-			{
-				dataUserInput.indexCreateModify = 1;
-			}
-		}
-		else if (screenCurr == CREATE_ROTATION_SCREEEN)
-		{
-			dataUserInput.indexCreate++;
-			if (dataUserInput.indexCreate > 2)
-			{
-				dataUserInput.indexCreate = 1;
-			}
+			dataUserInput.fCheater = dataUserInput.fCheater + _CHEATER;
 		}
 	}
 }
@@ -451,47 +569,55 @@ void decrese_callback(uint16_t GPIO_Pin)
 				dataUserInput.indexPageInSetup = 1;
 			}
 		}
+		else if (screenCurr == ANGLE_MAIN_SCREEN)
+		{
+			if (dataUserInput.dataAngleInMain.indexAngle > 0)
+			{
+				dataUserInput.dataAngleInMain.indexAngle--;
+			}
+		}
+		else if (screenCurr == FLOOR_MAIN_SCREEN)
+		{
+			dataUserInput.indexFloorInRotation--;
+			dataUserInput.dataAngleInMain.indexAngle = 0;
+			if (dataUserInput.indexFloorInRotation < 1)
+			{
+				dataUserInput.indexFloorInRotation = dataUserInput.dataSetup.totalPage;
+			}
+		}
 	}
 	else if (GPIO_Pin == A2_Pin) // 	ENCODER RIGHT
 	{
 		changeEncoder2 = true;
 		if (screenCurr == HAND_ROTATION_SCREEN)
 		{
-			dataUserInput.dataSetupRotation.indexSlotInRotation--;
-			if (dataUserInput.dataSetupRotation.indexSlotInRotation < 1)
+			dataUserInput.dataSetupRotation.changeCreatPage = false;
+			if (strcmp(dataUserInput.dataSetupRotation.strRotation, "00") != 0)
 			{
-				dataUserInput.dataSetupRotation.indexSlotInRotation = 3;
-				dataUserInput.dataSetupRotation.indexPageInRotation--;
+				memset(dataUserInput.dataSetupRotation.strRotation, '0', 2);
+			}
+			dataUserInput.dataSetupRotation.indexStrRotation = 0;
+
+			if (dataUserInput.dataSetupRotation.indexPageInRotation >= 1)
+			{
+				dataUserInput.dataSetupRotation.indexSlotInRotation--;
+				if (dataUserInput.dataSetupRotation.indexSlotInRotation < 1)
+				{
+					dataUserInput.dataSetupRotation.indexSlotInRotation = 3;
+					dataUserInput.dataSetupRotation.indexPageInRotation--;
+				}
 			}
 			if (dataUserInput.dataSetupRotation.indexPageInRotation < 1)
 			{
-				dataUserInput.dataSetupRotation.indexPageInRotation = (dataUserInput.dataSetupRotation.nSlot / 3);
+				dataUserInput.dataSetupRotation.indexPageInRotation = u8COLUMS / 3; // 45 /3
 			}
 		}
 		else if (screenCurr == CHEATER_SCREEN)
 		{
-			dataUserInput.fCheater -= 0.1;
-		}
-		else if (screenCurr == SELECT_CREAT_MODIFY_SCREEN)
-		{
-			dataUserInput.indexCreateModify--;
-			if (dataUserInput.indexCreateModify < 1)
-			{
-				dataUserInput.indexCreateModify = 2;
-			}
-		}
-		else if (screenCurr == CREATE_ROTATION_SCREEEN)
-		{
-			dataUserInput.indexCreate--;
-			if (dataUserInput.indexCreate < 1)
-			{
-				dataUserInput.indexCreate = 2;
-			}
+			dataUserInput.fCheater = dataUserInput.fCheater - _CHEATER;
 		}
 	}
 }
-
-uint8_t sizeArraypage;
 /* USER CODE END 0 */
 
 /**
@@ -525,91 +651,180 @@ int main(void)
 	MX_DMA_Init();
 	MX_SPI1_Init();
 	MX_TIM11_Init();
+	MX_TIM10_Init();
+	MX_TIM9_Init();
 	/* USER CODE BEGIN 2 */
-	dataUserInput.IndexRotation = 32;	 //(32, 64, 96)
-	dataUserInput.RotationInTFT = ROUND; // 360
+	HAL_TIM_Base_Start_IT(&htim9);
+	// READ PULSE AND SPEED FROM FLASH
+	{
+		Flash_Read_Struct_Setting(AR_STORE_SETTING, &dataReadFlash, sizeof(dataSaveFlash_t));
+		HAL_Delay(50);
+		dataUserInput.dataSetup.speed = dataReadFlash.Speed;
+		dataUserInput.dataSetup.pulse = atoi(dataReadFlash.Pulse);
+		dataUserInput.dataSetup.numIndex = dataReadFlash.numIndex;
 
-	dataUserInput.indexFloorInRotation = 1;
-	dataUserInput.indexPageInSetup = 1;
-	dataUserInput.indexSlotInSetup = 1;
-	dataUserInput.fCheater = 0.0;
+		dataUserInput.dataSetup.totalPage = dataReadFlash.totalPage;
+		free(arrayRotationR);
+		arrayRotationR = (uint8_t *)malloc((dataUserInput.dataSetup.totalPage * u8COLUMS) * sizeof(uint8_t));
+		Flash_Read_Array(AR_STORE_ROTATION, arrayRotationR, dataUserInput.dataSetup.totalPage * u8COLUMS);
+		// memcpy(dataTest, arrayRotationR, dataPageW.totalPage * u8COLUMS);
+	}
 
+	//  --------- END READ FLASH -----------------
+	{
+		dataUserInput.IndexRotation = dataUserInput.dataSetup.numIndex; //(32, 64, 96)
+		dataUserInput.RotationInTFT = 0;								// 360
+
+		dataUserInput.indexFloorInRotation = 1;
+		dataUserInput.indexPageInSetup = 1;
+		dataUserInput.indexSlotInSetup = 1;
+		dataUserInput.fCheater = 0;
+	}
 	// DEFINE ANGLE NUMBER IN MAIN
-	dataUserInput.dataAngleInMain.rotation_1 = 2.0;
-	dataUserInput.dataAngleInMain.rotation_2 = 4.5;
-	dataUserInput.dataAngleInMain.rotation_3 = 19.5;
-	dataUserInput.dataAngleInMain.rotation_4 = 190.5;
-	dataUserInput.dataAngleInMain.rotation_5 = 340.5;
+	{
+		dataUserInput.dataAngleInMain.rotation_1 = 0;
+		dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[0];
+		dataUserInput.dataAngleInMain.rotation_3 = arrayRotationR[1];
+		dataUserInput.dataAngleInMain.rotation_4 = arrayRotationR[2];
+		dataUserInput.dataAngleInMain.rotation_5 = arrayRotationR[3];
+	}
+	{
+		dataUserInput.dataSetup.LoopMode = false;
 
-	dataUserInput.dataSetup.LoopMode = true;
-	// DEFINE SPEED
-	dataUserInput.dataSetup.speed = 100;
-	memset(dataUserInput.dataSetup.arraySpeed, '0', sizeof(dataUserInput.dataSetup.arraySpeed));
-	dataUserInput.dataSetup.indexArraySpeed = 0;
-	dataUserInput.dataSetup.changeSpeed = false;
+		// DEFINE SPEED
+		memset(dataUserInput.dataSetup.arraySpeed, '0', sizeof(dataUserInput.dataSetup.arraySpeed));
+		dataUserInput.dataSetup.indexArraySpeed = 0;
+		dataUserInput.dataSetup.changeSpeed = false;
 
-	// DEFINE PULSE
-	dataUserInput.dataSetup.pulse = 9000;
-	memset(dataUserInput.dataSetup.arrayPulse, '0', sizeof(dataUserInput.dataSetup.arrayPulse));
-	dataUserInput.dataSetup.indexArrayPulse = 0;
-	dataUserInput.dataSetup.changePulse = false;
+		// DEFINE PULSE
+		memset(dataUserInput.dataSetup.arrayPulse, '0', sizeof(dataUserInput.dataSetup.arrayPulse));
+		dataUserInput.dataSetup.indexArrayPulse = 0;
+		dataUserInput.dataSetup.changePulse = false;
 
-	// DEFINE SELECT CREATE OR MODIFY SCREEN
-	dataUserInput.dataSetupRotation.indexPageInRotation = 1;
-	dataUserInput.dataSetupRotation.indexSlotInRotation = 1;
+		// DEFINE NUMINDEX
+		}
+	// DEFINE TOTAL CREATE
+	{
+		dataUserInput.dataSetupRotation.indexPageInRotation = 1;
+		dataUserInput.dataSetupRotation.indexSlotInRotation = 1;
+	}
 
-	dataUserInput.indexCreateModify = 1;
-	dataUserInput.indexCreate = 1;
-	memset(dataUserInput.dataSetupRotation.strPage, '0', sizeof(dataUserInput.dataSetupRotation.strPage));
-	sizeArraypage = sizeof(dataUserInput.dataSetupRotation.strPage);
-	dataUserInput.indexModify = 1;
-	memset(dataUserInput.dataSetupRotation.strSlot, '0', sizeof(dataUserInput.dataSetupRotation.strSlot));
-
-	Flash_Read_Struct(ADDRESS_STORAGE, &dataReadFlash, sizeof(dataReadFlash));
-	HAL_Delay(50);
-	dataUserInput.dataSetup.speed = atoi(dataReadFlash.Speed);
-	dataUserInput.dataSetup.pulse = atoi(dataReadFlash.Pulse);
-
-	initILI();
-	initButton();
-	initKeypad();
-
+	// DEFINE DATA ROTATION WRITE TO FLASH
+	{
+		dataPageW.totalPage = 0;
+		dataPageW.indexArrRCur = 1;
+		dataPageW.page = 0;
+	}
+	// ------------ INIT ----------------
+	initILI();	  // TFT
+	initButton(); // BUTTON
+	initKeypad(); // KEYPAD
+	initStep();	  // TIMER , SET SPEED , PULSE ONE ROUND
+	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
+	pulseStep = stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
 	ILI9341_Draw_Image((const char *)layoutMain, SCREEN_HORIZONTAL_2);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		// dataSetupRotation.page = malloc(10 * sizeof(dataSetupRotation.page));
 		buttonHandle();
-		BlynkSlot(dataUserInput);
-		if (HAL_GetTick() - timeLed > 100)
+		if (HAL_GetTick() - timeLed >= 100)
 		{
-			if (stateSaveSetup == true)
+			BlynkSlot(dataUserInput);
+			if (isRun == true)
 			{
-				stateSaveSetup = false;
-				Flash_Write_Struct(ADDRESS_STORAGE, dataWriteFlash);
-			}
-			if (screenPrev != screenCurr)
-			{
-				screenPrev = screenCurr;
-				clearLCD();
-				if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN || screenCurr == FLOOR_MAIN_SCREEN || screenCurr == ANGLE_MAIN_SCREEN)
+				if (dataUserInput.dataSetup.LoopMode == true)
 				{
-					ILI9341_Draw_Image((const char *)layoutMain, SCREEN_HORIZONTAL_2);
+					if (check == false)
+					{
+						check = true;
+						ArrayTFT(screenCurr, dataUserInput);
+					}
 				}
-				ArrayTFT(screenCurr, dataUserInput);
 			}
-			if (changeEncoder1 == true || changeEncoder2 == true || changeButton == true)
+			else if (isRun == false)
 			{
-				changeEncoder1 = false;
-				changeEncoder2 = false;
-				changeButton = false;
-				ArrayTFT(screenCurr, dataUserInput);
+				if (stateSaveSetup == true) // SAVE SETTIN
+				{
+					stateSaveSetup = false;
+					comfirmDataSetting();
+				}
+				if (stateSaveRotation == true) // SAVE ROTATION
+				{
+					stateSaveRotation = false;
+					Flash_Write_Array(AR_STORE_ROTATION, arrayRotationW, dataPageW.totalPage * u8COLUMS);
+					HAL_Delay(50);
+					free(arrayRotationW);
+
+					free(arrayRotationR);
+					arrayRotationR = (uint8_t *)malloc((dataUserInput.dataSetup.totalPage * u8COLUMS) * sizeof(uint8_t));
+					Flash_Read_Array(AR_STORE_ROTATION, arrayRotationR, dataUserInput.dataSetup.totalPage * u8COLUMS);
+
+					// memcpy(dataTest, arrayRotationR, dataPageW.totalPage * u8COLUMS);
+				}
+				if (screenPrev != screenCurr) // CHANGE SCREEN
+				{
+					clearLCD();
+					if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN || screenCurr == FLOOR_MAIN_SCREEN || screenCurr == ANGLE_MAIN_SCREEN)
+					{
+						ILI9341_Draw_Image((const char *)layoutMain, SCREEN_HORIZONTAL_2);
+					}
+					if (screenPrev == HAND_ROTATION_SCREEN && screenCurr != HAND_ROTATION_SCREEN)
+					{
+						for (int i = 0; i < dataPageW.totalPage; i++)
+						{
+							free(dataPageW.dataRotation[i]);
+						}
+						free(dataPageW.dataRotation);
+					}
+					ArrayTFT(screenCurr, dataUserInput);
+					screenPrev = screenCurr;
+				}
+				if (changeEncoder1 == true || changeEncoder2 == true || changeButton == true) // HANDLE ENCODER BUTTON
+				{
+					changeEncoder1 = false;
+					changeEncoder2 = false;
+					changeButton = false;
+					if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN)
+					{
+						pulseStep = stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
+					}
+
+					else if (screenCurr == ANGLE_MAIN_SCREEN || screenCurr == FLOOR_MAIN_SCREEN || screenCurr == ENCODER_ROTATION_SCREEN)
+					{
+						uint8_t indexColums, indexRow;
+						indexColums = dataUserInput.dataAngleInMain.indexAngle;
+						indexRow = dataUserInput.indexFloorInRotation - 1;
+
+						uint8_t num = indexRow * u8COLUMS + indexColums;
+
+						if (indexColums == 0)
+						{
+							dataUserInput.dataAngleInMain.rotation_1 = 0;
+							dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[num];
+						}
+						else if (indexColums > 0) // 1
+						{
+							dataUserInput.dataAngleInMain.rotation_1 = arrayRotationR[num - 1];
+							dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[num];
+						}
+
+						dataUserInput.dataAngleInMain.rotation_3 = arrayRotationR[num + 1];
+						dataUserInput.dataAngleInMain.rotation_4 = arrayRotationR[num + 2];
+						dataUserInput.dataAngleInMain.rotation_5 = arrayRotationR[num + 3];
+
+						pulseStep = stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
+					}
+
+					ArrayTFT(screenCurr, dataUserInput);
+				}
+
+				// HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+				timeLed = HAL_GetTick();
 			}
-			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-			timeLed = HAL_GetTick();
 		}
 		/* USER CODE END WHILE */
 

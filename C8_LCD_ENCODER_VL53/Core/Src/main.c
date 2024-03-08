@@ -69,7 +69,7 @@ static void MX_TIM2_Init(void);
 /* USER CODE BEGIN 0 */
 
 #define ERROR 40
-#define ERROR_MEASURE 2
+#define ERROR_MEASURE 3
 static uint64_t timeGetDistance , timeGetDistance1, timeLcd;
 static float value, valueReal, valueReal2,distance ;
 static uint8_t dataLcdLine3[20], dataLcdLine4[20];
@@ -83,7 +83,7 @@ void readDataVL53(void){
 		value = getVL53SingleMode()	;
 		valueReal = updateEstimate(value) ;
 		valueReal = updateEstimate(valueReal);
-		valueReal = updateEstimate(valueReal);
+		//valueReal = updateEstimate(valueReal);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -191,7 +191,7 @@ int main(void)
 										complete = 1;
 										timeGetDistance1 = HAL_GetTick();
 								}
-								if(HAL_GetTick() - timeGetDistance1 > 6000){
+								if(HAL_GetTick() - timeGetDistance1 > 3000){
 										run = 1;
 										distance = valueReal;
 										

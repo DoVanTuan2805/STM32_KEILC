@@ -31,4 +31,5 @@ f4_control_step_v2/step_user.o: ..\Lib\User\step_user.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h ..\Core\Inc\tim.h \
+  ..\Lib\User\user_ex.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h

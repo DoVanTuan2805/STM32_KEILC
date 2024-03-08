@@ -2,116 +2,109 @@
 #define USER_EX_H
 #include "stdbool.h"
 #include "stdint.h"
-static float ROUND = 360;
 
-// #define ANGLE_ON
+#define _CHEATER 0.1
+#define ROUND 360.0
 
-#define ADDRESS_STORAGE 0x08060000
+#define AR_STORE_SETTING 0x08040000
+#define AR_STORE_ROTATION 0x08060000
 
-#define NUM_OF_SCREEN 11
+#define NUM_OF_SCREEN 8
 typedef enum
 {
     CHEATER_SCREEN,
 
     FLOOR_MAIN_SCREEN,
-    FLOOR_SETUP_SCREEN,
-
     ANGLE_MAIN_SCREEN,
-    ANGLE_SETUP_SCREEN,
 
     ENCODER_ROTATION_SCREEN,
     HAND_ROTATION_SCREEN,
 
-    SELECT_CREAT_MODIFY_SCREEN,
-    CREATE_ROTATION_SCREEEN,
-    MODIFY_ROTATION_SCREEN,
-
+    INPUT_TOTAL_SLOT_SCREEN,
+    INPUT_TOTAL_PAGE_SCREEN,
     SETUP_SCREEN,
 } Screen_t;
 
-#define MAX_SPEED 100
-#define MIN_SPEED 0
 typedef struct
 {
-    char Speed[3];
     char Pulse[6];
-} dataSaveFlash_t;
+    uint8_t numIndex;
+    uint8_t Speed;
+    uint8_t totalPage;
+
+} __attribute__((packed)) dataSaveFlash_t;
 
 typedef struct
 {
     uint8_t indexAngle;
-    float rotation_1;
-    float rotation_2;
-    float rotation_3;
-    float rotation_4;
-    float rotation_5;
-} dataAngleInMain_t;
+    uint8_t rotation_1;
+    uint8_t rotation_2;
+    uint8_t rotation_3;
+    uint8_t rotation_4;
+    uint8_t rotation_5;
+} __attribute__((packed)) dataAngleInMain_t;
 
 typedef struct
 {
     bool changePulse;
     bool changeSpeed;
+    bool changeNumIndex;
     bool LoopMode; // STATUS LOOP MODE
 
-    uint8_t indexArraySpeed;
-    char arraySpeed[3];
-
-    uint8_t indexArrayPulse;
+    char arraySpeed[2];
+    char arrayNumIndex[2];
     char arrayPulse[6];
 
-    uint8_t speed;
-    uint64_t pulse;
-} dataSetup_t;
+    uint8_t indexArraySpeed;
+    uint8_t indexArrayPulse;
+    uint8_t indexArrayNumI;
 
+    uint8_t speed;
+    uint8_t numIndex;
+    uint8_t totalPage;
+    uint64_t pulse;
+} __attribute__((packed)) dataSetup_t;
+
+static uint8_t u8COLUMS = 24;
 typedef struct
 {
-    uint8_t indexPage;
-    uint8_t nSlot;
-    char **dataRotation;
-} dataPage_t;
+    uint8_t totalPage;
+    uint8_t page;
+    uint8_t indexArrRCur;
+    uint8_t **dataRotation;
+} __attribute__((packed)) dataPage_t;
 
 typedef struct
 {
     bool changeCreatPage;
-    bool changeModifyPage;
 
-    uint8_t nPage;
-    char strPage[2];
-    uint8_t indexStrPage;
+    char strTotalPage[1];
+    uint8_t indexStrTotalPage; // index array string Total page
 
-    uint8_t nSlot;
-    char strSlot[2];
-    uint8_t indexStrSlot;
-
-    uint8_t indexSlotUser;
+    char strRotation[2];
+    uint8_t indexStrRotation;
 
     uint8_t indexSlotInRotation; // INDEX SLOT (1 -> 3)
     uint8_t indexPageInRotation; // INDEX PAGE (nPage /  3)
-    dataPage_t page;
-} dataSetupRotation_t;
+} __attribute__((packed)) dataSetupRotation_t;
 
 typedef struct
 {
-
-    bool bCheater;
-    bool ReleaseStepB;
+    bool bKeypadEncoder;
+    char arrayRotEn[2];
+    uint8_t indexRotEn;
 
     uint8_t indexPageInSetup; // SETTING
     uint8_t indexSlotInSetup; // SETTING
 
     uint8_t indexFloorInRotation; // SHOW
 
-    uint8_t indexCreateModify; // SELECT CREATE OR MODIFY
-    uint8_t indexCreate;
-    uint8_t indexModify;
-
-    uint16_t RotationInTFT; // SHOW
-    uint16_t IndexRotation; // EX: 1 -> (32, 64, 96)
-
+    uint8_t IndexRotation; // EX: 1 -> (32, 64, 96)
+    float RotationInTFT;   // SHOW
     float fCheater;
     dataSetupRotation_t dataSetupRotation;
     dataAngleInMain_t dataAngleInMain;
     dataSetup_t dataSetup;
-} dataUser_t;
+} __attribute__((packed)) dataUser_t;
 
 #endif

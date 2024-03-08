@@ -18,8 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stdlib.h"
 #include "gpio.h"
 #include "Flash_user.h"
+#include "string.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -60,11 +62,29 @@ dataSaveFlash_t  dataRead;
 dataSaveFlash_t dataWrite = 
 {
 	.value = 10,
-	.Pulse = "9999",
-	.Speed = "1231212"
 };
-uint8_t arrayWrite[10] = {1, 2, 3, 4 , 5, 6, 7, 8, 9 , 10};
-uint8_t arrayRead[10]= {0};
+
+uint8_t dataReadFlash[5][5];
+
+
+dataSaveFlash2_t dataWrite2, dataRead2;
+
+#define ROWS 5
+#define COLS 5
+
+uint8_t **data;
+uint8_t dataAfter[ROWS*COLS];
+
+
+void convertArray(uint8_t **arr2D, uint8_t *arr1D, int rows, int cols)
+{
+	int i, j, k = 0;
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            arr1D[k++] = arr2D[i][j];
+        }
+    }
+}
 /* USER CODE END 0 */
 
 /**
@@ -101,12 +121,46 @@ int main(void)
 //	Flash_Write_Array(0x08010000, arrayWrite, sizeof(arrayWrite));
 //	HAL_Delay(100);
 //	Flash_Read_Array(0x08010000, arrayRead, sizeof(arrayRead));
+	data = (uint8_t**)malloc(5 * sizeof(uint8_t*));
 	
-	HAL_Delay(100);
-	Flash_Write_Struct(0x08060000, dataWrite);
-	HAL_Delay(100);
-	Flash_Read_Struct( 0x08060000, &dataRead, sizeof(dataRead));
-	sizeDataRead = sizeof(dataRead);
+	for(int i = 0; i < 5; i++)		// rows
+	{
+		data[i] = (uint8_t*)malloc(5 * sizeof(uint8_t));
+		if (data[i] == NULL)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				free(data[j]);
+			}
+			free(data);
+		}
+		for(int k = 0 ; k < 5; k++)
+		{
+			data[i][k] = i+k;
+		}
+	}
+	
+	for(int i = 0; i < 5; i++)		// rows
+	{
+		for(int k = 0 ; k < 5; k++)
+		{
+			dataReadFlash[i][k] = data[i][k];
+		}
+	}
+	
+	
+	dataWrite.data = (uint8_t*) malloc((ROWS * COLS) * sizeof(uint8_t));
+	
+	convertArray(data, dataWrite.data, ROWS, COLS);
+	
+	Flash_Write_Array(0x08040000, dataWrite.data, ROWS * COLS);
+	//Flash_Write_Struct(0x08040000, dataWrite);
+	HAL_Delay(50);
+	dataRead.data = (uint8_t*) malloc((ROWS * COLS) * sizeof(uint8_t));
+	Flash_Read_Array(0x08040000, dataRead.data, ROWS*COLS);
+	
+	memcpy(dataAfter , dataRead.data , sizeof(dataAfter));
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */

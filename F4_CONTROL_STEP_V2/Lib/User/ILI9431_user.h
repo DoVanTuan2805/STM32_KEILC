@@ -21,14 +21,12 @@ void fncAngleInMain(dataUser_t dataUser);
 void encoderRotation(dataUser_t dataUser);
 void handRotation(dataUser_t dataUser);
 
-void selectCreateModify(dataUser_t dataUser);
-void createRotation(dataUser_t dataUser);
-
+void inputTotalPage(dataUser_t dataUser);
+void inputSlotPage(dataUser_t dataUser);
 void setupParameter(dataUser_t dataUser);
 
 void clearLCD(void);
 void BlynkSlot(dataUser_t dataUser);
-void clearOneSlot(uint8_t slot);
 
 void pageInRotation(dataUser_t dataUser);
 void pageInSetup(dataUser_t dataUser);
