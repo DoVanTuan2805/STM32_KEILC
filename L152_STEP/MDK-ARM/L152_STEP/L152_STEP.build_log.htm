@@ -1,0 +1,70 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.38.0.0
+Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: tuan do, ABC, LIC=14HV2-9TT93-VE3HA-1JP7N-H1EV5-8YPT7
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.19
+Assembler:       Armasm.exe V6.19
+Linker/Locator:  ArmLink.exe V6.19
+Library Manager: ArmAr.exe V6.19
+Hex Converter:   FromElf.exe V6.19
+CPU DLL:         SARMCM3.DLL V5.38.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.1.0.0
+Dialog DLL:      TCM.DLL V1.56.4.0
+ 
+<h2>Project:</h2>
+D:\STM32\STM32_KEILC\L152_STEP\MDK-ARM\L152_STEP.uvprojx
+Project File Date:  04/20/2024
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'L152_STEP'
+../Core/Src/main.c(172): warning: format specifies type 'int *' but the argument has type 'uint8_t *' (aka 'unsigned char *') [-Wformat]
+            sscanf((char *)buffer_data, "%d %d\n", &viTri, &soTang);
+                                         ~~        ^~~~~~
+                                         %s
+../Core/Src/main.c(172): warning: format specifies type 'int *' but the argument has type 'uint8_t *' (aka 'unsigned char *') [-Wformat]
+            sscanf((char *)buffer_data, "%d %d\n", &viTri, &soTang);
+                                            ~~             ^~~~~~~
+                                            %s
+2 warnings generated.
+compiling main.c...
+linking...
+Program Size: Code=21412 RO-data=920 RW-data=136 ZI-data=2280  
+FromELF: creating hex file...
+"L152_STEP\L152_STEP.axf" - 0 Error(s), 2 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.CMSIS.6.0.0.pack
+                ARM.CMSIS.6.0.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 6.0.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32L1xx_DFP.1.4.1.pack
+                Keil.STM32L1xx_DFP.1.4.1
+                STMicroelectronics STM32L1 Series Device Support and Examples
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_L152_STEP
+  C:/Users/admin/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include
+  C:/Users/admin/AppData/Local/Arm/Packs/Keil/STM32L1xx_DFP/1.4.1/Drivers/CMSIS/Device/ST/STM32L1xx/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:6.0.0
+      Include file:  CMSIS/Core/Include/tz_context.h
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>
