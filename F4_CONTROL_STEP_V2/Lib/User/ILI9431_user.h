@@ -26,7 +26,7 @@ void inputSlotPage(dataUser_t dataUser);
 void setupParameter(dataUser_t dataUser);
 
 void clearLCD(void);
-void BlynkSlot(dataUser_t dataUser);
+void HighlightSlot(dataUser_t dataUser);
 
 void pageInRotation(dataUser_t dataUser);
 void pageInSetup(dataUser_t dataUser);

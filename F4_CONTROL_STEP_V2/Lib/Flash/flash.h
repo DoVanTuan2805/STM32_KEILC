@@ -11,10 +11,10 @@ typedef enum
 
 void Flash_Write_Int(uint32_t address, int value);
 void Flash_Write_Float(uint32_t address, float value);
-void Flash_Write_Array(uint32_t address, uint8_t *arrayWrite, uint16_t len);
+void Flash_Write_Array(uint32_t address, uint16_t *arrayWrite, uint16_t len);
 
 int Flash_Read_Int(uint32_t address);
 float Flash_Read_Float(uint32_t address);
-void Flash_Read_Array(uint32_t address, uint8_t *arrayRead, uint16_t len);
+void Flash_Read_Array(uint32_t address, uint16_t *arrayRead, uint16_t len);
 
 #endif

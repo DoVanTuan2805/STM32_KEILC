@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L152xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32L1xx_HAL_Driver/Inc;../Drivers/STM32L1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32L1xx/Include;../Drivers/CMSIS/Include;../User/STEP;../User/PLATE</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32L1xx_HAL_Driver/Inc;../Drivers/STM32L1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32L1xx/Include;../Drivers/CMSIS/Include;../User/STEP;../User/PLATE;../User/PROCESS;../User/CELL_CAR;../User/HOME;../User/HASH_UART</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -697,6 +697,46 @@
               <FileName>plate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\PLATE\plate.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Process</GroupName>
+          <Files>
+            <File>
+              <FileName>process.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\PROCESS\process.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Cell_car</GroupName>
+          <Files>
+            <File>
+              <FileName>cell_car.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\CELL_CAR\cell_car.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Home</GroupName>
+          <Files>
+            <File>
+              <FileName>home.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\HOME\home.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Hash_uart</GroupName>
+          <Files>
+            <File>
+              <FileName>parse_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\HASH_UART\parse_data.c</FilePath>
             </File>
           </Files>
         </Group>

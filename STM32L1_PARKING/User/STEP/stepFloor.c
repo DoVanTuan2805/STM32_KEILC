@@ -1,10 +1,13 @@
 #include "stepFloor.h"
 #include "stdlib.h"
+
+stepFloor_t stepF = {};
+
 eFloor_t floor_curr, floor_new;
 
 static uint64_t arr_pulse_to_floor[3] = 
 {
-    0, 36000, 72000
+    0, 34200, 68400
 //	0, 1800, 3600
 };
 

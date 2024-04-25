@@ -63,7 +63,7 @@
 extern uint8_t u8COLUMS;
 extern bool changeButton;
 
-uint8_t *arrayRotationW, *arrayRotationR;
+uint16_t *arrayRotationW, *arrayRotationR;
 
 dataUser_t dataUserInput;
 dataSaveFlash_t dataWriteFlash, dataReadFlash;
@@ -95,9 +95,6 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if (htim->Instance == htim9.Instance) // 100ms
-	{
-	}
 	if (htim->Instance == htim10.Instance)
 	{
 		{
@@ -305,9 +302,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 						{
 							dataUserInput.dataSetupRotation.indexStrTotalPage = 0;
 							dataPageW.totalPage = atoi(dataUserInput.dataSetupRotation.strTotalPage);
-							if (dataPageW.totalPage >= 5)
+							if (dataPageW.totalPage >= SETUP_ROTATION_MAX_SLOT)
 							{
-								dataPageW.totalPage = 5;
+								dataPageW.totalPage = SETUP_ROTATION_MAX_SLOT;
 							}
 							dataUserInput.dataSetupRotation.changeCreatPage = false;
 							dataUserInput.dataSetup.totalPage = dataPageW.totalPage;
@@ -327,7 +324,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 							{
 								keyPressCurr = '.';
 							}
-							if (dataUserInput.dataSetupRotation.indexStrRotation < 2)
+							if (dataUserInput.dataSetupRotation.indexStrRotation < SETUP_ROTATION_MAX_STR)
 							{
 								dataUserInput.dataSetupRotation.strRotation[dataUserInput.dataSetupRotation.indexStrRotation] = (char)keyPressCurr;
 								dataUserInput.dataSetupRotation.indexStrRotation++;
@@ -429,6 +426,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 	}
 }
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if (isRun == false)
@@ -443,6 +441,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		}
 	}
 }
+
 void increse_callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == A1_Pin) // 	ENCODER LEFT
@@ -530,6 +529,7 @@ void increse_callback(uint16_t GPIO_Pin)
 		}
 	}
 }
+
 void decrese_callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == A1_Pin) // 	ENCODER LEFT
@@ -618,6 +618,55 @@ void decrese_callback(uint16_t GPIO_Pin)
 		}
 	}
 }
+
+static inline void change_screen() {
+    if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN ||
+        screenCurr == FLOOR_MAIN_SCREEN || screenCurr == ANGLE_MAIN_SCREEN) {
+        ILI9341_Draw_Image((const char *)layoutMain, SCREEN_HORIZONTAL_2);
+    }
+    if (screenPrev == HAND_ROTATION_SCREEN &&
+        screenCurr != HAND_ROTATION_SCREEN) {
+        for (int i = 0; i < dataPageW.totalPage; i++) {
+            free(dataPageW.dataRotation[i]);
+        }
+        free(dataPageW.dataRotation);
+    }
+}
+
+static inline void change_encoder() {
+    if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN) {
+        pulseStep =
+            stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
+    }
+
+    else if (screenCurr == ANGLE_MAIN_SCREEN ||
+             screenCurr == FLOOR_MAIN_SCREEN ||
+             screenCurr == ENCODER_ROTATION_SCREEN) {
+        uint8_t indexColums, indexRow;
+        indexColums = dataUserInput.dataAngleInMain.indexAngle;
+        indexRow = dataUserInput.indexFloorInRotation - 1;
+
+        uint8_t num = indexRow * u8COLUMS + indexColums;
+
+        if (indexColums == 0) {
+            dataUserInput.dataAngleInMain.rotation_1 = 0;
+            dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[num];
+        } 
+		else if (indexColums > 0)  // 1
+        {
+            dataUserInput.dataAngleInMain.rotation_1 = arrayRotationR[num - 1];
+            dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[num];
+        }
+
+        dataUserInput.dataAngleInMain.rotation_3 = arrayRotationR[num + 1];
+        dataUserInput.dataAngleInMain.rotation_4 = arrayRotationR[num + 2];
+        dataUserInput.dataAngleInMain.rotation_5 = arrayRotationR[num + 3];
+
+        pulseStep =
+            stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
+    }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -654,7 +703,6 @@ int main(void)
 	MX_TIM10_Init();
 	MX_TIM9_Init();
 	/* USER CODE BEGIN 2 */
-	HAL_TIM_Base_Start_IT(&htim9);
 	// READ PULSE AND SPEED FROM FLASH
 	{
 		Flash_Read_Struct_Setting(AR_STORE_SETTING, &dataReadFlash, sizeof(dataSaveFlash_t));
@@ -665,7 +713,7 @@ int main(void)
 
 		dataUserInput.dataSetup.totalPage = dataReadFlash.totalPage;
 		free(arrayRotationR);
-		arrayRotationR = (uint8_t *)malloc((dataUserInput.dataSetup.totalPage * u8COLUMS) * sizeof(uint8_t));
+		arrayRotationR = (uint16_t *)malloc((dataUserInput.dataSetup.totalPage * u8COLUMS) * sizeof(uint16_t));
 		Flash_Read_Array(AR_STORE_ROTATION, arrayRotationR, dataUserInput.dataSetup.totalPage * u8COLUMS);
 		// memcpy(dataTest, arrayRotationR, dataPageW.totalPage * u8COLUMS);
 	}
@@ -731,109 +779,73 @@ int main(void)
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-	while (1)
-	{
-		buttonHandle();
-		if (HAL_GetTick() - timeLed >= 100)
-		{
-			BlynkSlot(dataUserInput);
-			if (isRun == true)
-			{
-				if (dataUserInput.dataSetup.LoopMode == true)
-				{
-					if (check == false)
-					{
-						check = true;
-						ArrayTFT(screenCurr, dataUserInput);
-					}
-				}
-			}
-			else if (isRun == false)
-			{
-				if (stateSaveSetup == true) // SAVE SETTIN
-				{
-					stateSaveSetup = false;
-					comfirmDataSetting();
-				}
-				if (stateSaveRotation == true) // SAVE ROTATION
-				{
-					stateSaveRotation = false;
-					Flash_Write_Array(AR_STORE_ROTATION, arrayRotationW, dataPageW.totalPage * u8COLUMS);
-					HAL_Delay(50);
-					free(arrayRotationW);
+        while (1) {
+            buttonHandle();
+            if (HAL_GetTick() - timeLed >= 200) {
+                if (isRun == true) {
+                    if (dataUserInput.dataSetup.LoopMode == true) {
+                        if (check == false) {
+                            check = true;
+                            ArrayTFT(screenCurr, dataUserInput);
+                            HighlightSlot(dataUserInput);
+                        }
+                    }
+                } 
+				else if (isRun == false) {
+                    if (stateSaveSetup == true)  // SAVE SETTING
+                    {
+                        stateSaveSetup = false;
+                        comfirmDataSetting();
+                    }
+                    if (stateSaveRotation == true)  // SAVE ROTATION
+                    {
+                        stateSaveRotation = false;
+                        Flash_Write_Array(AR_STORE_ROTATION, arrayRotationW,
+                                          dataPageW.totalPage * u8COLUMS);
+                        HAL_Delay(50);
+                        free(arrayRotationW);
 
-					free(arrayRotationR);
-					arrayRotationR = (uint8_t *)malloc((dataUserInput.dataSetup.totalPage * u8COLUMS) * sizeof(uint8_t));
-					Flash_Read_Array(AR_STORE_ROTATION, arrayRotationR, dataUserInput.dataSetup.totalPage * u8COLUMS);
+                        free(arrayRotationR);
+                        arrayRotationR = (uint16_t *)malloc(
+                            (dataUserInput.dataSetup.totalPage * u8COLUMS) *
+                            sizeof(uint8_t));
+                        Flash_Read_Array(
+                            AR_STORE_ROTATION, arrayRotationR,
+                            dataUserInput.dataSetup.totalPage * u8COLUMS);
 
-					// memcpy(dataTest, arrayRotationR, dataPageW.totalPage * u8COLUMS);
-				}
-				if (screenPrev != screenCurr) // CHANGE SCREEN
-				{
-					clearLCD();
-					if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN || screenCurr == FLOOR_MAIN_SCREEN || screenCurr == ANGLE_MAIN_SCREEN)
-					{
-						ILI9341_Draw_Image((const char *)layoutMain, SCREEN_HORIZONTAL_2);
-					}
-					if (screenPrev == HAND_ROTATION_SCREEN && screenCurr != HAND_ROTATION_SCREEN)
-					{
-						for (int i = 0; i < dataPageW.totalPage; i++)
-						{
-							free(dataPageW.dataRotation[i]);
-						}
-						free(dataPageW.dataRotation);
-					}
-					ArrayTFT(screenCurr, dataUserInput);
-					screenPrev = screenCurr;
-				}
-				if (changeEncoder1 == true || changeEncoder2 == true || changeButton == true) // HANDLE ENCODER BUTTON
-				{
-					changeEncoder1 = false;
-					changeEncoder2 = false;
-					changeButton = false;
-					if (screenCurr == ENCODER_ROTATION_SCREEN || screenCurr == CHEATER_SCREEN)
-					{
-						pulseStep = stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
-					}
+                        // memcpy(dataTest, arrayRotationR, dataPageW.totalPage
+                        // * u8COLUMS);
+                    }
+                    if (screenPrev != screenCurr)  // CHANGE SCREEN
+                    {
+                        clearLCD();
+                        change_screen();
+                        ArrayTFT(screenCurr, dataUserInput);
+                        HighlightSlot(dataUserInput);
+                        screenPrev = screenCurr;
+                    }
+                    if (changeEncoder1 == true || changeEncoder2 == true ||
+                        changeButton == true)  // HANDLE ENCODER BUTTON
+                    {
+                        changeEncoder1 = false;
+                        changeEncoder2 = false;
+                        changeButton = false;
 
-					else if (screenCurr == ANGLE_MAIN_SCREEN || screenCurr == FLOOR_MAIN_SCREEN || screenCurr == ENCODER_ROTATION_SCREEN)
-					{
-						uint8_t indexColums, indexRow;
-						indexColums = dataUserInput.dataAngleInMain.indexAngle;
-						indexRow = dataUserInput.indexFloorInRotation - 1;
+                        change_encoder();
 
-						uint8_t num = indexRow * u8COLUMS + indexColums;
+                        ArrayTFT(screenCurr, dataUserInput);
+                        HighlightSlot(dataUserInput);
+                    }
 
-						if (indexColums == 0)
-						{
-							dataUserInput.dataAngleInMain.rotation_1 = 0;
-							dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[num];
-						}
-						else if (indexColums > 0) // 1
-						{
-							dataUserInput.dataAngleInMain.rotation_1 = arrayRotationR[num - 1];
-							dataUserInput.dataAngleInMain.rotation_2 = arrayRotationR[num];
-						}
+                    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+                    timeLed = HAL_GetTick();
+                }
+            }
+            /* USER CODE END WHILE */
 
-						dataUserInput.dataAngleInMain.rotation_3 = arrayRotationR[num + 1];
-						dataUserInput.dataAngleInMain.rotation_4 = arrayRotationR[num + 2];
-						dataUserInput.dataAngleInMain.rotation_5 = arrayRotationR[num + 3];
-
-						pulseStep = stepAngle(dataUserInput.RotationInTFT + dataUserInput.fCheater);
-					}
-
-					ArrayTFT(screenCurr, dataUserInput);
-				}
-
-				// HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-				timeLed = HAL_GetTick();
-			}
-		}
-		/* USER CODE END WHILE */
-
-		/* USER CODE BEGIN 3 */
-	}
-	/* USER CODE END 3 */
+            /* USER CODE BEGIN 3 */
+        }
+        /* USER CODE END 3 */
 }
 
 /**

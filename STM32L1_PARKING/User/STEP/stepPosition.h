@@ -29,4 +29,5 @@ uint16_t get_angle_position(stepPosition_t *step);
 void set_speed_position(stepPosition_t *step, uint8_t speed);
 uint8_t get_speed_position(stepPosition_t *step);
 
+extern stepPosition_t stepP;
 #endif

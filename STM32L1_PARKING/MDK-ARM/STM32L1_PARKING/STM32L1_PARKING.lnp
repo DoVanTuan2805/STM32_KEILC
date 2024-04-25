@@ -26,6 +26,10 @@
 "stm32l1_parking\stepfloor.o"
 "stm32l1_parking\stepposition.o"
 "stm32l1_parking\plate.o"
+"stm32l1_parking\process.o"
+"stm32l1_parking\cell_car.o"
+"stm32l1_parking\home.o"
+"stm32l1_parking\parse_data.o"
 --strict --scatter "STM32L1_PARKING\STM32L1_PARKING.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

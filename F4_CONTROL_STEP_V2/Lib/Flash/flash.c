@@ -42,7 +42,7 @@ void Flash_Write_Int(uint32_t address, int value)
 	HAL_FLASH_Unlock();
 	uint32_t sector = getSector(address);
 	FLASH_Erase_Sector(sector, FLASH_VOLTAGE_RANGE_3);
-	HAL_Delay(100);
+	HAL_Delay(50);
 	HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, value);
 	HAL_FLASH_Lock();
 }
@@ -53,16 +53,16 @@ void Flash_Write_Float(uint32_t address, float value)
 	HAL_FLASH_Unlock();
 	uint32_t sector = getSector(address);
 	FLASH_Erase_Sector(sector, FLASH_VOLTAGE_RANGE_3);
-	HAL_Delay(100);
+	HAL_Delay(50);
 	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, *(uint64_t *)data);
 	HAL_FLASH_Lock();
 }
-void Flash_Write_Array(uint32_t address, uint8_t *arrayWrite, uint16_t len)
+void Flash_Write_Array(uint32_t address, uint16_t *arrayWrite, uint16_t len)
 {
 	HAL_FLASH_Unlock();
 	uint32_t sector = getSector(address);
 	FLASH_Erase_Sector(sector, FLASH_VOLTAGE_RANGE_3);
-	HAL_Delay(100);
+	HAL_Delay(50);
 	uint16_t *pt = (uint16_t *)arrayWrite;
 	for (int i = 0; i < (len + 1) / 2; i++)
 	{
@@ -80,7 +80,7 @@ float Flash_Read_Float(uint32_t address)
 	uint32_t data = *(__IO uint32_t *)address;
 	return *(float *)(&data);
 }
-void Flash_Read_Array(uint32_t address, uint8_t *arrayRead, uint16_t len)
+void Flash_Read_Array(uint32_t address, uint16_t *arrayRead, uint16_t len)
 {
 	uint16_t *pt = (uint16_t *)arrayRead;
 	for (int i = 0; i < (len + 1) / 2; i++)

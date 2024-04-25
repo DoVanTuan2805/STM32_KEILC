@@ -65,13 +65,16 @@ typedef struct
     uint64_t pulse;
 } __attribute__((packed)) dataSetup_t;
 
+#define SETUP_ROTATION_MAX_STR (3)           //(0-99 -> 2   / 0-360 -> 3) 
+#define SETUP_ROTATION_MAX_SLOT (4)
 static uint8_t u8COLUMS = 24;
+
 typedef struct
 {
     uint8_t totalPage;
     uint8_t page;
     uint8_t indexArrRCur;
-    uint8_t **dataRotation;
+    uint16_t **dataRotation;
 } __attribute__((packed)) dataPage_t;
 
 typedef struct
@@ -81,7 +84,7 @@ typedef struct
     char strTotalPage[1];
     uint8_t indexStrTotalPage; // index array string Total page
 
-    char strRotation[2];
+    char strRotation[3];
     uint8_t indexStrRotation;
 
     uint8_t indexSlotInRotation; // INDEX SLOT (1 -> 3)
@@ -99,7 +102,7 @@ typedef struct
 
     uint8_t indexFloorInRotation; // SHOW
 
-    uint8_t IndexRotation; // EX: 1 -> (32, 64, 96)
+    uint16_t IndexRotation; // EX: 1 -> (32, 64, 96)
     float RotationInTFT;   // SHOW
     float fCheater;
     dataSetupRotation_t dataSetupRotation;

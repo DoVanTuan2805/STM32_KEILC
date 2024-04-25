@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -24,16 +24,20 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "stdlib.h"
 #include "stdio.h"
+#include "math.h"
 #include "stdbool.h"
 #include "string.h"
-#include "math.h"
 
+#include "plate.h"
+#include "process.h"
+#include "cell_car.h"
 #include "drivenStep.h"
 #include "stepFloor.h"
 #include "stepPosition.h"
-
-#include "plate.h"
+#include "home.h"
+#include "parse_data.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,23 +63,18 @@ volatile uint8_t buffer_data[SIZE_DATA] = {};
 volatile uint8_t buffer_data_ESP[SIZE_DATA] = {};
 uint8_t RxData, RxDataESP;
 volatile uint8_t i_STM = 0, i_ESP = 0;
-bool flagRx = false;
 char *dataRead;  // data parse
-	
-uint8_t viTri = 0, soTang = 0;
-stepPosition_t stepP = {};
-stepFloor_t stepF = {};
-extern eFloor_t floorRead;
-extern ePosition_t positionRead;
 
+uint8_t viTri = 0, soTang = 0;
 uint64_t angle_floor = 0, angle_position = 0;
 volatile uint64_t pulseP = 0, pulseF = 0;
 uint64_t pulseStepP = 0, pulseStepF = 0;
-	
-bool tc_home = false, ctht_home = false;
-bool ctht_plate_in, ctht_plate_out;
+
+volatile bool flag_complete = true;
+volatile bool is_complete = true;
+
 volatile int16_t encoder_read = 0;
-uint64_t time_led;
+uint64_t time_led, time_process;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,58 +95,51 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     }
 }
 
-void go_home()
-{
-	HAL_TIM_Base_Start_IT(&htim2);
-	while(1)
-	{
-		tc_home = HAL_GPIO_ReadPin(TC_HOME_GPIO_Port, TC_HOME_Pin);
-		if(tc_home == true)
-		{
-			pulseP = 0;
-			while(1)
-			{
-				 ctht_home = HAL_GPIO_ReadPin(CTHT_HOME_GPIO_Port, CTHT_HOME_Pin);
-				if(ctht_home == 0)
-				{
-					set_dir(&stepF.inforStep, CCW);
-					pulseF = 16000;
-					encoder_read = 0;
-					break;
-				}
-				pulseF = 1600;
-			}
-			tc_home = false;
-			break;
-		}
-		pulseP = 1600;
-	}
-}
-
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	if (huart->Instance == huart2.Instance) {
+    if (huart->Instance == huart2.Instance) {
         buffer_data[i_STM++] = RxData;
+		
         if (RxData == '\n') {
             i_STM = 0;
-            sscanf((char *)buffer_data, "%d %d\n", &viTri, &soTang);
-            flagRx = true;
+			if(strcmp(parseData((char*)buffer_data, 0), "IN"))
+			{
+				signal = PROCESS_SIGNAL_IN_CAR;
+                process_step_pallet = PROCESS_FIND_EMPTY_CAR;
+                process_put_get_car = PROCESS_PALLET_GO_OUT;
+			}
+            else if (strcmp(parseData((char*)buffer_data, 0), "OUT"))
+            {
+                viTri = atoi(parseData((char*)buffer_data, 1));
+                soTang = atoi(parseData((char*)buffer_data, 2));
+                signal = PROCESS_SIGNAL_OUT_CAR;
+            }
+            
+            // sscanf((char *)buffer_data, "%d %d\n", &viTri, &soTang);
+            
         }
         HAL_UART_Receive_IT(&huart2, &RxData, 1);
     }
 }
 
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance == htim2.Instance)  // 80us
     {
         if (pulseP != 0) {
+            flag_complete = false;
             pulseP--;
             HAL_GPIO_TogglePin(PUL2_GPIO_Port, PUL2_Pin);
         }
         if (pulseF != 0) {
+            flag_complete = false;
             pulseF--;
             HAL_GPIO_TogglePin(PUL1_GPIO_Port, PUL1_Pin);
+        }
+        if (!flag_complete) {
+            if (pulseF == 0 && pulseP == 0) {
+                flag_complete = true;
+                is_complete = true;
+            }
         }
     }
 }
@@ -184,14 +176,14 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	// INIT UART
+    // INIT UART
     {
         HAL_UART_Receive_IT(&huart2, &RxData, 1);
-        //HAL_UART_Receive_IT(&huart3, &RxDataESP, 1);
+        // HAL_UART_Receive_IT(&huart3, &RxDataESP, 1);
         HAL_UART_Transmit(&huart2, (uint8_t *)"START\n", 6, 100);
     }
-	
-	// STEP CONSTRUCTOR
+
+    // STEP CONSTRUCTOR
     {
         step_floor_ctor(&stepF, PUL1_GPIO_Port, PUL1_Pin, DIR1_GPIO_Port,
                         DIR1_Pin);
@@ -201,56 +193,37 @@ int main(void)
                            DIR2_Pin);
         setPulse(&stepP.inforStep, 80000);
     }
-	
-	InfrStep_t const *step[] = {&stepF.inforStep, &stepP.inforStep};
+
+    InfrStep_t const *step[] = {&stepF.inforStep, &stepP.inforStep};
 
     // GET INFOR PULSE STEP
     {
         pulseStepP = getPulse(&stepP.inforStep);
         pulseStepF = getPulse(&stepF.inforStep);
     }
-	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, 1);
-	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, 0);
-	HAL_Delay(5000);
-	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, 0);
-	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, 0);
-//	go_home();
+	
+	plate_in();
+    go_home();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-		ctht_plate_in = HAL_GPIO_ReadPin(CTHT_PLATE_IN_GPIO_Port, CTHT_PLATE_IN_Pin);
-	  ctht_plate_out = HAL_GPIO_ReadPin(CTHT_PLATE_OUT_GPIO_Port, CTHT_PLATE_OUT_Pin);
-	  
-	   if (flagRx == true) {
-			flagRx = false;
-            set_floor(&stepF, soTang);
-            set_position(&stepP, viTri);
-            HAL_TIM_Base_Start_IT(&htim2);
+    while (1) { 
+		read_E18();
+        if (HAL_GetTick() - time_led >= 100) {
+            process_parking();
+            move_to(step, sizeof(step) / sizeof(step[0]));
+            
+            is_complete = false;
+            HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+            time_led = HAL_GetTick();
         }
-        angle_position = get_angle_position(&stepP);
-        angle_floor = get_angle_floor(&stepF);
-        if (angle_position != 0) {
-            pulseP = round((float)pulseStepP * ((float)angle_position / 360.0));
-            reseet_angle_position(&stepP);
-        }
-        if (angle_floor != 0) {
-            pulseF = round((float)pulseStepF * ((float)angle_floor / 360.0));
-            reset_angle_floor(&stepF);
-        }
-        move_to(step, sizeof(step) / sizeof(step[0]));
-		
-		if(HAL_GetTick() - time_led >= 100)
-		{
-			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-			time_led = HAL_GetTick();
-		}
+        
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+    }
   /* USER CODE END 3 */
 }
 
@@ -308,11 +281,11 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+    /* User can add his own implementation to report the HAL error return state
+     */
+    __disable_irq();
+    while (1) {
+    }
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -327,8 +300,9 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    /* User can add his own implementation to report the file name and line
+       number, ex: printf("Wrong parameters value: file %s on line %d\r\n",
+       file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

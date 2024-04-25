@@ -30,10 +30,13 @@ stm32l1_parking/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32L1xx_HAL_Driver\Inc\stm32l1xx_hal_tim_ex.h \
   ..\Drivers\STM32L1xx_HAL_Driver\Inc\stm32l1xx_hal_uart.h \
   ..\Drivers\STM32L1xx_HAL_Driver\Inc\stm32l1xx_hal_exti.h \
-  ..\Core\Inc\tim.h ..\Core\Inc\usart.h ..\Core\Inc\gpio.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h ..\Core\Inc\tim.h \
+  ..\Core\Inc\usart.h ..\Core\Inc\gpio.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h ..\User\PLATE\plate.h \
+  ..\User\PROCESS\process.h ..\User\CELL_CAR\cell_car.h \
   ..\User\STEP\drivenStep.h ..\User\STEP\stepFloor.h \
-  ..\User\STEP\stepPosition.h ..\User\PLATE\plate.h
+  ..\User\STEP\stepPosition.h ..\User\HOME\home.h \
+  ..\User\HASH_UART\parse_data.h

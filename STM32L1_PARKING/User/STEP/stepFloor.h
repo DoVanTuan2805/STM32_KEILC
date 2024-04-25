@@ -15,12 +15,14 @@ typedef struct
     eFloor_t curr_floor;
     uint64_t angle;
 }stepFloor_t ;
+
 void step_floor_ctor(stepFloor_t *step, 
                     GPIO_TypeDef *gpio_port_pul,
                     uint16_t gpio_pin_pul,
                     GPIO_TypeDef *gpio_port_dir,
                     uint16_t gpio_pin_dir
 );
+
 void set_floor(stepFloor_t *step, eFloor_t floor);
 eFloor_t get_floor(stepFloor_t *step);
 
@@ -30,5 +32,5 @@ void reset_angle_floor(stepFloor_t *step);
 void set_speed_floor(stepFloor_t *step, uint8_t speed);
 uint8_t get_speed_floor(stepFloor_t *step);
 
-
+extern stepFloor_t stepF;
 #endif

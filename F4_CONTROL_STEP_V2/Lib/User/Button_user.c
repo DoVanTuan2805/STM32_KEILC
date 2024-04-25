@@ -7,7 +7,7 @@
 #include "step_user.h"
 Button_t bt_down, bt_up;
 extern uint8_t u8COLUMS;
-extern uint8_t *arrayRotationW;
+extern uint16_t *arrayRotationW;
 extern dataPage_t dataPageW;
 extern dataUser_t dataUserInput;
 extern bool changeMode;
@@ -113,7 +113,7 @@ void bt_press_timout_callback(volatile Button_t *button)
 		if (screenCurr == HAND_ROTATION_SCREEN)
 		{
 			free(arrayRotationW);
-			arrayRotationW = (uint8_t *)malloc((dataPageW.totalPage * u8COLUMS) * sizeof(uint8_t));
+			arrayRotationW = (uint16_t *)malloc((dataPageW.totalPage * u8COLUMS) * sizeof(uint16_t));
 			convertToArray1D(dataPageW.dataRotation, arrayRotationW, dataPageW.totalPage, u8COLUMS);
 			stateSaveRotation = true;
 			changeButton = true;
@@ -122,13 +122,13 @@ void bt_press_timout_callback(volatile Button_t *button)
 		else if (screenCurr == INPUT_TOTAL_PAGE_SCREEN)
 		{
 			// uint8_t col = dataPageW.totalPage * u8COLUMS;
-			dataPageW.dataRotation = (uint8_t **)malloc(dataPageW.totalPage * sizeof(uint8_t *));
+			dataPageW.dataRotation = (uint16_t **)malloc(dataPageW.totalPage * sizeof(uint16_t *));
 			if (dataPageW.dataRotation != NULL)
 			{
 				dataPageW.indexArrRCur = 1;
 				for (int i = 0; i < dataPageW.totalPage; i++)
 				{
-					dataPageW.dataRotation[i] = (uint8_t *)malloc((u8COLUMS + 1) * sizeof(uint8_t));
+					dataPageW.dataRotation[i] = (uint16_t *)malloc((u8COLUMS + 1) * sizeof(uint16_t));
 					if (dataPageW.dataRotation[i] == NULL)
 					{
 						for (int j = 0; j < dataPageW.totalPage; j++)
@@ -147,7 +147,7 @@ void bt_press_timout_callback(volatile Button_t *button)
 		}
 	}
 }
-void convertToArray1D(uint8_t **arr2D, uint8_t *arr1D, int rows, int cols)
+void convertToArray1D(uint16_t **arr2D, uint16_t *arr1D, int rows, int cols)
 {
 	int i, j, k = 0;
 	for (i = 0; i < rows; i++)
@@ -158,7 +158,7 @@ void convertToArray1D(uint8_t **arr2D, uint8_t *arr1D, int rows, int cols)
 		}
 	}
 }
-void convertToArray2D(uint8_t *arr1D, uint8_t **arr2D, int rows, int cols)
+void convertToArray2D(uint16_t *arr1D, uint16_t **arr2D, int rows, int cols)
 {
 	int k = 0;
 	for (int i = 0; i < rows; i++)

@@ -34,7 +34,6 @@ void (*handleScreen[NUM_OF_SCREEN])(dataUser_t dataUser) =
 		[ENCODER_ROTATION_SCREEN] = encoderRotation,
 		[HAND_ROTATION_SCREEN] = handRotation,
 		[INPUT_TOTAL_PAGE_SCREEN] = inputTotalPage,
-		[INPUT_TOTAL_SLOT_SCREEN] = inputSlotPage,
 		[SETUP_SCREEN] = setupParameter,
 };
 
@@ -173,9 +172,7 @@ void encoderRotation(dataUser_t dataUser)
 }
 
 /*
-	SELECT SCREEN
-- CREATE NEW ROTATION
-- MODIFY OLD ROTATION
+
 */
 void inputTotalPage(dataUser_t dataUser)
 {
@@ -214,9 +211,7 @@ void inputTotalPage(dataUser_t dataUser)
 		}
 	}
 }
-void inputSlotPage(dataUser_t dataUser)
-{
-}
+
 /*
 			CUSTOMIZE ROTATION
 - PAGE (1- 10)
@@ -261,6 +256,7 @@ void pageInRotation(dataUser_t dataUser)
 		}
 	}
 }
+
 void handRotation(dataUser_t dataUser)
 {
 	pageInRotation(dataUser);
@@ -275,6 +271,7 @@ void handRotation(dataUser_t dataUser)
 	}
 	ILI9341_Draw_Hollow_Rectangle_Coord(Allign, Allign, 310, 230, GREEN);
 }
+
 void setupParameter(dataUser_t dataUser)
 {
 	pageInSetup(dataUser);
@@ -421,34 +418,40 @@ void pageInSetup(dataUser_t dataUser)
 		memset(textSetup, '\0', sizeof(textSetup));
 	}
 }
+
 void cheater(dataUser_t dataUser)
 {
 	encoderRotation(dataUser);
 	ILI9341_Draw_Hollow_Rectangle_Coord(5, 28, 110, 55, GREEN);
 }
+
 /*	CHINH TANG O MAN HINH CHINH */
 void fncFloorInMain(dataUser_t dataUser)
 {
 	encoderRotation(dataUser);
 	ILI9341_Draw_Hollow_Rectangle_Coord(5, 55, 110, 85, GREEN);
 }
+
 /*	CHINH GOC O MAN HINH CHINH */
 void fncAngleInMain(dataUser_t dataUser)
 {
 	encoderRotation(dataUser);
 	ILI9341_Draw_Hollow_Rectangle_Coord(5, 90, 110, 115, GREEN);
 }
+
 void clearLCD(void)
 {
 	ILI9341_Fill_Screen(WHITE);
 }
-void BlynkSlot(dataUser_t dataUser)
+
+void HighlightSlot(dataUser_t dataUser)
 {
-	static bool state;
+	static bool state = true;
+	
 	{
 		if (state == true)
 		{
-			state = false;
+			// state = false;
 			if (screenCurr == HAND_ROTATION_SCREEN)
 			{
 				ILI9341_Draw_Hollow_Rectangle_Coord(
@@ -456,7 +459,7 @@ void BlynkSlot(dataUser_t dataUser)
 					Allign + ((dataUser.dataSetupRotation.indexSlotInRotation) * HIGHT_ONE_SLOT),
 					Allign + WIDTH_ONE_SLOT,
 					Allign + (dataUser.dataSetupRotation.indexSlotInRotation + 1) * HIGHT_ONE_SLOT,
-					GREEN);
+					RED);
 			}
 			else if (screenCurr == SETUP_SCREEN)
 			{
@@ -465,7 +468,7 @@ void BlynkSlot(dataUser_t dataUser)
 					Allign + ((dataUser.indexSlotInSetup) * HIGHT_ONE_SLOT),
 					Allign + WIDTH_ONE_SLOT,
 					Allign + (dataUser.indexSlotInSetup + 1) * HIGHT_ONE_SLOT,
-					GREEN);
+					RED);
 			}
 			else if (screenCurr == INPUT_TOTAL_PAGE_SCREEN)
 			{
@@ -474,12 +477,13 @@ void BlynkSlot(dataUser_t dataUser)
 					Allign + ((2 - 1) * HIGHT_ONE_SLOT),
 					Allign + WIDTH_ONE_SLOT,
 					Allign + (2) * HIGHT_ONE_SLOT,
-					GREEN);
+					RED);
 			}
 		}
+		/*
 		else
 		{
-			state = true;
+			// state = false;
 			if (screenCurr == HAND_ROTATION_SCREEN)
 			{
 				ILI9341_Draw_Hollow_Rectangle_Coord(
@@ -487,7 +491,7 @@ void BlynkSlot(dataUser_t dataUser)
 					Allign + ((dataUser.dataSetupRotation.indexSlotInRotation) * HIGHT_ONE_SLOT),
 					Allign + WIDTH_ONE_SLOT,
 					Allign + (dataUser.dataSetupRotation.indexSlotInRotation + 1) * HIGHT_ONE_SLOT,
-					RED);
+					GREEN);
 			}
 			else if (screenCurr == SETUP_SCREEN)
 			{
@@ -496,7 +500,7 @@ void BlynkSlot(dataUser_t dataUser)
 					Allign + ((dataUser.indexSlotInSetup) * HIGHT_ONE_SLOT),
 					Allign + WIDTH_ONE_SLOT,
 					Allign + (dataUser.indexSlotInSetup + 1) * HIGHT_ONE_SLOT,
-					RED);
+					GREEN);
 			}
 			else if (screenCurr == INPUT_TOTAL_PAGE_SCREEN)
 			{
@@ -505,9 +509,10 @@ void BlynkSlot(dataUser_t dataUser)
 					Allign + ((2 - 1) * HIGHT_ONE_SLOT),
 					Allign + WIDTH_ONE_SLOT,
 					Allign + (2) * HIGHT_ONE_SLOT,
-					RED);
+					GREEN);
 			}
 		}
+		*/
 		/// 2->4
 	}
 }

@@ -1,7 +1,10 @@
 #include "stepPosition.h"
 #include "stdlib.h"
- ePosition_t pos_curr;
- ePosition_t pos_new;
+
+stepPosition_t stepP = {};
+
+ePosition_t pos_curr;
+ePosition_t pos_new;
 
 static uint64_t arr_pulse_pos[6] = 
 {
@@ -57,7 +60,8 @@ static uint16_t calculate_angle(InfrStep_t const* const step, ePosition_t curren
         ans = arr_pulse_pos[new] - arr_pulse_pos[current];      // -> angle
         if(abs(ans) > 180)
         {
-			dir = ans > 0 ? CCW : CW;
+            dir = ans > 0 ? CCW : CW;
+			
             ans = 360 - abs(ans);       // 240 -> 0 = -240
             set_dir(step,  dir);
         }

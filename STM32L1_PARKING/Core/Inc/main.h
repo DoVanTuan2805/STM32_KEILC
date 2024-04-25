@@ -31,7 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdbool.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -41,7 +41,13 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+extern uint8_t viTri, soTang;
+extern volatile uint64_t pulseP, pulseF;
+extern uint64_t angle_floor, angle_position;
+extern uint64_t pulseStepP, pulseStepF;
+extern volatile int16_t encoder_read;
 
+extern volatile bool is_complete;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -59,26 +65,58 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define TC_15_Pin GPIO_PIN_0
+#define TC_15_GPIO_Port GPIOC
+#define TC_16_Pin GPIO_PIN_1
+#define TC_16_GPIO_Port GPIOC
+#define TC_13_Pin GPIO_PIN_2
+#define TC_13_GPIO_Port GPIOC
+#define TC_14_Pin GPIO_PIN_3
+#define TC_14_GPIO_Port GPIOC
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
 #define USART_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+#define TC_12_Pin GPIO_PIN_4
+#define TC_12_GPIO_Port GPIOC
+#define TC_3_Pin GPIO_PIN_5
+#define TC_3_GPIO_Port GPIOC
+#define TC_8_Pin GPIO_PIN_1
+#define TC_8_GPIO_Port GPIOB
+#define TC_7_Pin GPIO_PIN_2
+#define TC_7_GPIO_Port GPIOB
+#define TC_6_Pin GPIO_PIN_12
+#define TC_6_GPIO_Port GPIOB
+#define TC_11_Pin GPIO_PIN_13
+#define TC_11_GPIO_Port GPIOB
+#define TC_10_Pin GPIO_PIN_14
+#define TC_10_GPIO_Port GPIOB
+#define TC_9_Pin GPIO_PIN_15
+#define TC_9_GPIO_Port GPIOB
+#define TC_2_Pin GPIO_PIN_6
+#define TC_2_GPIO_Port GPIOC
 #define PUL1_Pin GPIO_PIN_7
 #define PUL1_GPIO_Port GPIOC
+#define TC_1_Pin GPIO_PIN_8
+#define TC_1_GPIO_Port GPIOC
 #define CTHT_HOME_Pin GPIO_PIN_9
 #define CTHT_HOME_GPIO_Port GPIOC
 #define PUL2_Pin GPIO_PIN_8
 #define PUL2_GPIO_Port GPIOA
 #define DIR2_Pin GPIO_PIN_9
 #define DIR2_GPIO_Port GPIOA
+#define IN1_Pin GPIO_PIN_10
+#define IN1_GPIO_Port GPIOA
+#define TC_5_Pin GPIO_PIN_11
+#define TC_5_GPIO_Port GPIOA
+#define TC_4_Pin GPIO_PIN_12
+#define TC_4_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
-#define IN1_Pin GPIO_PIN_2
-#define IN1_GPIO_Port GPIOD
 #define IN2_Pin GPIO_PIN_3
 #define IN2_GPIO_Port GPIOB
 #define EXTI_IN_A_Pin GPIO_PIN_4
@@ -91,10 +129,10 @@ void Error_Handler(void);
 #define TC_HOME_Pin GPIO_PIN_7
 #define TC_HOME_GPIO_Port GPIOB
 #define TC_HOME_EXTI_IRQn EXTI9_5_IRQn
-#define CTHT_PLATE_OUT_Pin GPIO_PIN_8
-#define CTHT_PLATE_OUT_GPIO_Port GPIOB
-#define CTHT_PLATE_IN_Pin GPIO_PIN_9
+#define CTHT_PLATE_IN_Pin GPIO_PIN_8
 #define CTHT_PLATE_IN_GPIO_Port GPIOB
+#define CTHT_PLATE_OUT_Pin GPIO_PIN_9
+#define CTHT_PLATE_OUT_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
