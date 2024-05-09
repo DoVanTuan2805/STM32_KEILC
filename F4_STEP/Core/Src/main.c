@@ -178,6 +178,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  pulseStep = stepAngle(350);
+	  HAL_Delay(2000);
+	  pulseStep = stepAngle(180);
+	  HAL_Delay(2000);
 //		pulseStep = stepAngle(10);
 //	
 //		HAL_Delay(2000);

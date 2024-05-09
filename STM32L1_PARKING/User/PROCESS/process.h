@@ -5,9 +5,11 @@
 typedef enum
 {
     PROCESS_SIGNAL_NULL,
-    PROCESS_SIGNAL_IN_CAR,          // CAT XE
-    PROCESS_SIGNAL_OUT_CAR,         // LAY XE
+    PROCESS_SIGNAL_IN_NON_CAR,          // CAT XE NHUNG KO CO VI TRI
+    PROCESS_SIGNAL_IN_HAVE_CAR,         // CAT XE NHUNG CO VI TRI
+    PROCESS_SIGNAL_OUT_CAR,             // LAY XE
 }signal_t;
+
 typedef enum {
     PROCESS_STEP_PLATTE_NULL,
 
@@ -15,10 +17,13 @@ typedef enum {
     PROCESS_GO_EMPTY_CAR,           // DI TOI CHO TRONG
     PROCESS_PUT_CAR,
 
-    PROCESS_GO_GET_CAR,             // DI TOI CHO CO XE
 
+    PROCESS_GO_NON_EMPTY_CAR,
+    PROCESS_GO_GET_CAR,             // DI TOI CHO CO XE
+    
     PROCESS_GO_IN,
     PROCESS_GO_OUT
+
 } process_step_pallet_t;
 
 typedef enum {

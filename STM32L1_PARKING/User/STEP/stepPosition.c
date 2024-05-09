@@ -1,7 +1,7 @@
 #include "stepPosition.h"
 #include "stdlib.h"
 
-stepPosition_t stepP = {};
+stepPosition_t stepP;
 
 ePosition_t pos_curr;
 ePosition_t pos_new;

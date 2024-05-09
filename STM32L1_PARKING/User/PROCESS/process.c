@@ -18,13 +18,14 @@ process_put_get_car_t process_put_get_car = PROCESS_PUT_GET_NULL;
 void process_parking()
 {
     switch (signal) {
-        case PROCESS_SIGNAL_IN_CAR:
+        case PROCESS_SIGNAL_IN_NON_CAR:
             read_E18();
             process_step_pallet_in();
             break;
-
+        case PROCESS_SIGNAL_IN_HAVE_CAR:
+            process_step_pallet_in();
+            break;
         case PROCESS_SIGNAL_OUT_CAR:
-            process_step_pallet = PROCESS_GO_GET_CAR;
             process_step_pallet_out();
             break;
         default:
@@ -33,11 +34,14 @@ void process_parking()
     
 }
 
+// XE VAO
 void process_step_pallet_in() {
     switch (process_step_pallet) {
         case PROCESS_FIND_EMPTY_CAR:
             if (get_car() == true) {
-                find_empty_car(arr_car_empty, NUM_CELL, &viTri, &soTang);
+                if (signal == PROCESS_SIGNAL_IN_NON_CAR) {
+                    find_empty_car(arr_car_empty, NUM_CELL, &viTri, &soTang);
+                }
                 HAL_TIM_Base_Stop_IT(&htim2);
                 process_step_pallet = PROCESS_GO_EMPTY_CAR;
             }
@@ -84,9 +88,10 @@ void process_step_pallet_in() {
     }
 }
 
+// XE RA
 void process_step_pallet_out() {
     switch (process_step_pallet) {
-        case PROCESS_GO_GET_CAR:
+        case PROCESS_GO_NON_EMPTY_CAR:
             set_position(&stepP, viTri);
             set_floor(&stepF, soTang);
 
@@ -105,11 +110,55 @@ void process_step_pallet_out() {
                 HAL_TIM_Base_Start_IT(&htim2);
             }
             if (is_complete) {
-                process_step_pallet = PROCESS_GO_OUT;
+                process_step_pallet = PROCESS_GO_GET_CAR;
+                process_put_get_car = PROCESS_PALLET_GO_OUT;
             }
             break;
         
+        case PROCESS_GO_GET_CAR:
+            if(get_car() == true)
+            {
+                process_step_pallet = PROCESS_GO_OUT;
+            }
+            break;
+
         case PROCESS_GO_OUT:
+            viTri = 3;
+            soTang = 0;
+            set_position(&stepP, viTri);
+            set_floor(&stepF, soTang);
+
+            angle_position = get_angle_position(&stepP);
+            angle_floor = get_angle_floor(&stepF);
+
+            if (angle_position != 0 || angle_floor != 0) {
+                HAL_TIM_Base_Stop_IT(&htim2);
+                pulseP = round((float)pulseStepP * ((float)angle_position / 360.0));
+                reseet_angle_position(&stepP);
+
+                pulseF = round((float)pulseStepF * ((float)angle_floor / 360.0));
+                reset_angle_floor(&stepF);
+                HAL_Delay(10);
+                HAL_TIM_Base_Start_IT(&htim2);
+            }
+            if (is_complete) {
+                process_step_pallet = PROCESS_PUT_CAR;
+                process_put_get_car = PROCESS_PALLET_GO_OUT;
+            }
+            break;
+        
+        case PROCESS_PUT_CAR:
+            if(put_car() == true)
+            {
+                process_step_pallet = PROCESS_GO_IN;
+            }
+            break;
+
+        case PROCESS_GO_IN:
+            go_home();
+            process_step_pallet = PROCESS_STEP_PLATTE_NULL;  // HET QUA TRINH
+            signal = PROCESS_SIGNAL_NULL;
+            break;
 
         default:
             break;
@@ -136,8 +185,8 @@ bool get_car() {
     }
 
     else if (process_put_get_car == PROCESS_PALLET_DECREASE) {
-        set_dir(&stepF.inforStep, CW);  // di xuong
-        pulseF = 17600;
+        // set_dir(&stepF.inforStep, CW);  // di xuong
+        // pulseF = 17600;
         process_put_get_car = PROCESS_PUT_GET_NULL;
         return true;
     }

@@ -30,6 +30,7 @@ f4_eth_dwin_sim/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
   ..\Core\Inc\dma.h ..\Core\Inc\spi.h ..\Core\Inc\usart.h \
   ..\Core\Inc\gpio.h ..\Lib\Button\button.h ..\Lib\ENC28J60\enc28j60.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h ..\Lib\ENC28J60\uart.h \
@@ -52,6 +53,5 @@ f4_eth_dwin_sim/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\lwip-2.1.2\lwip-2.1.2\src\include\lwip\ip6_addr.h \
   ..\lwip-2.1.2\lwip-2.1.2\src\include\lwip\prot\iana.h \
   ..\Lib\MQTT\mqtt_client.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\lwip-2.1.2\lwip-2.1.2\src\include\lwip\prot\dns.h \
   ..\Lib\SIM\A7860C_command.h

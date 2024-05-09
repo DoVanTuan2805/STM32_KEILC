@@ -146,10 +146,14 @@ int main(void)
 	Button_Init(&btRst, BT1_GPIO_Port, BT1_Pin);
 	
 	UART_init(&huart6);
-	/*
-	ENC29J600_init(&hspi1);
+	
+	while (ENC29J600_init(&hspi1) == false) {
+		HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+		HAL_Delay(50);
+	}
 	
 	lwip_config_init();
+	
 	dns_initialize();
 	mqtt_client_cfg_t mqtt_cfg = 
 	{
@@ -160,8 +164,8 @@ int main(void)
 			.client_id = "465d777f41f140b69fcdd258c1d38671",
 	};
 	mqtt_client_initialize(&mqtt_cfg);
-	*/
 	
+	/*
 	SIM_init(&huart1);
 	MQTT_Infor_t inforMQTT =
 	{
@@ -193,12 +197,14 @@ int main(void)
 	subcribeTopic(mqttSub);
 	
 	MQTTsetCallbackMess(Mqtt_on_message);
+	*/
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  /*
 		bt_handle(&btRst);
 		SimLoop();
 		if(HAL_GetTick() - time > 100)
@@ -207,8 +213,8 @@ int main(void)
 			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 			time = HAL_GetTick();
 		}
+		*/
 		
-		/*
 		lwip_periodic_handle();				// HANDLE CONNECT ETH
 		if(ETH_IPOK())
 		{
@@ -216,7 +222,7 @@ int main(void)
 				mqtt_client_polling_task(NULL);
 				
 		}
-		*/
+		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

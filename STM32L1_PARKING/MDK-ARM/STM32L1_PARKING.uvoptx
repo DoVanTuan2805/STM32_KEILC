@@ -163,12 +163,12 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>encoder_read,0x0A</ItemText>
+          <ItemText>buffer_data_ESP,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>arr_car_empty,0x0A</ItemText>
+          <ItemText>buffer_data,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
@@ -208,22 +208,27 @@
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>tc_home,0x0A</ItemText>
+          <ItemText>angle_position,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ctht_home,0x0A</ItemText>
+          <ItemText>angle_floor,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>13</count>
           <WinNumber>1</WinNumber>
-          <ItemText>angle_position</ItemText>
+          <ItemText>argv,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>14</count>
           <WinNumber>1</WinNumber>
-          <ItemText>angle_floor</ItemText>
+          <ItemText>ctht_plate_out,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>ctht_plate_in,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -725,6 +730,18 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\User\HASH_UART\parse_data.c</PathWithFileName>
       <FilenameWithoutPath>parse_data.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>32</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\HASH_UART\uart.c</PathWithFileName>
+      <FilenameWithoutPath>uart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -1,7 +1,7 @@
 #include "stepFloor.h"
 #include "stdlib.h"
 
-stepFloor_t stepF = {};
+stepFloor_t stepF;
 
 eFloor_t floor_curr, floor_new;
 

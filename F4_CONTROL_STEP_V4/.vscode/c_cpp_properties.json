@@ -1,0 +1,32 @@
+{
+  "configurations": [
+    {
+      "name": "windows-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/application",
+        "${workspaceFolder}/application/ak",
+        "${workspaceFolder}/application/ak/inc",
+        "${workspaceFolder}/application/ak/src",
+        "${workspaceFolder}/application/app",
+        "${workspaceFolder}/application/common",
+        "${workspaceFolder}/application/libraries",
+        "${workspaceFolder}/application/platform",
+        "${workspaceFolder}/application/sys",
+        "${workspaceFolder}/application/task",
+        "${workspaceFolder}/application/task/screens",
+        "${workspaceFolder}/Core",
+        "${workspaceFolder}/Drivers/**"
+
+      ],
+      "compilerPath": "C:/mingw32/bin/gcc.exe",
+      "cStandard": "${default}",
+      "cppStandard": "${default}",
+      "intelliSenseMode": "windows-gcc-x64",
+      "compilerArgs": [
+        ""
+      ]
+    }
+  ],
+  "version": 4
+}

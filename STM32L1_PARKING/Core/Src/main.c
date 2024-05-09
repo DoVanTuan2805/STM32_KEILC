@@ -38,6 +38,7 @@
 #include "stepPosition.h"
 #include "home.h"
 #include "parse_data.h"
+#include "uart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,12 +59,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-#define SIZE_DATA 128
-volatile uint8_t buffer_data[SIZE_DATA] = {};
-volatile uint8_t buffer_data_ESP[SIZE_DATA] = {};
 uint8_t RxData, RxDataESP;
-volatile uint8_t i_STM = 0, i_ESP = 0;
-char *dataRead;  // data parse
 
 uint8_t viTri = 0, soTang = 0;
 uint64_t angle_floor = 0, angle_position = 0;
@@ -94,31 +90,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
         }
     }
 }
-
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == huart2.Instance) {
-        buffer_data[i_STM++] = RxData;
-		
-        if (RxData == '\n') {
-            i_STM = 0;
-			if(strcmp(parseData((char*)buffer_data, 0), "IN"))
-			{
-				signal = PROCESS_SIGNAL_IN_CAR;
-                process_step_pallet = PROCESS_FIND_EMPTY_CAR;
-                process_put_get_car = PROCESS_PALLET_GO_OUT;
-			}
-            else if (strcmp(parseData((char*)buffer_data, 0), "OUT"))
-            {
-                viTri = atoi(parseData((char*)buffer_data, 1));
-                soTang = atoi(parseData((char*)buffer_data, 2));
-                signal = PROCESS_SIGNAL_OUT_CAR;
-            }
-            
-            // sscanf((char *)buffer_data, "%d %d\n", &viTri, &soTang);
-            
-        }
+        uart_receive_stm(RxData);
         HAL_UART_Receive_IT(&huart2, &RxData, 1);
+    }
+    if (huart->Instance == huart3.Instance) {
+        uart_receive_esp(RxDataESP);
+        HAL_UART_Receive_IT(&huart3, &RxDataESP, 1);
     }
 }
 
@@ -135,6 +114,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             pulseF--;
             HAL_GPIO_TogglePin(PUL1_GPIO_Port, PUL1_Pin);
         }
+		
         if (!flag_complete) {
             if (pulseF == 0 && pulseP == 0) {
                 flag_complete = true;
@@ -175,11 +155,13 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_USART2_UART_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
     // INIT UART
     {
         HAL_UART_Receive_IT(&huart2, &RxData, 1);
-        // HAL_UART_Receive_IT(&huart3, &RxDataESP, 1);
+        HAL_UART_Receive_IT(&huart3, &RxDataESP, 1);
+		HAL_UART_Transmit(&huart3, (uint8_t *)"START\n", 6, 100);
         HAL_UART_Transmit(&huart2, (uint8_t *)"START\n", 6, 100);
     }
 
@@ -201,8 +183,8 @@ int main(void)
         pulseStepP = getPulse(&stepP.inforStep);
         pulseStepF = getPulse(&stepF.inforStep);
     }
-	
-	plate_in();
+
+    plate_in();
     go_home();
 
   /* USER CODE END 2 */
@@ -211,6 +193,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
     while (1) { 
 		read_E18();
+		uart_handle_stm();
+		uart_handle_esp();
         if (HAL_GetTick() - time_led >= 100) {
             process_parking();
             move_to(step, sizeof(step) / sizeof(step[0]));

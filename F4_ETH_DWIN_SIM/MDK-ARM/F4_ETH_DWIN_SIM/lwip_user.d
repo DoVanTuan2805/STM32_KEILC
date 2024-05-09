@@ -72,6 +72,7 @@ f4_eth_dwin_sim/lwip_user.o: ..\lwip-2.1.2\lwip_user\lwip_user.c \
   ..\lwip-2.1.2\lwip-2.1.2\src\include\lwip\tcpip.h \
   ..\lwip-2.1.2\lwip-2.1.2\src\include\lwip\timeouts.h \
   ..\Lib\ENC28J60\enc28j60.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h ..\Lib\ENC28J60\uart.h \
   ..\Core\Inc\usart.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   ..\lwip-2.1.2\lwip_user\noOS\ethernetif.h \

@@ -189,7 +189,7 @@ low_level_input(struct netif *netif)
   /* Obtain the size of the packet and put it into the "len"
      variable. */
   //len = ENC28J60_Packet_Receive(MAX_FRAMELEN,lwip_buf);
-	  len = ENC28J60_read_packet(lwip_buf,MAX_FRAMELEN);
+	  len = ENC28J60_read_packet(lwip_buf, MAX_FRAMELEN);
 
 #if ETH_PAD_SIZE
   len += ETH_PAD_SIZE; /* allow room for Ethernet padding */

@@ -39,4 +39,4 @@ stm32l1_parking/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\User\PROCESS\process.h ..\User\CELL_CAR\cell_car.h \
   ..\User\STEP\drivenStep.h ..\User\STEP\stepFloor.h \
   ..\User\STEP\stepPosition.h ..\User\HOME\home.h \
-  ..\User\HASH_UART\parse_data.h
+  ..\User\HASH_UART\parse_data.h ..\User\HASH_UART\uart.h

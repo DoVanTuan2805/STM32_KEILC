@@ -3,6 +3,7 @@
 //--------------------------------------------------
 //Include cac thu vien can thiet
 #include "stm32f4xx_hal.h"
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -184,7 +185,7 @@ uint8_t ENC28J60_readByte(uint8_t addres);
 void ENC28J60_writeByte16(uint8_t addres,uint16_t data);
 void ENC28J60_writePhy(uint8_t addres,uint16_t data);
 uint16_t ENC28J60_readPhy(uint8_t addres);
-void ENC29J600_init(SPI_HandleTypeDef *spi);
+bool ENC29J600_init(SPI_HandleTypeDef *spi);
 void ENC28J60_error (void);
 
 uint8_t ENC28J60_read_Byte_Buffer(void);

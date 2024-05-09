@@ -82,7 +82,7 @@ uint16_t ENC28J60_readPhy(uint8_t addres) //ham doc PHY
   return value; //tra ve gia tri
 }
 static uint16_t NextPacketPtr;
-void ENC29J600_init(SPI_HandleTypeDef *spi)
+bool ENC29J600_init(SPI_HandleTypeDef *spi)
 {
  hspi = spi;
  uint8_t mymac[6];
@@ -91,8 +91,12 @@ void ENC29J600_init(SPI_HandleTypeDef *spi)
 	
  HAL_Delay(10);
  while(!ENC28J60_read_command(ENC28J60_READ_CTRL_REG,ESTAT)&ESTAT_CLKRDY); //cho bit CLKRDY duoc set
- if(ENC28J60_readByte(ERDPT) != 0xFA)ENC28J60_error(); //khoi tao that bai
- else
+ if(ENC28J60_readByte(ERDPT) != 0xFA)
+ {
+	 ENC28J60_error(); //khoi tao that bai
+	return false;
+ } 
+else
  {
     NextPacketPtr=RXSTART_INIT;
     //cau hinh kich thuoc bo dem truyen nhan
@@ -147,6 +151,7 @@ void ENC29J600_init(SPI_HandleTypeDef *spi)
     HAL_Delay(1);
     ENC28J60_write_command (ENC28J60_BIT_FIELD_SET, ECON1, ECON1_RXEN); // cho phép nhan gói
  }
+ return true;
 }
 void ENC28J60_error (void)
 {

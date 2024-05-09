@@ -1,0 +1,10 @@
+{
+	"folders": [],
+	"settings": {
+		"files.associations": {
+			"task_keypad.h": "c",
+			"app_keypad.h": "c",
+			"system.h": "c"
+		}
+	}
+}
